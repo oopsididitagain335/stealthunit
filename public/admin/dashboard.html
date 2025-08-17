@@ -70,6 +70,21 @@
             display: flex;
             align-items: center;
             border-left: 3px solid transparent;
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+
+        .sidebar-menu li a.active {
+            opacity: 1;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .sidebar-menu li a i {
+            margin-right: 1rem;
+            width: 20px;
+            text-align: center;
         }
 
         .sidebar-menu li a:hover, 
@@ -77,12 +92,6 @@
             background-color: rgba(0, 255, 136, 0.1);
             color: #00ff88;
             border-left-color: #00ff88;
-        }
-
-        .sidebar-menu li a i {
-            margin-right: 1rem;
-            width: 20px;
-            text-align: center;
         }
 
         /* Main Content */
@@ -107,37 +116,43 @@
             font-size: 1.5rem;
             font-weight: 600;
             color: #00ff88;
-        }
-
-        .navbar-user {
             display: flex;
             align-items: center;
         }
 
-        .navbar-user span {
-            margin-right: 1rem;
-            color: #00ff88;
-        }
-
-        .logout-btn {
-            background: none;
-            border: 1px solid #00ff88;
-            color: #00ff88;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-        }
-
-        .logout-btn i {
+        .navbar-title i {
             margin-right: 0.5rem;
         }
 
-        .logout-btn:hover {
+        .unlock-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .code-input {
+            background-color: #222;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            padding: 0.5rem;
+            width: 120px;
+        }
+
+        .unlock-btn {
             background-color: #00ff88;
             color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .unlock-btn:hover {
+            background-color: #00e67a;
+            transform: translateY(-2px);
         }
 
         /* Dashboard Content */
@@ -172,40 +187,41 @@
             border: 1px solid #333;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-
-        .stat-newspaper {
-            color: #00ff88;
-        }
-
-        .stat-players {
-            color: #00b3ff;
-        }
-
-        .stat-products {
-            color: #ff9900;
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .stat-number {
             font-size: 2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
-            color: white;
+            color: #666;
         }
 
         .stat-label {
-            opacity: 0.8;
+            opacity: 0.5;
             font-size: 0.9rem;
+        }
+
+        .unlocked .stat-card {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .unlocked .stat-number {
+            color: white;
+        }
+
+        .unlocked .stat-label {
+            opacity: 0.8;
+        }
+
+        .unlocked .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .unlocked .stat-icon {
+            color: #00ff88;
         }
 
         /* Table Styles */
@@ -216,6 +232,8 @@
             margin-bottom: 2rem;
             border: 1px solid #333;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .section-header {
@@ -230,27 +248,35 @@
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #00ff88;
+            color: #666;
         }
 
         .add-btn {
-            background-color: #00ff88;
-            color: #000;
+            background-color: #666;
+            color: #333;
             border: none;
             padding: 0.5rem 1rem;
             border-radius: 5px;
             font-weight: 600;
+            cursor: not-allowed;
+        }
+
+        .unlocked .data-section {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .unlocked .section-title {
+            color: #00ff88;
+        }
+
+        .unlocked .add-btn {
+            background-color: #00ff88;
+            color: #000;
             cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
         }
 
-        .add-btn i {
-            margin-right: 0.5rem;
-        }
-
-        .add-btn:hover {
+        .unlocked .add-btn:hover {
             background-color: #00e67a;
             transform: translateY(-2px);
         }
@@ -264,7 +290,7 @@
             background-color: #222;
             padding: 1rem;
             text-align: left;
-            color: #00ff88;
+            color: #666;
             font-weight: 600;
             border-bottom: 2px solid #333;
         }
@@ -272,7 +298,7 @@
         tbody td {
             padding: 1rem;
             border-bottom: 1px solid #222;
-            color: #ddd;
+            color: #666;
         }
 
         tbody tr:hover {
@@ -282,22 +308,30 @@
         .action-btn {
             background: none;
             border: none;
-            color: #00ff88;
-            cursor: pointer;
+            color: #666;
+            cursor: not-allowed;
             margin-right: 0.5rem;
             font-size: 1.1rem;
-            transition: color 0.3s;
         }
 
-        .action-btn:hover {
+        .unlocked .action-btn {
+            color: #00ff88;
+            cursor: pointer;
+        }
+
+        .unlocked .action-btn:hover {
             color: #00e67a;
         }
 
         .delete-btn {
+            color: #666;
+        }
+
+        .unlocked .delete-btn {
             color: #ff4d4d;
         }
 
-        .delete-btn:hover {
+        .unlocked .delete-btn:hover {
             color: #ff3333;
         }
 
@@ -374,13 +408,17 @@
         
         .form-tab {
             padding: 0.5rem 1rem;
-            cursor: pointer;
-            opacity: 0.7;
+            cursor: not-allowed;
+            opacity: 0.5;
             transition: all 0.3s;
             border-bottom: 2px solid transparent;
         }
         
-        .form-tab.active {
+        .unlocked .form-tab {
+            cursor: pointer;
+        }
+
+        .unlocked .form-tab.active {
             opacity: 1;
             border-bottom: 2px solid #00ff88;
             color: #00ff88;
@@ -420,16 +458,22 @@
         }
         
         .add-item-btn {
-            background-color: #00ff88;
-            color: #000;
+            background-color: #666;
+            color: #333;
             border: none;
             padding: 0.3rem 0.5rem;
             border-radius: 3px;
-            cursor: pointer;
+            cursor: not-allowed;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
+        }
+
+        .unlocked .add-item-btn {
+            background-color: #00ff88;
+            color: #000;
+            cursor: pointer;
         }
 
         .add-item-btn i {
@@ -509,6 +553,13 @@
             font-size: 1rem;
         }
 
+        .form-group input[disabled], 
+        .form-group textarea[disabled], 
+        .form-group select[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
@@ -535,37 +586,36 @@
             padding: 0.7rem 1.5rem;
             border-radius: 5px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            cursor: not-allowed;
             border: none;
         }
 
         .btn-secondary {
             background: none;
             border: 1px solid #666;
-            color: white;
+            color: #666;
         }
 
-        .btn-secondary:hover {
-            background-color: #333;
+        .unlocked .btn {
+            cursor: pointer;
         }
 
-        .btn-primary {
+        .unlocked .btn-primary {
             background-color: #00ff88;
             color: #000;
         }
 
-        .btn-primary:hover {
+        .unlocked .btn-primary:hover {
             background-color: #00e67a;
             transform: translateY(-2px);
         }
 
-        .btn-danger {
+        .unlocked .btn-danger {
             background-color: #ff4d4d;
             color: white;
         }
 
-        .btn-danger:hover {
+        .unlocked .btn-danger:hover {
             background-color: #ff3333;
             transform: translateY(-2px);
         }
@@ -612,6 +662,71 @@
             border-radius: 5px;
             margin-bottom: 1rem;
             border-left: 3px solid #ff4d4d;
+        }
+
+        /* Lock screen */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .lock-icon {
+            font-size: 5rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .lock-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #00ff88;
+        }
+
+        .lock-screen p {
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            max-width: 500px;
+        }
+
+        .unlock-code {
+            background-color: #222;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            padding: 0.8rem;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 5px;
+            width: 250px;
+            margin-bottom: 1rem;
+        }
+
+        .unlock-btn-large {
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .unlock-btn-large:hover {
+            background-color: #00e67a;
+            transform: translateY(-2px);
         }
 
         /* Responsive Design */
@@ -676,6 +791,17 @@
     </style>
 </head>
 <body>
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lock-screen">
+        <div class="lock-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+        <h2>Admin Panel Access</h2>
+        <p>Enter the access code to unlock the admin panel and view/edit content.</p>
+        <input type="text" class="unlock-code" id="unlock-code" placeholder="Enter code" maxlength="6">
+        <button class="unlock-btn-large" id="unlock-btn">Unlock Dashboard</button>
+    </div>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
@@ -693,9 +819,9 @@
     <div class="main-content">
         <nav class="navbar">
             <div class="navbar-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</div>
-            <div class="navbar-user">
-                <span id="username-display">Loading...</span>
-                <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            <div class="unlock-section">
+                <input type="text" class="code-input" id="navbar-code" placeholder="Code" maxlength="6">
+                <button class="unlock-btn" id="navbar-unlock-btn">Unlock</button>
             </div>
         </nav>
 
@@ -734,7 +860,7 @@
                     </div>
                     <div style="padding: 1.5rem; text-align: center; color: #888;">
                         <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                        <p>No recent activity to display</p>
+                        <p>Data is hidden. Enter the access code to view content.</p>
                     </div>
                 </div>
             </div>
@@ -758,7 +884,11 @@
                             </tr>
                         </thead>
                         <tbody id="news-table-body">
-                            <!-- News items will be populated by JavaScript -->
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: #888; padding: 2rem;">
+                                    News data is hidden. Enter the access code to view and manage news.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -784,7 +914,11 @@
                             </tr>
                         </thead>
                         <tbody id="players-table-body">
-                            <!-- Players will be populated by JavaScript -->
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">
+                                    Player data is hidden. Enter the access code to view and manage players.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -810,7 +944,11 @@
                             </tr>
                         </thead>
                         <tbody id="products-table-body">
-                            <!-- Products will be populated by JavaScript -->
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">
+                                    Product data is hidden. Enter the access code to view and manage products.
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -836,23 +974,23 @@
                     <input type="hidden" id="news-id">
                     <div class="form-group">
                         <label for="news-title">Title</label>
-                        <input type="text" id="news-title" name="title" required>
+                        <input type="text" id="news-title" name="title" required disabled>
                     </div>
                     <div class="form-group">
                         <label for="news-content">Content</label>
-                        <textarea id="news-content" name="content" required></textarea>
+                        <textarea id="news-content" name="content" required disabled></textarea>
                     </div>
                     <div class="form-group">
                         <label for="news-image">Image URL</label>
-                        <input type="text" id="news-image" name="image">
+                        <input type="text" id="news-image" name="image" disabled>
                     </div>
                     <div class="form-group">
                         <label for="news-author">Author</label>
-                        <input type="text" id="news-author" name="author" value="StealthUnitGG" required>
+                        <input type="text" id="news-author" name="author" value="StealthUnitGG" required disabled>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-news-btn">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save News</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-news-btn" disabled>Cancel</button>
+                        <button type="submit" class="btn btn-primary" disabled>Save News</button>
                     </div>
                 </form>
             </div>
@@ -888,7 +1026,7 @@
                         <div class="file-upload">
                             <label class="file-upload-label">Player Image:</label>
                             <div class="file-upload-input">
-                                <input type="file" id="player-image-upload" name="image" accept="image/*">
+                                <input type="file" id="player-image-upload" name="image" accept="image/*" disabled>
                                 <div class="current-image" id="current-image-container" style="display: none;">
                                     <p>Current image:</p>
                                     <img id="current-image" src="" alt="Current player image">
@@ -897,19 +1035,19 @@
                             
                             <div class="form-group">
                                 <label for="player-name">Full Name</label>
-                                <input type="text" id="player-name" name="name" required>
+                                <input type="text" id="player-name" name="name" required disabled>
                             </div>
                             <div class="form-group">
                                 <label for="player-username">In-game Username</label>
-                                <input type="text" id="player-username" name="username" required>
+                                <input type="text" id="player-username" name="username" required disabled>
                             </div>
                             <div class="form-group">
                                 <label for="player-role">Position/Role</label>
-                                <input type="text" id="player-role" name="role" required>
+                                <input type="text" id="player-role" name="role" required disabled>
                             </div>
                             <div class="form-group">
                                 <label for="player-game">Game</label>
-                                <input type="text" id="player-game" name="game" required>
+                                <input type="text" id="player-game" name="game" required disabled>
                             </div>
                         </div>
                         
@@ -917,7 +1055,7 @@
                         <div class="tab-content" id="bio-tab">
                             <div class="form-group">
                                 <label for="player-bio">Player Bio</label>
-                                <textarea id="player-bio" name="bio" class="bio-field"></textarea>
+                                <textarea id="player-bio" name="bio" class="bio-field" disabled></textarea>
                             </div>
                         </div>
                         
@@ -927,19 +1065,19 @@
                             <div class="social-links-grid">
                                 <div class="form-group">
                                     <label for="player-twitch">Twitch</label>
-                                    <input type="text" id="player-twitch" name="socialLinks.twitch">
+                                    <input type="text" id="player-twitch" name="socialLinks.twitch" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-twitter">Twitter</label>
-                                    <input type="text" id="player-twitter" name="socialLinks.twitter">
+                                    <input type="text" id="player-twitter" name="socialLinks.twitter" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-instagram">Instagram</label>
-                                    <input type="text" id="player-instagram" name="socialLinks.instagram">
+                                    <input type="text" id="player-instagram" name="socialLinks.instagram" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-youtube">YouTube</label>
-                                    <input type="text" id="player-youtube" name="socialLinks.youtube">
+                                    <input type="text" id="player-youtube" name="socialLinks.youtube" disabled>
                                 </div>
                             </div>
                             
@@ -947,19 +1085,19 @@
                             <div class="stats-grid">
                                 <div class="form-group">
                                     <label for="player-kills">Kills</label>
-                                    <input type="number" id="player-kills" name="stats.kills" value="0">
+                                    <input type="number" id="player-kills" name="stats.kills" value="0" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-deaths">Deaths</label>
-                                    <input type="number" id="player-deaths" name="stats.deaths" value="0">
+                                    <input type="number" id="player-deaths" name="stats.deaths" value="0" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-assists">Assists</label>
-                                    <input type="number" id="player-assists" name="stats.assists" value="0">
+                                    <input type="number" id="player-assists" name="stats.assists" value="0" disabled>
                                 </div>
                                 <div class="form-group">
                                     <label for="player-kd">K/D Ratio</label>
-                                    <input type="number" id="player-kd" name="stats.kdRatio" step="0.01" value="0">
+                                    <input type="number" id="player-kd" name="stats.kdRatio" step="0.01" value="0" disabled>
                                 </div>
                             </div>
                         </div>
@@ -968,7 +1106,7 @@
                         <div class="tab-content" id="history-tab">
                             <div class="achievements-container">
                                 <h3>Achievements</h3>
-                                <button type="button" class="add-item-btn" id="add-achievement">
+                                <button type="button" class="add-item-btn" id="add-achievement" disabled>
                                     <i class="fas fa-plus"></i> Add Achievement
                                 </button>
                                 <div id="achievements-list">
@@ -978,7 +1116,7 @@
                             
                             <div class="team-history-container">
                                 <h3>Team History</h3>
-                                <button type="button" class="add-item-btn" id="add-team">
+                                <button type="button" class="add-item-btn" id="add-team" disabled>
                                     <i class="fas fa-plus"></i> Add Team
                                 </button>
                                 <div id="team-history-list">
@@ -988,8 +1126,8 @@
                         </div>
                         
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-player-btn">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Player</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-player-btn" disabled>Cancel</button>
+                            <button type="submit" class="btn btn-primary" disabled>Save Player</button>
                         </div>
                     </form>
                 </div>
@@ -1014,23 +1152,23 @@
                         <input type="hidden" id="product-id">
                         <div class="form-group">
                             <label for="product-name">Product Name</label>
-                            <input type="text" id="product-name" name="name" required>
+                            <input type="text" id="product-name" name="name" required disabled>
                         </div>
                         <div class="form-group">
                             <label for="product-description">Description</label>
-                            <textarea id="product-description" name="description" required></textarea>
+                            <textarea id="product-description" name="description" required disabled></textarea>
                         </div>
                         <div class="form-group">
                             <label for="product-price">Price</label>
-                            <input type="number" id="product-price" name="price" step="0.01" required>
+                            <input type="number" id="product-price" name="price" step="0.01" required disabled>
                         </div>
                         <div class="form-group">
                             <label for="product-image">Image URL</label>
-                            <input type="text" id="product-image" name="image" required>
+                            <input type="text" id="product-image" name="image" required disabled>
                         </div>
                         <div class="form-group">
                             <label for="product-category">Category</label>
-                            <select id="product-category" name="category" required>
+                            <select id="product-category" name="category" required disabled>
                                 <option value="Apparel">Apparel</option>
                                 <option value="Accessories">Accessories</option>
                                 <option value="Collectibles">Collectibles</option>
@@ -1038,11 +1176,11 @@
                         </div>
                         <div class="form-group">
                             <label for="product-stock">In Stock</label>
-                            <input type="checkbox" id="product-stock" name="inStock" checked>
+                            <input type="checkbox" id="product-stock" name="inStock" checked disabled>
                         </div>
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-product-btn">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Product</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-product-btn" disabled>Cancel</button>
+                            <button type="submit" class="btn btn-primary" disabled>Save Product</button>
                         </div>
                     </form>
                 </div>
@@ -1050,31 +1188,72 @@
         </div>
         
         <script>
-            // Check if user is authenticated when loading the page
-            async function checkAuth() {
-                try {
-                    // We'll use the fact that if we can access the dashboard, we're authenticated
-                    // The requireAuth middleware will redirect if not authenticated
-                    const response = await fetch('/api/admin/news', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (response.status === 401) {
-                        // Not authenticated, redirect to login
-                        window.location.href = '/adminp/login';
-                        return false;
-                    }
-                    
+            // Check if access code is stored in localStorage
+            function checkAccessCode() {
+                const storedCode = localStorage.getItem('adminAccessCode');
+                return storedCode === '247915';
+            }
+            
+            // Apply unlocked state
+            function unlockDashboard() {
+                document.body.classList.add('unlocked');
+                document.getElementById('lock-screen').style.display = 'none';
+                
+                // Store the code in localStorage for future visits
+                localStorage.setItem('adminAccessCode', '247915');
+                
+                // Load data
+                loadDashboardStats();
+                loadNews();
+                loadPlayers();
+                loadProducts();
+            }
+            
+            // Check access code
+            function verifyAccessCode(code) {
+                if (code === '247915') {
+                    unlockDashboard();
                     return true;
-                } catch (error) {
-                    console.error('Auth check error:', error);
-                    window.location.href = '/adminp/login';
+                } else {
+                    alert('Invalid access code. Please try again.');
                     return false;
                 }
             }
+            
+            // Show lock screen if no valid code is stored
+            if (!checkAccessCode()) {
+                document.getElementById('lock-screen').style.display = 'flex';
+            } else {
+                unlockDashboard();
+            }
+            
+            // Unlock with code
+            document.getElementById('unlock-btn').addEventListener('click', function() {
+                const code = document.getElementById('unlock-code').value;
+                verifyAccessCode(code);
+            });
+            
+            // Allow Enter key to submit code
+            document.getElementById('unlock-code').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const code = document.getElementById('unlock-code').value;
+                    verifyAccessCode(code);
+                }
+            });
+            
+            // Navbar unlock button
+            document.getElementById('navbar-unlock-btn').addEventListener('click', function() {
+                const code = document.getElementById('navbar-code').value;
+                verifyAccessCode(code);
+            });
+            
+            // Navbar code input - Enter key
+            document.getElementById('navbar-code').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const code = document.getElementById('navbar-code').value;
+                    verifyAccessCode(code);
+                }
+            });
             
             // Tab navigation
             const tabs = document.querySelectorAll('.sidebar-menu a');
@@ -1094,20 +1273,6 @@
                     // Show corresponding content
                     const tabId = this.getAttribute('data-tab');
                     document.getElementById(`${tabId}-tab`).classList.add('active');
-                    
-                    // Update page title
-                    document.querySelector('.navbar-title').innerHTML = `<i class="fas fa-${tabId === 'dashboard' ? 'tachometer-alt' : tabId === 'news' ? 'newspaper' : tabId === 'players' ? 'users' : 'store'}"></i> ${this.textContent.trim()}`;
-                    
-                    // Load data for the selected tab
-                    if (tabId === 'dashboard') {
-                        loadDashboardStats();
-                    } else if (tabId === 'news') {
-                        loadNews();
-                    } else if (tabId === 'players') {
-                        loadPlayers();
-                    } else if (tabId === 'products') {
-                        loadProducts();
-                    }
                 });
             });
             
@@ -1115,20 +1280,31 @@
             const formTabs = document.querySelectorAll('.form-tab');
             const formTabContents = document.querySelectorAll('.tab-content');
             
-            formTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs and content
-                    formTabs.forEach(t => t.classList.remove('active'));
-                    formTabContents.forEach(tc => tc.classList.remove('active'));
-                    
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-                    
-                    // Show corresponding content
-                    const tabId = this.getAttribute('data-tab');
-                    document.getElementById(`${tabId}-tab`).classList.add('active');
+            // Make sure form tabs are clickable when unlocked
+            function setupFormTabs() {
+                formTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        // Only allow tab switching if unlocked
+                        if (!document.body.classList.contains('unlocked')) {
+                            return;
+                        }
+                        
+                        // Remove active class from all tabs and content
+                        formTabs.forEach(t => t.classList.remove('active'));
+                        formTabContents.forEach(tc => tc.classList.remove('active'));
+                        
+                        // Add active class to clicked tab
+                        this.classList.add('active');
+                        
+                        // Show corresponding content
+                        const tabId = this.getAttribute('data-tab');
+                        document.getElementById(`${tabId}-tab`).classList.add('active');
+                    });
                 });
-            });
+            }
+            
+            // Call setupFormTabs when the page loads
+            document.addEventListener('DOMContentLoaded', setupFormTabs);
             
             // Modal functionality
             const modals = document.querySelectorAll('.modal');
@@ -1136,6 +1312,12 @@
             const cancelButtons = document.querySelectorAll('[id^=cancel-]');
             
             function openModal(modalId) {
+                // Only allow opening if unlocked
+                if (!document.body.classList.contains('unlocked')) {
+                    alert('Please enter the access code to use the admin panel.');
+                    return;
+                }
+                
                 document.getElementById(modalId).style.display = 'flex';
                 // Reset messages
                 document.querySelectorAll('.success-message, .error-message, .loading').forEach(el => {
@@ -1187,6 +1369,7 @@
                 document.getElementById('player-modal-title').textContent = 'Add Player';
                 document.getElementById('player-form').reset();
                 document.getElementById('current-image-container').style.display = 'none';
+                document.querySelectorAll('#achievements-list, #team-history-list').forEach(el => el.innerHTML = '');
                 openModal('player-modal');
             });
             
@@ -1341,57 +1524,53 @@
             });
             
             // Dynamic list items for achievements and team history
-            document.getElementById('add-achievement').addEventListener('click', function() {
-                const container = document.getElementById('achievements-list');
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `
-                    <input type="text" name="achievements" placeholder="Enter achievement">
-                    <button type="button" class="remove-item-btn">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                `;
-                container.appendChild(item);
-                
-                // Add event listener to remove button
-                item.querySelector('.remove-item-btn').addEventListener('click', function() {
-                    container.removeChild(item);
-                });
-            });
-            
-            document.getElementById('add-team').addEventListener('click', function() {
-                const container = document.getElementById('team-history-list');
-                const item = document.createElement('div');
-                item.className = 'list-item';
-                item.innerHTML = `
-                    <input type="text" name="teamHistory" placeholder="Enter team name">
-                    <button type="button" class="remove-item-btn">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                `;
-                container.appendChild(item);
-                
-                // Add event listener to remove button
-                item.querySelector('.remove-item-btn').addEventListener('click', function() {
-                    container.removeChild(item);
-                });
-            });
-            
-            // Logout button
-            document.getElementById('logout-btn').addEventListener('click', async function() {
-                if (confirm('Are you sure you want to log out?')) {
-                    try {
-                        await fetch('/adminp/logout', { method: 'POST' });
-                        window.location.href = '/adminp/login';
-                    } catch (error) {
-                        console.error('Logout error:', error);
-                        window.location.href = '/adminp/login';
-                    }
+            function setupDynamicLists() {
+                // Only set up dynamic lists when unlocked
+                if (!document.body.classList.contains('unlocked')) {
+                    return;
                 }
-            });
+                
+                document.getElementById('add-achievement').addEventListener('click', function() {
+                    const container = document.getElementById('achievements-list');
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <input type="text" name="achievements" placeholder="Enter achievement">
+                        <button type="button" class="remove-item-btn">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    `;
+                    container.appendChild(item);
+                    
+                    // Add event listener to remove button
+                    item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                        container.removeChild(item);
+                    });
+                });
+                
+                document.getElementById('add-team').addEventListener('click', function() {
+                    const container = document.getElementById('team-history-list');
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <input type="text" name="teamHistory" placeholder="Enter team name">
+                        <button type="button" class="remove-item-btn">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    `;
+                    container.appendChild(item);
+                    
+                    // Add event listener to remove button
+                    item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                        container.removeChild(item);
+                    });
+                });
+            }
             
             // Load initial data
             async function loadDashboardStats() {
+                if (!document.body.classList.contains('unlocked')) return;
+                
                 try {
                     const [newsRes, playersRes, productsRes] = await Promise.all([
                         fetch('/api/admin/news'),
@@ -1414,11 +1593,24 @@
             }
             
             async function loadNews() {
+                if (!document.body.classList.contains('unlocked')) return;
+                
                 try {
                     const response = await fetch('/api/admin/news');
                     const news = await response.json();
                     const tableBody = document.getElementById('news-table-body');
                     tableBody.innerHTML = '';
+                    
+                    if (news.length === 0) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td colspan="4" style="text-align: center; color: #888; padding: 2rem;">
+                                No news articles found. Click "Add News" to create one.
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                        return;
+                    }
                     
                     news.forEach(item => {
                         const row = document.createElement('tr');
@@ -1483,11 +1675,24 @@
             }
             
             async function loadPlayers() {
+                if (!document.body.classList.contains('unlocked')) return;
+                
                 try {
                     const response = await fetch('/api/admin/players');
                     const players = await response.json();
                     const tableBody = document.getElementById('players-table-body');
                     tableBody.innerHTML = '';
+                    
+                    if (players.length === 0) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">
+                                No players found. Click "Add Player" to create one.
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                        return;
+                    }
                     
                     players.forEach(player => {
                         const row = document.createElement('tr');
@@ -1619,11 +1824,24 @@
             }
             
             async function loadProducts() {
+                if (!document.body.classList.contains('unlocked')) return;
+                
                 try {
                     const response = await fetch('/api/admin/products');
                     const products = await response.json();
                     const tableBody = document.getElementById('products-table-body');
                     tableBody.innerHTML = '';
+                    
+                    if (products.length === 0) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">
+                                No products found. Click "Add Product" to create one.
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                        return;
+                    }
                     
                     products.forEach(product => {
                         const row = document.createElement('tr');
@@ -1690,45 +1908,21 @@
                 }
             }
             
-            // Load username from session
-            async function loadUsername() {
-                try {
-                    // We can't directly access the session, but we can check if we can access protected routes
-                    const response = await fetch('/api/admin/news', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        // We're authenticated, but we don't have the username
-                        // We'll just show a generic message
-                        document.getElementById('username-display').textContent = 'Admin User';
-                    } else {
-                        // Not authenticated
-                        window.location.href = '/adminp/login';
-                    }
-                } catch (error) {
-                    console.error('Error loading username:', error);
-                    window.location.href = '/adminp/login';
-                }
-            }
-            
             // Initialize the page
-            document.addEventListener('DOMContentLoaded', async () => {
-                // Check authentication
-                const isAuthenticated = await checkAuth();
-                if (!isAuthenticated) return;
+            document.addEventListener('DOMContentLoaded', () => {
+                // If already unlocked, load data
+                if (document.body.classList.contains('unlocked')) {
+                    loadDashboardStats();
+                    loadNews();
+                    loadPlayers();
+                    loadProducts();
+                    
+                    // Set initial tab
+                    document.querySelector('.sidebar-menu li:first-child a').click();
+                }
                 
-                // Load username
-                await loadUsername();
-                
-                // Load initial data
-                loadDashboardStats();
-                
-                // Set initial tab
-                document.querySelector('.sidebar-menu li:first-child a').click();
+                // Set up dynamic lists
+                setupDynamicLists();
             });
             
             // Player image upload preview
