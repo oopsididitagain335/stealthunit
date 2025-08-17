@@ -199,15 +199,15 @@ app.post('/adminp/login', async (req, res) => {
       req.session.username = admin.username;
       req.session.role = admin.role;
       
-      // Return success response
-      res.json({ success: true, message: 'Login successful' });
+      // Redirect to dashboard on successful login
+      res.redirect('/adminp/dashboard');
     } else {
-      // Invalid credentials
-      res.status(401).json({ error: 'Invalid username or password' });
+      // Invalid credentials - redirect back to login with error
+      res.redirect('/adminp/login');
     }
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.redirect('/adminp/login');
   }
 });
 
