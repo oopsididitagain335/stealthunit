@@ -18,17 +18,20 @@
             background-color: #000;
             color: white;
             display: flex;
+            min-height: 100vh;
         }
 
         /* Sidebar */
         .sidebar {
             width: 250px;
             height: 100vh;
-            background-color: #111;
+            background: linear-gradient(180deg, #0a0a0a 0%, #000 100%);
             padding: 2rem 0;
             position: fixed;
             left: 0;
             top: 0;
+            border-right: 1px solid #222;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
         }
 
         .sidebar-header {
@@ -37,9 +40,16 @@
             padding: 0 1rem;
         }
 
-        .sidebar-header h2 {
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: block;
+        }
+
+        .logo span {
             color: #00ff88;
-            font-size: 1.5rem;
         }
 
         .sidebar-menu {
@@ -48,6 +58,7 @@
 
         .sidebar-menu li {
             margin-bottom: 0.5rem;
+            position: relative;
         }
 
         .sidebar-menu li a {
@@ -58,17 +69,20 @@
             transition: all 0.3s;
             display: flex;
             align-items: center;
+            border-left: 3px solid transparent;
         }
 
         .sidebar-menu li a:hover, 
         .sidebar-menu li a.active {
-            background-color: #222;
+            background-color: rgba(0, 255, 136, 0.1);
             color: #00ff88;
+            border-left-color: #00ff88;
         }
 
         .sidebar-menu li a i {
             margin-right: 1rem;
             width: 20px;
+            text-align: center;
         }
 
         /* Main Content */
@@ -76,20 +90,23 @@
             flex: 1;
             margin-left: 250px;
             min-height: 100vh;
+            background-color: #111;
         }
 
         .navbar {
-            background-color: #111;
+            background: linear-gradient(90deg, #0a0a0a 0%, #111 100%);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #222;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .navbar-title {
             font-size: 1.5rem;
             font-weight: 600;
+            color: #00ff88;
         }
 
         .navbar-user {
@@ -99,6 +116,7 @@
 
         .navbar-user span {
             margin-right: 1rem;
+            color: #00ff88;
         }
 
         .logout-btn {
@@ -109,6 +127,12 @@
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .logout-btn i {
+            margin-right: 0.5rem;
         }
 
         .logout-btn:hover {
@@ -124,6 +148,13 @@
         .page-title {
             margin-bottom: 2rem;
             font-size: 2rem;
+            color: #00ff88;
+            display: flex;
+            align-items: center;
+        }
+
+        .page-title i {
+            margin-right: 0.5rem;
         }
 
         .stats-container {
@@ -134,47 +165,72 @@
         }
 
         .stat-card {
-            background-color: #111;
+            background: linear-gradient(135deg, #1a1a1a 0%, #222 100%);
             padding: 1.5rem;
             border-radius: 10px;
             text-align: center;
+            border: 1px solid #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
         }
 
         .stat-icon {
             font-size: 2.5rem;
-            color: #00ff88;
             margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .stat-newspaper {
+            color: #00ff88;
+        }
+
+        .stat-players {
+            color: #00b3ff;
+        }
+
+        .stat-products {
+            color: #ff9900;
         }
 
         .stat-number {
             font-size: 2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            color: white;
         }
 
         .stat-label {
             opacity: 0.8;
+            font-size: 0.9rem;
         }
 
         /* Table Styles */
         .data-section {
-            background-color: #111;
+            background-color: #1a1a1a;
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 2rem;
+            border: 1px solid #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .section-header {
             padding: 1.5rem;
-            background-color: #222;
+            background: linear-gradient(90deg, #111 0%, #1a1a1a 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #333;
         }
 
         .section-title {
             font-size: 1.3rem;
             font-weight: 600;
+            color: #00ff88;
         }
 
         .add-btn {
@@ -186,10 +242,17 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .add-btn i {
+            margin-right: 0.5rem;
         }
 
         .add-btn:hover {
             background-color: #00e67a;
+            transform: translateY(-2px);
         }
 
         table {
@@ -201,11 +264,15 @@
             background-color: #222;
             padding: 1rem;
             text-align: left;
+            color: #00ff88;
+            font-weight: 600;
+            border-bottom: 2px solid #333;
         }
 
         tbody td {
             padding: 1rem;
             border-bottom: 1px solid #222;
+            color: #ddd;
         }
 
         tbody tr:hover {
@@ -219,10 +286,19 @@
             cursor: pointer;
             margin-right: 0.5rem;
             font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .action-btn:hover {
+            color: #00e67a;
         }
 
         .delete-btn {
             color: #ff4d4d;
+        }
+
+        .delete-btn:hover {
+            color: #ff3333;
         }
 
         /* Modal */
@@ -233,44 +309,61 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
-            background-color: #111;
+            background-color: #1a1a1a;
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             border-radius: 10px;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
         }
 
         .modal-header {
             padding: 1.5rem;
-            background-color: #222;
+            background: linear-gradient(90deg, #111 0%, #1a1a1a 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #333;
         }
 
         .modal-title {
             font-size: 1.3rem;
             font-weight: 600;
+            color: #00ff88;
         }
 
         .close-modal {
             background: none;
             border: none;
-            color: white;
+            color: #ff4d4d;
             font-size: 1.5rem;
             cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #ff3333;
         }
 
         .modal-body {
             padding: 2rem;
+            max-height: 60vh;
+            overflow-y: auto;
         }
 
         .form-tabs {
@@ -284,11 +377,13 @@
             cursor: pointer;
             opacity: 0.7;
             transition: all 0.3s;
+            border-bottom: 2px solid transparent;
         }
         
         .form-tab.active {
             opacity: 1;
             border-bottom: 2px solid #00ff88;
+            color: #00ff88;
         }
         
         .tab-content {
@@ -316,6 +411,7 @@
         .list-item {
             display: flex;
             margin-bottom: 0.5rem;
+            align-items: center;
         }
         
         .list-item input {
@@ -332,6 +428,12 @@
             cursor: pointer;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .add-item-btn i {
+            margin-right: 0.3rem;
         }
         
         .remove-item-btn {
@@ -342,16 +444,24 @@
             border-radius: 3px;
             cursor: pointer;
             font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .remove-item-btn i {
+            margin-right: 0.3rem;
         }
         
         .file-upload {
             display: flex;
             align-items: center;
             margin-bottom: 1rem;
+            flex-wrap: wrap;
         }
         
         .file-upload-label {
             margin-right: 1rem;
+            min-width: 120px;
         }
         
         .file-upload-input {
@@ -362,11 +472,19 @@
             margin-top: 1rem;
             max-width: 200px;
             border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #333;
         }
         
         .current-image img {
             width: 100%;
             border-radius: 5px;
+        }
+
+        .current-image p {
+            margin-bottom: 0.5rem;
+            color: #00ff88;
+            font-size: 0.9rem;
         }
         
         .form-group {
@@ -396,11 +514,21 @@
             resize: vertical;
         }
 
+        .form-group input:focus, 
+        .form-group textarea:focus, 
+        .form-group select:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+        }
+
         .form-actions {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
             margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #333;
         }
 
         .btn {
@@ -409,6 +537,7 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            border: none;
         }
 
         .btn-secondary {
@@ -424,21 +553,125 @@
         .btn-primary {
             background-color: #00ff88;
             color: #000;
-            border: none;
         }
 
         .btn-primary:hover {
             background-color: #00e67a;
+            transform: translateY(-2px);
         }
 
         .btn-danger {
             background-color: #ff4d4d;
             color: white;
-            border: none;
         }
 
         .btn-danger:hover {
             background-color: #ff3333;
+            transform: translateY(-2px);
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid #333;
+            border-top: 3px solid #00ff88;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            background-color: rgba(0, 255, 136, 0.1);
+            color: #00ff88;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #00ff88;
+        }
+
+        /* Error message */
+        .error-message {
+            display: none;
+            background-color: rgba(255, 77, 77, 0.1);
+            color: #ff4d4d;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #ff4d4d;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 1rem;
+            }
+            
+            .form-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .form-tab {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .navbar-title {
+                font-size: 1.2rem;
+            }
+            
+            .dashboard-content {
+                padding: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .file-upload {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .file-upload-label {
+                margin-bottom: 0.5rem;
+                margin-right: 0;
+            }
         }
     </style>
 </head>
@@ -446,7 +679,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>StealthUnitGG Admin</h2>
+            <a href="/adminp/dashboard" class="logo">Stealth<span>Unit</span>GG</a>
         </div>
         <ul class="sidebar-menu">
             <li><a href="#" class="active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
@@ -459,35 +692,35 @@
     <!-- Main Content -->
     <div class="main-content">
         <nav class="navbar">
-            <div class="navbar-title">Dashboard</div>
+            <div class="navbar-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</div>
             <div class="navbar-user">
-                <span id="username-display">admin</span>
-                <button class="logout-btn" id="logout-btn">Logout</button>
+                <span id="username-display">Loading...</span>
+                <button class="logout-btn" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </nav>
 
         <div class="dashboard-content">
             <!-- Dashboard Tab -->
             <div id="dashboard-tab" class="tab-content active">
-                <h1 class="page-title">Dashboard</h1>
+                <h1 class="page-title"><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
                 
                 <div class="stats-container">
                     <div class="stat-card">
-                        <div class="stat-icon">
+                        <div class="stat-icon stat-newspaper">
                             <i class="fas fa-newspaper"></i>
                         </div>
                         <div class="stat-number" id="news-count">0</div>
                         <div class="stat-label">News Articles</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">
+                        <div class="stat-icon stat-players">
                             <i class="fas fa-users"></i>
                         </div>
                         <div class="stat-number" id="players-count">0</div>
                         <div class="stat-label">Players</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-icon">
+                        <div class="stat-icon stat-products">
                             <i class="fas fa-store"></i>
                         </div>
                         <div class="stat-number" id="products-count">0</div>
@@ -495,20 +728,25 @@
                     </div>
                 </div>
                 
-                <div class="recent-activity">
-                    <h2 class="page-title">Recent Activity</h2>
-                    <p>Recent activity will be displayed here.</p>
+                <div class="data-section">
+                    <div class="section-header">
+                        <div class="section-title">Recent Activity</div>
+                    </div>
+                    <div style="padding: 1.5rem; text-align: center; color: #888;">
+                        <i class="fas fa-history" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>No recent activity to display</p>
+                    </div>
                 </div>
             </div>
 
             <!-- News Management Tab -->
             <div id="news-tab" class="tab-content">
-                <h1 class="page-title">News Management</h1>
+                <h1 class="page-title"><i class="fas fa-newspaper"></i> News Management</h1>
                 
                 <div class="data-section">
                     <div class="section-header">
                         <div class="section-title">News Articles</div>
-                        <button class="add-btn" id="add-news-btn">Add News</button>
+                        <button class="add-btn" id="add-news-btn"><i class="fas fa-plus"></i> Add News</button>
                     </div>
                     <table>
                         <thead>
@@ -528,12 +766,12 @@
 
             <!-- Players Management Tab -->
             <div id="players-tab" class="tab-content">
-                <h1 class="page-title">Players Management</h1>
+                <h1 class="page-title"><i class="fas fa-users"></i> Players Management</h1>
                 
                 <div class="data-section">
                     <div class="section-header">
                         <div class="section-title">Team Players</div>
-                        <button class="add-btn" id="add-player-btn">Add Player</button>
+                        <button class="add-btn" id="add-player-btn"><i class="fas fa-plus"></i> Add Player</button>
                     </div>
                     <table>
                         <thead>
@@ -554,12 +792,12 @@
 
             <!-- Products Management Tab -->
             <div id="products-tab" class="tab-content">
-                <h1 class="page-title">Products Management</h1>
+                <h1 class="page-title"><i class="fas fa-store"></i> Products Management</h1>
                 
                 <div class="data-section">
                     <div class="section-header">
                         <div class="section-title">Store Products</div>
-                        <button class="add-btn" id="add-product-btn">Add Product</button>
+                        <button class="add-btn" id="add-product-btn"><i class="fas fa-plus"></i> Add Product</button>
                     </div>
                     <table>
                         <thead>
@@ -588,6 +826,12 @@
                 <button class="close-modal" id="close-news-modal">&times;</button>
             </div>
             <div class="modal-body">
+                <div class="success-message" id="news-success">News saved successfully!</div>
+                <div class="error-message" id="news-error">Error saving news. Please try again.</div>
+                <div class="loading" id="news-loading">
+                    <div class="spinner"></div>
+                    Saving news...
+                </div>
                 <form id="news-form">
                     <input type="hidden" id="news-id">
                     <div class="form-group">
@@ -623,6 +867,12 @@
                 <button class="close-modal" id="close-player-modal">&times;</button>
             </div>
             <div class="modal-body">
+                <div class="success-message" id="player-success">Player saved successfully!</div>
+                <div class="error-message" id="player-error">Error saving player. Please try again.</div>
+                <div class="loading" id="player-loading">
+                    <div class="spinner"></div>
+                    Saving player...
+                </div>
                 <form id="player-form" enctype="multipart/form-data">
                     <input type="hidden" id="player-id">
                     
@@ -718,7 +968,9 @@
                         <div class="tab-content" id="history-tab">
                             <div class="achievements-container">
                                 <h3>Achievements</h3>
-                                <button type="button" class="add-item-btn" id="add-achievement">Add Achievement</button>
+                                <button type="button" class="add-item-btn" id="add-achievement">
+                                    <i class="fas fa-plus"></i> Add Achievement
+                                </button>
                                 <div id="achievements-list">
                                     <!-- Achievements will be added here -->
                                 </div>
@@ -726,7 +978,9 @@
                             
                             <div class="team-history-container">
                                 <h3>Team History</h3>
-                                <button type="button" class="add-item-btn" id="add-team">Add Team</button>
+                                <button type="button" class="add-item-btn" id="add-team">
+                                    <i class="fas fa-plus"></i> Add Team
+                                </button>
                                 <div id="team-history-list">
                                     <!-- Team history items will be added here -->
                                 </div>
@@ -750,6 +1004,12 @@
                     <button class="close-modal" id="close-product-modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <div class="success-message" id="product-success">Product saved successfully!</div>
+                    <div class="error-message" id="product-error">Error saving product. Please try again.</div>
+                    <div class="loading" id="product-loading">
+                        <div class="spinner"></div>
+                        Saving product...
+                    </div>
                     <form id="product-form">
                         <input type="hidden" id="product-id">
                         <div class="form-group">
@@ -790,6 +1050,32 @@
         </div>
         
         <script>
+            // Check if user is authenticated when loading the page
+            async function checkAuth() {
+                try {
+                    // We'll use the fact that if we can access the dashboard, we're authenticated
+                    // The requireAuth middleware will redirect if not authenticated
+                    const response = await fetch('/api/admin/news', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.status === 401) {
+                        // Not authenticated, redirect to login
+                        window.location.href = '/adminp/login';
+                        return false;
+                    }
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Auth check error:', error);
+                    window.location.href = '/adminp/login';
+                    return false;
+                }
+            }
+            
             // Tab navigation
             const tabs = document.querySelectorAll('.sidebar-menu a');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -810,7 +1096,7 @@
                     document.getElementById(`${tabId}-tab`).classList.add('active');
                     
                     // Update page title
-                    document.querySelector('.navbar-title').textContent = this.textContent.trim();
+                    document.querySelector('.navbar-title').innerHTML = `<i class="fas fa-${tabId === 'dashboard' ? 'tachometer-alt' : tabId === 'news' ? 'newspaper' : tabId === 'players' ? 'users' : 'store'}"></i> ${this.textContent.trim()}`;
                     
                     // Load data for the selected tab
                     if (tabId === 'dashboard') {
@@ -851,6 +1137,10 @@
             
             function openModal(modalId) {
                 document.getElementById(modalId).style.display = 'flex';
+                // Reset messages
+                document.querySelectorAll('.success-message, .error-message, .loading').forEach(el => {
+                    el.style.display = 'none';
+                });
             }
             
             function closeModal(modalId) {
@@ -918,6 +1208,9 @@
             document.getElementById('player-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                // Show loading
+                document.getElementById('player-loading').style.display = 'block';
+                
                 const formData = new FormData(this);
                 const playerId = document.getElementById('player-id').value;
                 const method = playerId ? 'PUT' : 'POST';
@@ -930,20 +1223,33 @@
                     });
                     
                     if (response.ok) {
-                        closeModal('player-modal');
-                        loadPlayers();
+                        // Hide loading, show success
+                        document.getElementById('player-loading').style.display = 'none';
+                        document.getElementById('player-success').style.display = 'block';
+                        
+                        // Wait a moment then close modal and reload data
+                        setTimeout(() => {
+                            closeModal('player-modal');
+                            loadPlayers();
+                        }, 1000);
                     } else {
-                        alert('Error saving player');
+                        // Hide loading, show error
+                        document.getElementById('player-loading').style.display = 'none';
+                        document.getElementById('player-error').style.display = 'block';
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error saving player');
+                    document.getElementById('player-loading').style.display = 'none';
+                    document.getElementById('player-error').style.display = 'block';
                 }
             });
             
             // News form submit
             document.getElementById('news-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
+                
+                // Show loading
+                document.getElementById('news-loading').style.display = 'block';
                 
                 const formData = new FormData();
                 formData.append('title', document.getElementById('news-title').value);
@@ -962,20 +1268,33 @@
                     });
                     
                     if (response.ok) {
-                        closeModal('news-modal');
-                        loadNews();
+                        // Hide loading, show success
+                        document.getElementById('news-loading').style.display = 'none';
+                        document.getElementById('news-success').style.display = 'block';
+                        
+                        // Wait a moment then close modal and reload data
+                        setTimeout(() => {
+                            closeModal('news-modal');
+                            loadNews();
+                        }, 1000);
                     } else {
-                        alert('Error saving news');
+                        // Hide loading, show error
+                        document.getElementById('news-loading').style.display = 'none';
+                        document.getElementById('news-error').style.display = 'block';
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error saving news');
+                    document.getElementById('news-loading').style.display = 'none';
+                    document.getElementById('news-error').style.display = 'block';
                 }
             });
             
             // Product form submit
             document.getElementById('product-form').addEventListener('submit', async function(e) {
                 e.preventDefault();
+                
+                // Show loading
+                document.getElementById('product-loading').style.display = 'block';
                 
                 const productData = {
                     name: document.getElementById('product-name').value,
@@ -1000,14 +1319,24 @@
                     });
                     
                     if (response.ok) {
-                        closeModal('product-modal');
-                        loadProducts();
+                        // Hide loading, show success
+                        document.getElementById('product-loading').style.display = 'none';
+                        document.getElementById('product-success').style.display = 'block';
+                        
+                        // Wait a moment then close modal and reload data
+                        setTimeout(() => {
+                            closeModal('product-modal');
+                            loadProducts();
+                        }, 1000);
                     } else {
-                        alert('Error saving product');
+                        // Hide loading, show error
+                        document.getElementById('product-loading').style.display = 'none';
+                        document.getElementById('product-error').style.display = 'block';
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error saving product');
+                    document.getElementById('product-loading').style.display = 'none';
+                    document.getElementById('product-error').style.display = 'block';
                 }
             });
             
@@ -1018,7 +1347,9 @@
                 item.className = 'list-item';
                 item.innerHTML = `
                     <input type="text" name="achievements" placeholder="Enter achievement">
-                    <button type="button" class="remove-item-btn">Remove</button>
+                    <button type="button" class="remove-item-btn">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
                 `;
                 container.appendChild(item);
                 
@@ -1034,7 +1365,9 @@
                 item.className = 'list-item';
                 item.innerHTML = `
                     <input type="text" name="teamHistory" placeholder="Enter team name">
-                    <button type="button" class="remove-item-btn">Remove</button>
+                    <button type="button" class="remove-item-btn">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
                 `;
                 container.appendChild(item);
                 
@@ -1046,35 +1379,18 @@
             
             // Logout button
             document.getElementById('logout-btn').addEventListener('click', async function() {
-                try {
-                    await fetch('/adminp/logout', { method: 'POST' });
-                    window.location.href = '/adminp/login';
-                } catch (error) {
-                    console.error('Logout error:', error);
+                if (confirm('Are you sure you want to log out?')) {
+                    try {
+                        await fetch('/adminp/logout', { method: 'POST' });
+                        window.location.href = '/adminp/login';
+                    } catch (error) {
+                        console.error('Logout error:', error);
+                        window.location.href = '/adminp/login';
+                    }
                 }
             });
             
             // Load initial data
-            loadDashboardStats();
-            
-            // Set initial tab
-            document.querySelector('.sidebar-menu li:first-child a').click();
-            
-            // Player image upload preview
-            document.getElementById('player-image-upload').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.getElementById('current-image');
-                        img.src = e.target.result;
-                        document.getElementById('current-image-container').style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-            
-            // Data loading functions
             async function loadDashboardStats() {
                 try {
                     const [newsRes, playersRes, productsRes] = await Promise.all([
@@ -1133,7 +1449,7 @@
                                 document.getElementById('news-author').value = news.author;
                                 
                                 document.getElementById('news-modal-title').textContent = 'Edit News';
-                                document.getElementById('news-modal').style.display = 'flex';
+                                openModal('news-modal');
                             } catch (error) {
                                 console.error('Error fetching news:', error);
                             }
@@ -1228,7 +1544,9 @@
                                         item.className = 'list-item';
                                         item.innerHTML = `
                                             <input type="text" name="achievements" value="${achievement}" placeholder="Enter achievement">
-                                            <button type="button" class="remove-item-btn">Remove</button>
+                                            <button type="button" class="remove-item-btn">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
                                         `;
                                         container.appendChild(item);
                                         
@@ -1246,7 +1564,9 @@
                                         item.className = 'list-item';
                                         item.innerHTML = `
                                             <input type="text" name="teamHistory" value="${team}" placeholder="Enter team name">
-                                            <button type="button" class="remove-item-btn">Remove</button>
+                                            <button type="button" class="remove-item-btn">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
                                         `;
                                         container.appendChild(item);
                                         
@@ -1265,7 +1585,7 @@
                                 }
                                 
                                 document.getElementById('player-modal-title').textContent = 'Edit Player';
-                                document.getElementById('player-modal').style.display = 'flex';
+                                openModal('player-modal');
                             } catch (error) {
                                 console.error('Error fetching player:', error);
                             }
@@ -1337,7 +1657,7 @@
                                 document.getElementById('product-stock').checked = product.inStock;
                                 
                                 document.getElementById('product-modal-title').textContent = 'Edit Product';
-                                document.getElementById('product-modal').style.display = 'flex';
+                                openModal('product-modal');
                             } catch (error) {
                                 console.error('Error fetching product:', error);
                             }
@@ -1369,6 +1689,61 @@
                     console.error('Error loading products:', error);
                 }
             }
+            
+            // Load username from session
+            async function loadUsername() {
+                try {
+                    // We can't directly access the session, but we can check if we can access protected routes
+                    const response = await fetch('/api/admin/news', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // We're authenticated, but we don't have the username
+                        // We'll just show a generic message
+                        document.getElementById('username-display').textContent = 'Admin User';
+                    } else {
+                        // Not authenticated
+                        window.location.href = '/adminp/login';
+                    }
+                } catch (error) {
+                    console.error('Error loading username:', error);
+                    window.location.href = '/adminp/login';
+                }
+            }
+            
+            // Initialize the page
+            document.addEventListener('DOMContentLoaded', async () => {
+                // Check authentication
+                const isAuthenticated = await checkAuth();
+                if (!isAuthenticated) return;
+                
+                // Load username
+                await loadUsername();
+                
+                // Load initial data
+                loadDashboardStats();
+                
+                // Set initial tab
+                document.querySelector('.sidebar-menu li:first-child a').click();
+            });
+            
+            // Player image upload preview
+            document.getElementById('player-image-upload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.getElementById('current-image');
+                        img.src = e.target.result;
+                        document.getElementById('current-image-container').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         </script>
 </body>
 </html>
