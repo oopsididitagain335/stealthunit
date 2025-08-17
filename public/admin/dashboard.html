@@ -408,18 +408,12 @@
         
         .form-tab {
             padding: 0.5rem 1rem;
-            cursor: not-allowed;
-            opacity: 0.5;
+            cursor: pointer;
             transition: all 0.3s;
             border-bottom: 2px solid transparent;
         }
         
-        .unlocked .form-tab {
-            cursor: pointer;
-        }
-
-        .unlocked .form-tab.active {
-            opacity: 1;
+        .form-tab.active {
             border-bottom: 2px solid #00ff88;
             color: #00ff88;
         }
@@ -458,22 +452,16 @@
         }
         
         .add-item-btn {
-            background-color: #666;
-            color: #333;
+            background-color: #00ff88;
+            color: #000;
             border: none;
             padding: 0.3rem 0.5rem;
             border-radius: 3px;
-            cursor: not-allowed;
+            cursor: pointer;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-        }
-
-        .unlocked .add-item-btn {
-            background-color: #00ff88;
-            color: #000;
-            cursor: pointer;
         }
 
         .add-item-btn i {
@@ -553,13 +541,6 @@
             font-size: 1rem;
         }
 
-        .form-group input[disabled], 
-        .form-group textarea[disabled], 
-        .form-group select[disabled] {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
@@ -586,7 +567,7 @@
             padding: 0.7rem 1.5rem;
             border-radius: 5px;
             font-weight: 600;
-            cursor: not-allowed;
+            cursor: pointer;
             border: none;
         }
 
@@ -596,26 +577,26 @@
             color: #666;
         }
 
-        .unlocked .btn {
-            cursor: pointer;
+        .btn-secondary:hover {
+            background-color: #222;
         }
 
-        .unlocked .btn-primary {
+        .btn-primary {
             background-color: #00ff88;
             color: #000;
         }
 
-        .unlocked .btn-primary:hover {
+        .btn-primary:hover {
             background-color: #00e67a;
             transform: translateY(-2px);
         }
 
-        .unlocked .btn-danger {
+        .btn-danger {
             background-color: #ff4d4d;
             color: white;
         }
 
-        .unlocked .btn-danger:hover {
+        .btn-danger:hover {
             background-color: #ff3333;
             transform: translateY(-2px);
         }
@@ -820,8 +801,7 @@
         <nav class="navbar">
             <div class="navbar-title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</div>
             <div class="unlock-section">
-                <input type="text" class="code-input" id="navbar-code" placeholder="Code" maxlength="6">
-                <button class="unlock-btn" id="navbar-unlock-btn">Unlock</button>
+                <span id="access-status">Access: Locked</span>
             </div>
         </nav>
 
@@ -974,23 +954,23 @@
                     <input type="hidden" id="news-id">
                     <div class="form-group">
                         <label for="news-title">Title</label>
-                        <input type="text" id="news-title" name="title" required disabled>
+                        <input type="text" id="news-title" name="title" required>
                     </div>
                     <div class="form-group">
                         <label for="news-content">Content</label>
-                        <textarea id="news-content" name="content" required disabled></textarea>
+                        <textarea id="news-content" name="content" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="news-image">Image URL</label>
-                        <input type="text" id="news-image" name="image" disabled>
+                        <input type="text" id="news-image" name="image">
                     </div>
                     <div class="form-group">
                         <label for="news-author">Author</label>
-                        <input type="text" id="news-author" name="author" value="StealthUnitGG" required disabled>
+                        <input type="text" id="news-author" name="author" value="StealthUnitGG" required>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-news-btn" disabled>Cancel</button>
-                        <button type="submit" class="btn btn-primary" disabled>Save News</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-news-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save News</button>
                     </div>
                 </form>
             </div>
@@ -1026,7 +1006,7 @@
                         <div class="file-upload">
                             <label class="file-upload-label">Player Image:</label>
                             <div class="file-upload-input">
-                                <input type="file" id="player-image-upload" name="image" accept="image/*" disabled>
+                                <input type="file" id="player-image-upload" name="image" accept="image/*">
                                 <div class="current-image" id="current-image-container" style="display: none;">
                                     <p>Current image:</p>
                                     <img id="current-image" src="" alt="Current player image">
@@ -1035,19 +1015,19 @@
                             
                             <div class="form-group">
                                 <label for="player-name">Full Name</label>
-                                <input type="text" id="player-name" name="name" required disabled>
+                                <input type="text" id="player-name" name="name" required>
                             </div>
                             <div class="form-group">
                                 <label for="player-username">In-game Username</label>
-                                <input type="text" id="player-username" name="username" required disabled>
+                                <input type="text" id="player-username" name="username" required>
                             </div>
                             <div class="form-group">
                                 <label for="player-role">Position/Role</label>
-                                <input type="text" id="player-role" name="role" required disabled>
+                                <input type="text" id="player-role" name="role" required>
                             </div>
                             <div class="form-group">
                                 <label for="player-game">Game</label>
-                                <input type="text" id="player-game" name="game" required disabled>
+                                <input type="text" id="player-game" name="game" required>
                             </div>
                         </div>
                         
@@ -1055,7 +1035,7 @@
                         <div class="tab-content" id="bio-tab">
                             <div class="form-group">
                                 <label for="player-bio">Player Bio</label>
-                                <textarea id="player-bio" name="bio" class="bio-field" disabled></textarea>
+                                <textarea id="player-bio" name="bio" class="bio-field"></textarea>
                             </div>
                         </div>
                         
@@ -1065,19 +1045,19 @@
                             <div class="social-links-grid">
                                 <div class="form-group">
                                     <label for="player-twitch">Twitch</label>
-                                    <input type="text" id="player-twitch" name="socialLinks.twitch" disabled>
+                                    <input type="text" id="player-twitch" name="socialLinks.twitch">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-twitter">Twitter</label>
-                                    <input type="text" id="player-twitter" name="socialLinks.twitter" disabled>
+                                    <input type="text" id="player-twitter" name="socialLinks.twitter">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-instagram">Instagram</label>
-                                    <input type="text" id="player-instagram" name="socialLinks.instagram" disabled>
+                                    <input type="text" id="player-instagram" name="socialLinks.instagram">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-youtube">YouTube</label>
-                                    <input type="text" id="player-youtube" name="socialLinks.youtube" disabled>
+                                    <input type="text" id="player-youtube" name="socialLinks.youtube">
                                 </div>
                             </div>
                             
@@ -1085,19 +1065,19 @@
                             <div class="stats-grid">
                                 <div class="form-group">
                                     <label for="player-kills">Kills</label>
-                                    <input type="number" id="player-kills" name="stats.kills" value="0" disabled>
+                                    <input type="number" id="player-kills" name="stats.kills" value="0">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-deaths">Deaths</label>
-                                    <input type="number" id="player-deaths" name="stats.deaths" value="0" disabled>
+                                    <input type="number" id="player-deaths" name="stats.deaths" value="0">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-assists">Assists</label>
-                                    <input type="number" id="player-assists" name="stats.assists" value="0" disabled>
+                                    <input type="number" id="player-assists" name="stats.assists" value="0">
                                 </div>
                                 <div class="form-group">
                                     <label for="player-kd">K/D Ratio</label>
-                                    <input type="number" id="player-kd" name="stats.kdRatio" step="0.01" value="0" disabled>
+                                    <input type="number" id="player-kd" name="stats.kdRatio" step="0.01" value="0">
                                 </div>
                             </div>
                         </div>
@@ -1106,7 +1086,7 @@
                         <div class="tab-content" id="history-tab">
                             <div class="achievements-container">
                                 <h3>Achievements</h3>
-                                <button type="button" class="add-item-btn" id="add-achievement" disabled>
+                                <button type="button" class="add-item-btn" id="add-achievement">
                                     <i class="fas fa-plus"></i> Add Achievement
                                 </button>
                                 <div id="achievements-list">
@@ -1116,7 +1096,7 @@
                             
                             <div class="team-history-container">
                                 <h3>Team History</h3>
-                                <button type="button" class="add-item-btn" id="add-team" disabled>
+                                <button type="button" class="add-item-btn" id="add-team">
                                     <i class="fas fa-plus"></i> Add Team
                                 </button>
                                 <div id="team-history-list">
@@ -1126,8 +1106,8 @@
                         </div>
                         
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-player-btn" disabled>Cancel</button>
-                            <button type="submit" class="btn btn-primary" disabled>Save Player</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-player-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Player</button>
                         </div>
                     </form>
                 </div>
@@ -1152,23 +1132,23 @@
                         <input type="hidden" id="product-id">
                         <div class="form-group">
                             <label for="product-name">Product Name</label>
-                            <input type="text" id="product-name" name="name" required disabled>
+                            <input type="text" id="product-name" name="name" required>
                         </div>
                         <div class="form-group">
                             <label for="product-description">Description</label>
-                            <textarea id="product-description" name="description" required disabled></textarea>
+                            <textarea id="product-description" name="description" required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="product-price">Price</label>
-                            <input type="number" id="product-price" name="price" step="0.01" required disabled>
+                            <input type="number" id="product-price" name="price" step="0.01" required>
                         </div>
                         <div class="form-group">
                             <label for="product-image">Image URL</label>
-                            <input type="text" id="product-image" name="image" required disabled>
+                            <input type="text" id="product-image" name="image" required>
                         </div>
                         <div class="form-group">
                             <label for="product-category">Category</label>
-                            <select id="product-category" name="category" required disabled>
+                            <select id="product-category" name="category" required>
                                 <option value="Apparel">Apparel</option>
                                 <option value="Accessories">Accessories</option>
                                 <option value="Collectibles">Collectibles</option>
@@ -1176,11 +1156,11 @@
                         </div>
                         <div class="form-group">
                             <label for="product-stock">In Stock</label>
-                            <input type="checkbox" id="product-stock" name="inStock" checked disabled>
+                            <input type="checkbox" id="product-stock" name="inStock" checked>
                         </div>
                         <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancel-product-btn" disabled>Cancel</button>
-                            <button type="submit" class="btn btn-primary" disabled>Save Product</button>
+                            <button type="button" class="btn btn-secondary" id="cancel-product-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Product</button>
                         </div>
                     </form>
                 </div>
@@ -1188,19 +1168,20 @@
         </div>
         
         <script>
-            // Check if access code is stored in localStorage
+            // Check if access code is stored in sessionStorage (session only, not persistent)
             function checkAccessCode() {
-                const storedCode = localStorage.getItem('adminAccessCode');
+                const storedCode = sessionStorage.getItem('adminAccessCode');
                 return storedCode === '247915';
             }
             
             // Apply unlocked state
             function unlockDashboard() {
-                document.body.classList.add('unlocked');
-                document.getElementById('lock-screen').style.display = 'none';
+                // Store the code in sessionStorage for the current session only
+                sessionStorage.setItem('adminAccessCode', '247915');
                 
-                // Store the code in localStorage for future visits
-                localStorage.setItem('adminAccessCode', '247915');
+                // Update UI
+                document.getElementById('lock-screen').style.display = 'none';
+                document.getElementById('access-status').textContent = 'Access: Unlocked';
                 
                 // Load data
                 loadDashboardStats();
@@ -1224,6 +1205,7 @@
             if (!checkAccessCode()) {
                 document.getElementById('lock-screen').style.display = 'flex';
             } else {
+                // If already unlocked in this session, just unlock the dashboard
                 unlockDashboard();
             }
             
@@ -1237,20 +1219,6 @@
             document.getElementById('unlock-code').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     const code = document.getElementById('unlock-code').value;
-                    verifyAccessCode(code);
-                }
-            });
-            
-            // Navbar unlock button
-            document.getElementById('navbar-unlock-btn').addEventListener('click', function() {
-                const code = document.getElementById('navbar-code').value;
-                verifyAccessCode(code);
-            });
-            
-            // Navbar code input - Enter key
-            document.getElementById('navbar-code').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const code = document.getElementById('navbar-code').value;
                     verifyAccessCode(code);
                 }
             });
@@ -1280,31 +1248,20 @@
             const formTabs = document.querySelectorAll('.form-tab');
             const formTabContents = document.querySelectorAll('.tab-content');
             
-            // Make sure form tabs are clickable when unlocked
-            function setupFormTabs() {
-                formTabs.forEach(tab => {
-                    tab.addEventListener('click', function() {
-                        // Only allow tab switching if unlocked
-                        if (!document.body.classList.contains('unlocked')) {
-                            return;
-                        }
-                        
-                        // Remove active class from all tabs and content
-                        formTabs.forEach(t => t.classList.remove('active'));
-                        formTabContents.forEach(tc => tc.classList.remove('active'));
-                        
-                        // Add active class to clicked tab
-                        this.classList.add('active');
-                        
-                        // Show corresponding content
-                        const tabId = this.getAttribute('data-tab');
-                        document.getElementById(`${tabId}-tab`).classList.add('active');
-                    });
+            formTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and content
+                    formTabs.forEach(t => t.classList.remove('active'));
+                    formTabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
                 });
-            }
-            
-            // Call setupFormTabs when the page loads
-            document.addEventListener('DOMContentLoaded', setupFormTabs);
+            });
             
             // Modal functionality
             const modals = document.querySelectorAll('.modal');
@@ -1312,12 +1269,6 @@
             const cancelButtons = document.querySelectorAll('[id^=cancel-]');
             
             function openModal(modalId) {
-                // Only allow opening if unlocked
-                if (!document.body.classList.contains('unlocked')) {
-                    alert('Please enter the access code to use the admin panel.');
-                    return;
-                }
-                
                 document.getElementById(modalId).style.display = 'flex';
                 // Reset messages
                 document.querySelectorAll('.success-message, .error-message, .loading').forEach(el => {
@@ -1524,53 +1475,44 @@
             });
             
             // Dynamic list items for achievements and team history
-            function setupDynamicLists() {
-                // Only set up dynamic lists when unlocked
-                if (!document.body.classList.contains('unlocked')) {
-                    return;
-                }
+            document.getElementById('add-achievement').addEventListener('click', function() {
+                const container = document.getElementById('achievements-list');
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <input type="text" name="achievements" placeholder="Enter achievement">
+                    <button type="button" class="remove-item-btn">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                `;
+                container.appendChild(item);
                 
-                document.getElementById('add-achievement').addEventListener('click', function() {
-                    const container = document.getElementById('achievements-list');
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <input type="text" name="achievements" placeholder="Enter achievement">
-                        <button type="button" class="remove-item-btn">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                    `;
-                    container.appendChild(item);
-                    
-                    // Add event listener to remove button
-                    item.querySelector('.remove-item-btn').addEventListener('click', function() {
-                        container.removeChild(item);
-                    });
+                // Add event listener to remove button
+                item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                    container.removeChild(item);
                 });
+            });
+            
+            document.getElementById('add-team').addEventListener('click', function() {
+                const container = document.getElementById('team-history-list');
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <input type="text" name="teamHistory" placeholder="Enter team name">
+                    <button type="button" class="remove-item-btn">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                `;
+                container.appendChild(item);
                 
-                document.getElementById('add-team').addEventListener('click', function() {
-                    const container = document.getElementById('team-history-list');
-                    const item = document.createElement('div');
-                    item.className = 'list-item';
-                    item.innerHTML = `
-                        <input type="text" name="teamHistory" placeholder="Enter team name">
-                        <button type="button" class="remove-item-btn">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                    `;
-                    container.appendChild(item);
-                    
-                    // Add event listener to remove button
-                    item.querySelector('.remove-item-btn').addEventListener('click', function() {
-                        container.removeChild(item);
-                    });
+                // Add event listener to remove button
+                item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                    container.removeChild(item);
                 });
-            }
+            });
             
             // Load initial data
             async function loadDashboardStats() {
-                if (!document.body.classList.contains('unlocked')) return;
-                
                 try {
                     const [newsRes, playersRes, productsRes] = await Promise.all([
                         fetch('/api/admin/news'),
@@ -1593,8 +1535,6 @@
             }
             
             async function loadNews() {
-                if (!document.body.classList.contains('unlocked')) return;
-                
                 try {
                     const response = await fetch('/api/admin/news');
                     const news = await response.json();
@@ -1675,8 +1615,6 @@
             }
             
             async function loadPlayers() {
-                if (!document.body.classList.contains('unlocked')) return;
-                
                 try {
                     const response = await fetch('/api/admin/players');
                     const players = await response.json();
@@ -1824,8 +1762,6 @@
             }
             
             async function loadProducts() {
-                if (!document.body.classList.contains('unlocked')) return;
-                
                 try {
                     const response = await fetch('/api/admin/products');
                     const products = await response.json();
@@ -1910,19 +1846,13 @@
             
             // Initialize the page
             document.addEventListener('DOMContentLoaded', () => {
-                // If already unlocked, load data
-                if (document.body.classList.contains('unlocked')) {
-                    loadDashboardStats();
-                    loadNews();
-                    loadPlayers();
-                    loadProducts();
-                    
-                    // Set initial tab
-                    document.querySelector('.sidebar-menu li:first-child a').click();
+                // If already unlocked in this session, load data
+                if (checkAccessCode()) {
+                    unlockDashboard();
                 }
                 
-                // Set up dynamic lists
-                setupDynamicLists();
+                // Set initial tab
+                document.querySelector('.sidebar-menu li:first-child a').click();
             });
             
             // Player image upload preview
