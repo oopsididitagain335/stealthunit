@@ -1,4 +1,4 @@
-// server.js (updated with enhanced player management)
+// server.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
