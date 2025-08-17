@@ -229,8 +229,7 @@ app.get('/adminp/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
 });
 
-// API Routes for Admin Panel - Remove requireAuth middleware
-// This allows the dashboard UI to request data, but the UI will control access via the code
+// API Routes for Admin Panel
 app.get('/api/admin/news', async (req, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
@@ -440,10 +439,10 @@ app.delete('/api/admin/products/:id', async (req, res) => {
   }
 });
 
-// Public API endpoints
+// Public API endpoints - These are the endpoints that the frontend will call
 app.get('/api/news', async (req, res) => {
   try {
-    const news = await News.find().sort({ date: -1 }).limit(10);
+    const news = await News.find().sort({ date: -1 });
     res.json(news);
   } catch (error) {
     console.error('Error fetching news:', error);
