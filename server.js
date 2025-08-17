@@ -5,36 +5,11 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
-const dotenv = require('dotenv');
 const multer = require('multer');
 const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 
-// Load environment variables
-dotenv.config();
-
 const app = express();
-
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'stealthunitgg-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({ 
-    mongoUrl: process.env.MONGO_URI,
-    collectionName: 'sessions'
-  }),
-  cookie: { 
-    maxAge: 1000 * 60 * 60 * 24, // 24 hours
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  }
-}));
 
 // Create uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, 'public', 'uploads');
@@ -67,6 +42,27 @@ const upload = multer({
     }
   }
 });
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'stealthunitgg-secret-key',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ 
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions'
+  }),
+  cookie: { 
+    maxAge: 1000 * 60 * 60 * 24, // 24 hours
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production'
+  }
+}));
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
