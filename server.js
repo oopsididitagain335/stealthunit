@@ -7,14 +7,20 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const fs = require('fs');
+
+// Use process.env.PORT for deployment environments
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 // Create uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, 'public', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+try {
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+} catch (err) {
+  console.error('Error creating uploads directory:', err);
 }
 
 // Configure multer for file uploads
@@ -54,7 +60,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ 
-    mongoUrl: process.env.MONGO_URI,
+    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunitgg',
     collectionName: 'sessions'
   }),
   cookie: { 
@@ -64,10 +70,13 @@ app.use(session({
   }
 }));
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// Connect to MongoDB with error handling
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunitgg', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // MongoDB Schemas
 const adminSchema = new mongoose.Schema({
@@ -141,7 +150,7 @@ async function createDefaultAdmin() {
 
 // Authentication middleware
 function requireAuth(req, res, next) {
-  if (req.session.userId) {
+  if (req.session && req.session.userId) {
     return next();
   }
   res.redirect('/adminp/login');
@@ -195,12 +204,16 @@ app.post('/adminp/login', async (req, res) => {
 });
 
 app.get('/adminp/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) {
-      return res.redirect('/adminp/dashboard');
-    }
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Session destruction error:', err);
+      }
+      res.redirect('/adminp/login');
+    });
+  } else {
     res.redirect('/adminp/login');
-  });
+  }
 });
 
 app.get('/adminp/dashboard', requireAuth, (req, res) => {
@@ -258,7 +271,7 @@ app.get('/api/admin/players', requireAuth, async (req, res) => {
 app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, res) => {
   try {
     // If a file was uploaded, use its path, otherwise use the image URL from form
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : (req.body.image || '');
     
     const playerData = {
       ...req.body,
@@ -269,6 +282,7 @@ app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, 
     await player.save();
     res.status(201).json(player);
   } catch (error) {
+    console.error('Error creating player:', error);
     res.status(500).json({ error: 'Failed to create player' });
   }
 });
@@ -298,6 +312,7 @@ app.put('/api/admin/players/:id', requireAuth, upload.single('image'), async (re
     const player = await Player.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json(player);
   } catch (error) {
+    console.error('Error updating player:', error);
     res.status(500).json({ error: 'Failed to update player' });
   }
 });
@@ -310,8 +325,8 @@ app.delete('/api/admin/players/:id', requireAuth, async (req, res) => {
     if (player && player.image) {
       try {
         const imagePath = path.join(__dirname, 'public', player.image);
-        if (fs.existsSync(path.join(__dirname, 'public', player.image))) {
-          fs.unlinkSync(path.join(__dirname, 'public', player.image));
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
         }
       } catch (err) {
         console.error('Error removing player image:', err);
@@ -396,8 +411,20 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 // Start the server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   createDefaultAdmin(); // Create default admin if not exists
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled Promise Rejection:', err);
+  server.close(() => process.exit(1));
 });
