@@ -236,16 +236,25 @@ app.get('/api/admin/news', async (req, res) => {
     const news = await News.find().sort({ date: -1 });
     res.json(news);
   } catch (error) {
+    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
 
 app.post('/api/admin/news', async (req, res) => {
   try {
+    console.log('Request body:', req.body); // Debugging
+    
+    // Validate required fields
+    if (!req.body.title || !req.body.content) {
+      return res.status(400).json({ error: 'Title and content are required' });
+    }
+    
     const news = new News(req.body);
     await news.save();
     res.status(201).json(news);
   } catch (error) {
+    console.error('Error creating news:', error);
     res.status(500).json({ error: 'Failed to create news' });
   }
 });
@@ -253,17 +262,25 @@ app.post('/api/admin/news', async (req, res) => {
 app.put('/api/admin/news/:id', async (req, res) => {
   try {
     const news = await News.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!news) {
+      return res.status(404).json({ error: 'News article not found' });
+    }
     res.json(news);
   } catch (error) {
+    console.error('Error updating news:', error);
     res.status(500).json({ error: 'Failed to update news' });
   }
 });
 
 app.delete('/api/admin/news/:id', async (req, res) => {
   try {
-    await News.findByIdAndDelete(req.params.id);
+    const news = await News.findByIdAndDelete(req.params.id);
+    if (!news) {
+      return res.status(404).json({ error: 'News article not found' });
+    }
     res.json({ message: 'News deleted successfully' });
   } catch (error) {
+    console.error('Error deleting news:', error);
     res.status(500).json({ error: 'Failed to delete news' });
   }
 });
@@ -274,6 +291,7 @@ app.get('/api/admin/players', async (req, res) => {
     const players = await Player.find();
     res.json(players);
   } catch (error) {
+    console.error('Error fetching players:', error);
     res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
@@ -282,6 +300,11 @@ app.post('/api/admin/players', upload.single('image'), async (req, res) => {
   try {
     // If a file was uploaded, use its path, otherwise use the image URL from form
     const imagePath = req.file ? `/uploads/${req.file.filename}` : (req.body.image || '');
+    
+    // Validate required fields
+    if (!req.body.name || !req.body.username || !req.body.role || !req.body.game) {
+      return res.status(400).json({ error: 'Name, username, role, and game are required' });
+    }
     
     const playerData = {
       ...req.body,
@@ -320,6 +343,9 @@ app.put('/api/admin/players/:id', upload.single('image'), async (req, res) => {
     }
     
     const player = await Player.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
     res.json(player);
   } catch (error) {
     console.error('Error updating player:', error);
@@ -330,6 +356,9 @@ app.put('/api/admin/players/:id', upload.single('image'), async (req, res) => {
 app.delete('/api/admin/players/:id', async (req, res) => {
   try {
     const player = await Player.findById(req.params.id);
+    if (!player) {
+      return res.status(404).json({ error: 'Player not found' });
+    }
     
     // Remove player image if it exists
     if (player && player.image) {
@@ -346,6 +375,7 @@ app.delete('/api/admin/players/:id', async (req, res) => {
     await Player.findByIdAndDelete(req.params.id);
     res.json({ message: 'Player deleted successfully' });
   } catch (error) {
+    console.error('Error deleting player:', error);
     res.status(500).json({ error: 'Failed to delete player' });
   }
 });
@@ -356,16 +386,23 @@ app.get('/api/admin/products', async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
 app.post('/api/admin/products', async (req, res) => {
   try {
+    // Validate required fields
+    if (!req.body.name || !req.body.description || !req.body.price || !req.body.image || !req.body.category) {
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    
     const product = new Product(req.body);
     await product.save();
     res.status(201).json(product);
   } catch (error) {
+    console.error('Error creating product:', error);
     res.status(500).json({ error: 'Failed to create product' });
   }
 });
@@ -373,17 +410,25 @@ app.post('/api/admin/products', async (req, res) => {
 app.put('/api/admin/products/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     res.json(product);
   } catch (error) {
+    console.error('Error updating product:', error);
     res.status(500).json({ error: 'Failed to update product' });
   }
 });
 
 app.delete('/api/admin/products/:id', async (req, res) => {
   try {
-    await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
+    console.error('Error deleting product:', error);
     res.status(500).json({ error: 'Failed to delete product' });
   }
 });
@@ -394,6 +439,7 @@ app.get('/api/news', async (req, res) => {
     const news = await News.find().sort({ date: -1 }).limit(10);
     res.json(news);
   } catch (error) {
+    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
@@ -403,6 +449,7 @@ app.get('/api/players', async (req, res) => {
     const players = await Player.find();
     res.json(players);
   } catch (error) {
+    console.error('Error fetching players:', error);
     res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
@@ -412,6 +459,7 @@ app.get('/api/products', async (req, res) => {
     const products = await Product.find({ inStock: true });
     res.json(products);
   } catch (error) {
+    console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
