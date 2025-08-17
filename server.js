@@ -1,4 +1,4 @@
-// server.js
+// server.js (updated with enhanced player management)
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -6,6 +6,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
+const multer = require('multer');
+const fs = require('fs');
 const PORT = process.env.PORT || 3000;
 
 // Load environment variables
@@ -34,6 +36,38 @@ app.use(session({
   }
 }));
 
+// Create uploads directory if it doesn't exist
+const uploadDir = path.join(__dirname, 'public', 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'player-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = filetypes.test(file.mimetype);
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    } else {
+      cb(new Error('Images only'));
+    }
+  }
+});
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
@@ -59,12 +93,22 @@ const playerSchema = new mongoose.Schema({
   username: { type: String, required: true },
   role: { type: String, required: true },
   game: { type: String, required: true },
+  bio: { type: String },
   image: { type: String },
   socialLinks: {
     twitter: { type: String },
     instagram: { type: String },
-    twitch: { type: String }
-  }
+    twitch: { type: String },
+    youtube: { type: String }
+  },
+  stats: {
+    kills: { type: Number, default: 0 },
+    deaths: { type: Number, default: 0 },
+    assists: { type: Number, default: 0 },
+    kdRatio: { type: Number, default: 0 }
+  },
+  achievements: [{ type: String }],
+  teamHistory: [{ type: String }]
 });
 
 const productSchema = new mongoose.Schema({
@@ -205,7 +249,7 @@ app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Players API
+// Players API with file upload
 app.get('/api/admin/players', requireAuth, async (req, res) => {
   try {
     const players = await Player.find();
@@ -215,9 +259,17 @@ app.get('/api/admin/players', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/admin/players', requireAuth, async (req, res) => {
+app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, res) => {
   try {
-    const player = new Player(req.body);
+    // If a file was uploaded, use its path, otherwise use the image URL from form
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : req.body.image;
+    
+    const playerData = {
+      ...req.body,
+      image: imagePath
+    };
+    
+    const player = new Player(playerData);
     await player.save();
     res.status(201).json(player);
   } catch (error) {
@@ -225,9 +277,29 @@ app.post('/api/admin/players', requireAuth, async (req, res) => {
   }
 });
 
-app.put('/api/admin/players/:id', requireAuth, async (req, res) => {
+app.put('/api/admin/players/:id', requireAuth, upload.single('image'), async (req, res) => {
   try {
-    const player = await Player.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updateData = { ...req.body };
+    
+    // If a new image was uploaded, update the image path
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+      
+      // Remove old image if it exists
+      try {
+        const player = await Player.findById(req.params.id);
+        if (player && player.image) {
+          const oldImagePath = path.join(__dirname, 'public', player.image);
+          if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+          }
+        }
+      } catch (err) {
+        console.error('Error removing old image:', err);
+      }
+    }
+    
+    const player = await Player.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.json(player);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update player' });
@@ -236,6 +308,20 @@ app.put('/api/admin/players/:id', requireAuth, async (req, res) => {
 
 app.delete('/api/admin/players/:id', requireAuth, async (req, res) => {
   try {
+    const player = await Player.findById(req.params.id);
+    
+    // Remove player image if it exists
+    if (player && player.image) {
+      try {
+        const imagePath = path.join(__dirname, 'public', player.image);
+        if (fs.existsSync(path.join(__dirname, 'public', player.image))) {
+          fs.unlinkSync(path.join(__dirname, 'public', player.image));
+        }
+      } catch (err) {
+        console.error('Error removing player image:', err);
+      }
+    }
+    
     await Player.findByIdAndDelete(req.params.id);
     res.json({ message: 'Player deleted successfully' });
   } catch (error) {
