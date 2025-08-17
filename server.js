@@ -250,7 +250,14 @@ app.post('/api/admin/news', async (req, res) => {
       return res.status(400).json({ error: 'Title and content are required' });
     }
     
-    const news = new News(req.body);
+    // Create new news article
+    const news = new News({
+      title: req.body.title,
+      content: req.body.content,
+      image: req.body.image || '',
+      author: req.body.author || 'StealthUnitGG'
+    });
+    
     await news.save();
     res.status(201).json(news);
   } catch (error) {
