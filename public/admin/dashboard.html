@@ -1,0 +1,1374 @@
+<!-- public/admin/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | StealthUnitGG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: white;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #111;
+            padding: 2rem 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 1rem;
+        }
+
+        .sidebar-header h2 {
+            color: #00ff88;
+            font-size: 1.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu li a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-menu li a:hover, 
+        .sidebar-menu li a.active {
+            background-color: #222;
+            color: #00ff88;
+        }
+
+        .sidebar-menu li a i {
+            margin-right: 1rem;
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #111;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .navbar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-user span {
+            margin-right: 1rem;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #00ff88;
+            color: #000;
+        }
+
+        /* Dashboard Content */
+        .dashboard-content {
+            padding: 2rem;
+        }
+
+        .page-title {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: #111;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+        }
+
+        /* Table Styles */
+        .data-section {
+            background-color: #111;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            padding: 1.5rem;
+            background-color: #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .add-btn {
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-btn:hover {
+            background-color: #00e67a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background-color: #222;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid #222;
+        }
+
+        tbody tr:hover {
+            background-color: #222;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #00ff88;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .delete-btn {
+            color: #ff4d4d;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #111;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background-color: #222;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        
+        .form-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .form-tab.active {
+            opacity: 1;
+            border-bottom: 2px solid #00ff88;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .bio-field {
+            min-height: 150px;
+        }
+        
+        .social-links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .achievements-container, .team-history-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .list-item {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+        
+        .list-item input {
+            flex: 1;
+            margin-right: 0.5rem;
+        }
+        
+        .add-item-btn {
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+            padding: 0.3rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .remove-item-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .file-upload {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .file-upload-label {
+            margin-right: 1rem;
+        }
+        
+        .file-upload-input {
+            flex: 1;
+        }
+        
+        .current-image {
+            margin-top: 1rem;
+            max-width: 200px;
+            border-radius: 5px;
+        }
+        
+        .current-image img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #222;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary {
+            background: none;
+            border: 1px solid #666;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #333;
+        }
+
+        .btn-primary {
+            background-color: #00ff88;
+            color: #000;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #00e67a;
+        }
+
+        .btn-danger {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff3333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>StealthUnitGG Admin</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#" class="active" data-tab="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="#" data-tab="news"><i class="fas fa-newspaper"></i> News Management</a></li>
+            <li><a href="#" data-tab="players"><i class="fas fa-users"></i> Players Management</a></li>
+            <li><a href="#" data-tab="products"><i class="fas fa-store"></i> Products Management</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <nav class="navbar">
+            <div class="navbar-title">Dashboard</div>
+            <div class="navbar-user">
+                <span id="username-display">admin</span>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </nav>
+
+        <div class="dashboard-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-tab" class="tab-content active">
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="stat-number" id="news-count">0</div>
+                        <div class="stat-label">News Articles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" id="players-count">0</div>
+                        <div class="stat-label">Players</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <div class="stat-number" id="products-count">0</div>
+                        <div class="stat-label">Products</div>
+                    </div>
+                </div>
+                
+                <div class="recent-activity">
+                    <h2 class="page-title">Recent Activity</h2>
+                    <p>Recent activity will be displayed here.</p>
+                </div>
+            </div>
+
+            <!-- News Management Tab -->
+            <div id="news-tab" class="tab-content">
+                <h1 class="page-title">News Management</h1>
+                
+                <div class="data-section">
+                    <div class="section-header">
+                        <div class="section-title">News Articles</div>
+                        <button class="add-btn" id="add-news-btn">Add News</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Author</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="news-table-body">
+                            <!-- News items will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Players Management Tab -->
+            <div id="players-tab" class="tab-content">
+                <h1 class="page-title">Players Management</h1>
+                
+                <div class="data-section">
+                    <div class="section-header">
+                        <div class="section-title">Team Players</div>
+                        <button class="add-btn" id="add-player-btn">Add Player</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Game</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="players-table-body">
+                            <!-- Players will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Products Management Tab -->
+            <div id="products-tab" class="tab-content">
+                <h1 class="page-title">Products Management</h1>
+                
+                <div class="data-section">
+                    <div class="section-header">
+                        <div class="section-title">Store Products</div>
+                        <button class="add-btn" id="add-product-btn">Add Product</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Category</th>
+                                <th>In Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body">
+                            <!-- Products will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- News Modal -->
+    <div class="modal" id="news-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="news-modal-title">Add News</div>
+                <button class="close-modal" id="close-news-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="news-form">
+                    <input type="hidden" id="news-id">
+                    <div class="form-group">
+                        <label for="news-title">Title</label>
+                        <input type="text" id="news-title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-content">Content</label>
+                        <textarea id="news-content" name="content" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="news-image">Image URL</label>
+                        <input type="text" id="news-image" name="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="news-author">Author</label>
+                        <input type="text" id="news-author" name="author" value="StealthUnitGG" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-news-btn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save News</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player Modal -->
+    <div class="modal" id="player-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="player-modal-title">Add Player</div>
+                <button class="close-modal" id="close-player-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="player-form" enctype="multipart/form-data">
+                    <input type="hidden" id="player-id">
+                    
+                    <div class="form-tabs">
+                        <div class="form-tab active" data-tab="basic">Basic Info</div>
+                        <div class="form-tab" data-tab="bio">Bio & Details</div>
+                        <div class="form-tab" data-tab="social">Social & Stats</div>
+                        <div class="form-tab" data-tab="history">History</div>
+                    </div>
+                    
+                    <!-- Basic Info Tab -->
+                    <div class="tab-content active" id="basic-tab">
+                        <div class="file-upload">
+                            <label class="file-upload-label">Player Image:</label>
+                            <div class="file-upload-input">
+                                <input type="file" id="player-image-upload" name="image" accept="image/*">
+                                <div class="current-image" id="current-image-container" style="display: none;">
+                                    <p>Current image:</p>
+                                    <img id="current-image" src="" alt="Current player image">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="player-name">Full Name</label>
+                                <input type="text" id="player-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="player-username">In-game Username</label>
+                                <input type="text" id="player-username" name="username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="player-role">Position/Role</label>
+                                <input type="text" id="player-role" name="role" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="player-game">Game</label>
+                                <input type="text" id="player-game" name="game" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Bio & Details Tab -->
+                        <div class="tab-content" id="bio-tab">
+                            <div class="form-group">
+                                <label for="player-bio">Player Bio</label>
+                                <textarea id="player-bio" name="bio" class="bio-field"></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Social & Stats Tab -->
+                        <div class="tab-content" id="social-tab">
+                            <h3>Social Links</h3>
+                            <div class="social-links-grid">
+                                <div class="form-group">
+                                    <label for="player-twitch">Twitch</label>
+                                    <input type="text" id="player-twitch" name="socialLinks.twitch">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-twitter">Twitter</label>
+                                    <input type="text" id="player-twitter" name="socialLinks.twitter">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-instagram">Instagram</label>
+                                    <input type="text" id="player-instagram" name="socialLinks.instagram">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-youtube">YouTube</label>
+                                    <input type="text" id="player-youtube" name="socialLinks.youtube">
+                                </div>
+                            </div>
+                            
+                            <h3>Stats</h3>
+                            <div class="stats-grid">
+                                <div class="form-group">
+                                    <label for="player-kills">Kills</label>
+                                    <input type="number" id="player-kills" name="stats.kills" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-deaths">Deaths</label>
+                                    <input type="number" id="player-deaths" name="stats.deaths" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-assists">Assists</label>
+                                    <input type="number" id="player-assists" name="stats.assists" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="player-kd">K/D Ratio</label>
+                                    <input type="number" id="player-kd" name="stats.kdRatio" step="0.01" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- History Tab -->
+                        <div class="tab-content" id="history-tab">
+                            <div class="achievements-container">
+                                <h3>Achievements</h3>
+                                <button type="button" class="add-item-btn" id="add-achievement">Add Achievement</button>
+                                <div id="achievements-list">
+                                    <!-- Achievements will be added here -->
+                                </div>
+                            </div>
+                            
+                            <div class="team-history-container">
+                                <h3>Team History</h3>
+                                <button type="button" class="add-item-btn" id="add-team">Add Team</button>
+                                <div id="team-history-list">
+                                    <!-- Team history items will be added here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancel-player-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Player</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Modal -->
+        <div class="modal" id="product-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="product-modal-title">Add Product</div>
+                    <button class="close-modal" id="close-product-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="product-form">
+                        <input type="hidden" id="product-id">
+                        <div class="form-group">
+                            <label for="product-name">Product Name</label>
+                            <input type="text" id="product-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-description">Description</label>
+                            <textarea id="product-description" name="description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-price">Price</label>
+                            <input type="number" id="product-price" name="price" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-image">Image URL</label>
+                            <input type="text" id="product-image" name="image" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-category">Category</label>
+                            <select id="product-category" name="category" required>
+                                <option value="Apparel">Apparel</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Collectibles">Collectibles</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="product-stock">In Stock</label>
+                            <input type="checkbox" id="product-stock" name="inStock" checked>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancel-product-btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Product</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            // Tab navigation
+            const tabs = document.querySelectorAll('.sidebar-menu a');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all tabs and content
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Update page title
+                    document.querySelector('.navbar-title').textContent = this.textContent.trim();
+                    
+                    // Load data for the selected tab
+                    if (tabId === 'dashboard') {
+                        loadDashboardStats();
+                    } else if (tabId === 'news') {
+                        loadNews();
+                    } else if (tabId === 'players') {
+                        loadPlayers();
+                    } else if (tabId === 'products') {
+                        loadProducts();
+                    }
+                });
+            });
+            
+            // Form tab navigation (for player modal)
+            const formTabs = document.querySelectorAll('.form-tab');
+            const formTabContents = document.querySelectorAll('.tab-content');
+            
+            formTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and content
+                    formTabs.forEach(t => t.classList.remove('active'));
+                    formTabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Modal functionality
+            const modals = document.querySelectorAll('.modal');
+            const closeButtons = document.querySelectorAll('.close-modal');
+            const cancelButtons = document.querySelectorAll('[id^=cancel-]');
+            
+            function openModal(modalId) {
+                document.getElementById(modalId).style.display = 'flex';
+            }
+            
+            function closeModal(modalId) {
+                document.getElementById(modalId).style.display = 'none';
+                
+                // Reset form when closing
+                const form = document.getElementById(modalId.replace('-modal', '-form'));
+                if (form) {
+                    form.reset();
+                }
+                
+                // Hide current image
+                const currentImageContainer = document.getElementById('current-image-container');
+                if (currentImageContainer) {
+                    currentImageContainer.style.display = 'none';
+                }
+            }
+            
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modalId = this.closest('.modal').id;
+                    closeModal(modalId);
+                });
+            });
+            
+            cancelButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const modalId = this.closest('.modal').id;
+                    closeModal(modalId);
+                });
+            });
+            
+            // Click outside modal to close
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeModal(this.id);
+                    }
+                });
+            });
+            
+            // Add player button
+            document.getElementById('add-player-btn').addEventListener('click', function() {
+                document.getElementById('player-modal-title').textContent = 'Add Player';
+                document.getElementById('player-form').reset();
+                document.getElementById('current-image-container').style.display = 'none';
+                openModal('player-modal');
+            });
+            
+            // Add news button
+            document.getElementById('add-news-btn').addEventListener('click', function() {
+                document.getElementById('news-modal-title').textContent = 'Add News';
+                document.getElementById('news-form').reset();
+                openModal('news-modal');
+            });
+            
+            // Add product button
+            document.getElementById('add-product-btn').addEventListener('click', function() {
+                document.getElementById('product-modal-title').textContent = 'Add Product';
+                document.getElementById('product-form').reset();
+                openModal('product-modal');
+            });
+            
+            // Player form submit
+            document.getElementById('player-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const playerId = document.getElementById('player-id').value;
+                const method = playerId ? 'PUT' : 'POST';
+                const url = playerId ? `/api/admin/players/${playerId}` : '/api/admin/players';
+                
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        closeModal('player-modal');
+                        loadPlayers();
+                    } else {
+                        alert('Error saving player');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving player');
+                }
+            });
+            
+            // News form submit
+            document.getElementById('news-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData();
+                formData.append('title', document.getElementById('news-title').value);
+                formData.append('content', document.getElementById('news-content').value);
+                formData.append('image', document.getElementById('news-image').value);
+                formData.append('author', document.getElementById('news-author').value);
+                
+                const newsId = document.getElementById('news-id').value;
+                const method = newsId ? 'PUT' : 'POST';
+                const url = newsId ? `/api/admin/news/${newsId}` : '/api/admin/news';
+                
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        closeModal('news-modal');
+                        loadNews();
+                    } else {
+                        alert('Error saving news');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving news');
+                }
+            });
+            
+            // Product form submit
+            document.getElementById('product-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const productData = {
+                    name: document.getElementById('product-name').value,
+                    description: document.getElementById('product-description').value,
+                    price: parseFloat(document.getElementById('product-price').value),
+                    image: document.getElementById('product-image').value,
+                    category: document.getElementById('product-category').value,
+                    inStock: document.getElementById('product-stock').checked
+                };
+                
+                const productId = document.getElementById('product-id').value;
+                const method = productId ? 'PUT' : 'POST';
+                const url = productId ? `/api/admin/products/${productId}` : '/api/admin/products';
+                
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(productData)
+                    });
+                    
+                    if (response.ok) {
+                        closeModal('product-modal');
+                        loadProducts();
+                    } else {
+                        alert('Error saving product');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving product');
+                }
+            });
+            
+            // Dynamic list items for achievements and team history
+            document.getElementById('add-achievement').addEventListener('click', function() {
+                const container = document.getElementById('achievements-list');
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <input type="text" name="achievements" placeholder="Enter achievement">
+                    <button type="button" class="remove-item-btn">Remove</button>
+                `;
+                container.appendChild(item);
+                
+                // Add event listener to remove button
+                item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                    container.removeChild(item);
+                });
+            });
+            
+            document.getElementById('add-team').addEventListener('click', function() {
+                const container = document.getElementById('team-history-list');
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <input type="text" name="teamHistory" placeholder="Enter team name">
+                    <button type="button" class="remove-item-btn">Remove</button>
+                `;
+                container.appendChild(item);
+                
+                // Add event listener to remove button
+                item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                    container.removeChild(item);
+                });
+            });
+            
+            // Logout button
+            document.getElementById('logout-btn').addEventListener('click', async function() {
+                try {
+                    await fetch('/adminp/logout', { method: 'POST' });
+                    window.location.href = '/adminp/login';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                }
+            });
+            
+            // Load initial data
+            loadDashboardStats();
+            
+            // Set initial tab
+            document.querySelector('.sidebar-menu li:first-child a').click();
+            
+            // Player image upload preview
+            document.getElementById('player-image-upload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.getElementById('current-image');
+                        img.src = e.target.result;
+                        document.getElementById('current-image-container').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Data loading functions
+            async function loadDashboardStats() {
+                try {
+                    const [newsRes, playersRes, productsRes] = await Promise.all([
+                        fetch('/api/admin/news'),
+                        fetch('/api/admin/players'),
+                        fetch('/api/admin/products')
+                    ]);
+                    
+                    const [news, players, products] = await Promise.all([
+                        newsRes.json(),
+                        playersRes.json(),
+                        productsRes.json()
+                    ]);
+                    
+                    document.getElementById('news-count').textContent = news.length;
+                    document.getElementById('players-count').textContent = players.length;
+                    document.getElementById('products-count').textContent = products.length;
+                } catch (error) {
+                    console.error('Error loading dashboard stats:', error);
+                }
+            }
+            
+            async function loadNews() {
+                try {
+                    const response = await fetch('/api/admin/news');
+                    const news = await response.json();
+                    const tableBody = document.getElementById('news-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    news.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.title}</td>
+                            <td>${new Date(item.date).toLocaleDateString()}</td>
+                            <td>${item.author}</td>
+                            <td>
+                                <button class="action-btn edit-news" data-id="${item._id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn delete-news" data-id="${item._id}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Add event listeners to edit and delete buttons
+                    document.querySelectorAll('.edit-news').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            const newsId = this.getAttribute('data-id');
+                            try {
+                                const response = await fetch(`/api/admin/news/${newsId}`);
+                                const news = await response.json();
+                                
+                                document.getElementById('news-id').value = news._id;
+                                document.getElementById('news-title').value = news.title;
+                                document.getElementById('news-content').value = news.content;
+                                document.getElementById('news-image').value = news.image || '';
+                                document.getElementById('news-author').value = news.author;
+                                
+                                document.getElementById('news-modal-title').textContent = 'Edit News';
+                                document.getElementById('news-modal').style.display = 'flex';
+                            } catch (error) {
+                                console.error('Error fetching news:', error);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-news').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            if (confirm('Are you sure you want to delete this news article?')) {
+                                const newsId = this.getAttribute('data-id');
+                                try {
+                                    const response = await fetch(`/api/admin/news/${newsId}`, {
+                                        method: 'DELETE'
+                                    });
+                                    
+                                    if (response.ok) {
+                                        loadNews();
+                                    } else {
+                                        alert('Error deleting news');
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('Error deleting news');
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error loading news:', error);
+                }
+            }
+            
+            async function loadPlayers() {
+                try {
+                    const response = await fetch('/api/admin/players');
+                    const players = await response.json();
+                    const tableBody = document.getElementById('players-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    players.forEach(player => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${player.name}</td>
+                            <td>${player.username}</td>
+                            <td>${player.role}</td>
+                            <td>${player.game}</td>
+                            <td>
+                                <button class="action-btn edit-player" data-id="${player._id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn delete-player" data-id="${player._id}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Add event listeners to edit and delete buttons
+                    document.querySelectorAll('.edit-player').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            const playerId = this.getAttribute('data-id');
+                            try {
+                                const response = await fetch(`/api/admin/players/${playerId}`);
+                                const player = await response.json();
+                                
+                                // Fill the form with player data
+                                document.getElementById('player-id').value = player._id;
+                                document.getElementById('player-name').value = player.name;
+                                document.getElementById('player-username').value = player.username;
+                                document.getElementById('player-role').value = player.role;
+                                document.getElementById('player-game').value = player.game;
+                                document.getElementById('player-bio').value = player.bio || '';
+                                
+                                // Social links
+                                document.getElementById('player-twitch').value = player.socialLinks?.twitch || '';
+                                document.getElementById('player-twitter').value = player.socialLinks?.twitter || '';
+                                document.getElementById('player-instagram').value = player.socialLinks?.instagram || '';
+                                document.getElementById('player-youtube').value = player.socialLinks?.youtube || '';
+                                
+                                // Stats
+                                document.getElementById('player-kills').value = player.stats?.kills || 0;
+                                document.getElementById('player-deaths').value = player.stats?.deaths || 0;
+                                document.getElementById('player-assists').value = player.stats?.assists || 0;
+                                document.getElementById('player-kd').value = player.stats?.kdRatio || 0;
+                                
+                                // Clear achievements and team history lists
+                                document.getElementById('achievements-list').innerHTML = '';
+                                document.getElementById('team-history-list').innerHTML = '';
+                                
+                                // Add achievements
+                                if (player.achievements && player.achievements.length > 0) {
+                                    player.achievements.forEach(achievement => {
+                                        const container = document.getElementById('achievements-list');
+                                        const item = document.createElement('div');
+                                        item.className = 'list-item';
+                                        item.innerHTML = `
+                                            <input type="text" name="achievements" value="${achievement}" placeholder="Enter achievement">
+                                            <button type="button" class="remove-item-btn">Remove</button>
+                                        `;
+                                        container.appendChild(item);
+                                        
+                                        item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                                            container.removeChild(item);
+                                        });
+                                    });
+                                }
+                                
+                                // Add team history
+                                if (player.teamHistory && player.teamHistory.length > 0) {
+                                    player.teamHistory.forEach(team => {
+                                        const container = document.getElementById('team-history-list');
+                                        const item = document.createElement('div');
+                                        item.className = 'list-item';
+                                        item.innerHTML = `
+                                            <input type="text" name="teamHistory" value="${team}" placeholder="Enter team name">
+                                            <button type="button" class="remove-item-btn">Remove</button>
+                                        `;
+                                        container.appendChild(item);
+                                        
+                                        item.querySelector('.remove-item-btn').addEventListener('click', function() {
+                                            container.removeChild(item);
+                                        });
+                                    });
+                                }
+                                
+                                // Show current image if exists
+                                if (player.image) {
+                                    document.getElementById('current-image').src = player.image;
+                                    document.getElementById('current-image-container').style.display = 'block';
+                                } else {
+                                    document.getElementById('current-image-container').style.display = 'none';
+                                }
+                                
+                                document.getElementById('player-modal-title').textContent = 'Edit Player';
+                                document.getElementById('player-modal').style.display = 'flex';
+                            } catch (error) {
+                                console.error('Error fetching player:', error);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-player').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            if (confirm('Are you sure you want to delete this player?')) {
+                                const playerId = this.getAttribute('data-id');
+                                try {
+                                    const response = await fetch(`/api/admin/players/${playerId}`, {
+                                        method: 'DELETE'
+                                    });
+                                    
+                                    if (response.ok) {
+                                        loadPlayers();
+                                    } else {
+                                        alert('Error deleting player');
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('Error deleting player');
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error loading players:', error);
+                }
+            }
+            
+            async function loadProducts() {
+                try {
+                    const response = await fetch('/api/admin/products');
+                    const products = await response.json();
+                    const tableBody = document.getElementById('products-table-body');
+                    tableBody.innerHTML = '';
+                    
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${product.name}</td>
+                            <td>$${product.price.toFixed(2)}</td>
+                            <td>${product.category}</td>
+                            <td>${product.inStock ? 'Yes' : 'No'}</td>
+                            <td>
+                                <button class="action-btn edit-product" data-id="${product._id}"><i class="fas fa-edit"></i></button>
+                                <button class="action-btn delete-btn delete-product" data-id="${product._id}"><i class="fas fa-trash"></i></button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                    
+                    // Add event listeners to edit and delete buttons
+                    document.querySelectorAll('.edit-product').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            const productId = this.getAttribute('data-id');
+                            try {
+                                const response = await fetch(`/api/admin/products/${productId}`);
+                                const product = await response.json();
+                                
+                                document.getElementById('product-id').value = product._id;
+                                document.getElementById('product-name').value = product.name;
+                                document.getElementById('product-description').value = product.description;
+                                document.getElementById('product-price').value = product.price;
+                                document.getElementById('product-image').value = product.image;
+                                document.getElementById('product-category').value = product.category;
+                                document.getElementById('product-stock').checked = product.inStock;
+                                
+                                document.getElementById('product-modal-title').textContent = 'Edit Product';
+                                document.getElementById('product-modal').style.display = 'flex';
+                            } catch (error) {
+                                console.error('Error fetching product:', error);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-product').forEach(btn => {
+                        btn.addEventListener('click', async function() {
+                            if (confirm('Are you sure you want to delete this product?')) {
+                                const productId = this.getAttribute('data-id');
+                                try {
+                                    const response = await fetch(`/api/admin/products/${productId}`, {
+                                        method: 'DELETE'
+                                    });
+                                    
+                                    if (response.ok) {
+                                        loadProducts();
+                                    } else {
+                                        alert('Error deleting product');
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('Error deleting product');
+                                }
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error loading products:', error);
+                }
+            }
+        </script>
+</body>
+</html>
