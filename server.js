@@ -7,20 +7,15 @@ const MongoStore = require('connect-mongo');
 const bcrypt = require('bcrypt');
 const multer = require('multer');
 const fs = require('fs');
-
-// Use process.env.PORT for deployment environments
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 // Create uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, 'public', 'uploads');
-try {
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-} catch (err) {
-  console.error('Error creating uploads directory:', err);
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
 
 // Configure multer for file uploads
@@ -60,7 +55,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ 
-    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunitgg',
+    mongoUrl: process.env.MONGO_URI,
     collectionName: 'sessions'
   }),
   cookie: { 
@@ -70,8 +65,8 @@ app.use(session({
   }
 }));
 
-// Connect to MongoDB with error handling
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunitgg', {
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
