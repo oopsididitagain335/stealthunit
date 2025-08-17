@@ -1,3 +1,4 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -245,142 +246,6 @@
             font-size: 0.95rem;
         }
 
-        /* Team Section */
-        .team-section {
-            padding: 5rem 5%;
-        }
-
-        .team-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .player-card {
-            background-color: #111;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .player-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .player-image {
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .player-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .player-card:hover .player-image img {
-            transform: scale(1.1);
-        }
-
-        .player-info {
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .player-info h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .player-role {
-            color: #00ff88;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            color: white;
-            font-size: 1.2rem;
-            transition: color 0.3s;
-        }
-
-        .social-links a:hover {
-            color: #00ff88;
-        }
-
-        /* Store Section */
-        .store-section {
-            padding: 5rem 5%;
-            background-color: #111;
-        }
-
-        .products-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .product-card {
-            background-color: #222;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .product-image {
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.1);
-        }
-
-        .product-info {
-            padding: 1.5rem;
-        }
-
-        .product-info h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.3rem;
-        }
-
-        .product-price {
-            color: #00ff88;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .product-description {
-            margin-bottom: 1.5rem;
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
         /* Footer */
         footer {
             background-color: #111;
@@ -607,22 +472,6 @@
         </div>
     </section>
 
-    <!-- Team Section -->
-    <section class="team-section">
-        <h2 class="section-title">Our Players</h2>
-        <div class="team-container" id="team-container">
-            <!-- Players will be populated by JavaScript -->
-        </div>
-    </section>
-
-    <!-- Store Section -->
-    <section class="store-section">
-        <h2 class="section-title">Featured Products</h2>
-        <div class="products-container" id="products-container">
-            <!-- Products will be populated by JavaScript -->
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="footer-container">
@@ -711,70 +560,9 @@
             }
         }
 
-        // Fetch and display team players
-        async function loadTeam() {
-            try {
-                const response = await fetch('/api/players');
-                const players = await response.json();
-                const teamContainer = document.getElementById('team-container');
-                
-                players.slice(0, 4).forEach(player => {
-                    const playerCard = document.createElement('div');
-                    playerCard.className = 'player-card';
-                    playerCard.innerHTML = `
-                        <div class="player-image">
-                            <img src="${player.image || 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'}" alt="${player.name}">
-                        </div>
-                        <div class="player-info">
-                            <h3>${player.name}</h3>
-                            <div class="player-role">${player.role} - ${player.game}</div>
-                            <div class="social-links">
-                                ${player.socialLinks?.twitch ? `<a href="${player.socialLinks.twitch}"><i class="fab fa-twitch"></i></a>` : ''}
-                                ${player.socialLinks?.twitter ? `<a href="${player.socialLinks.twitter}"><i class="fab fa-twitter"></i></a>` : ''}
-                                ${player.socialLinks?.instagram ? `<a href="${player.socialLinks.instagram}"><i class="fab fa-instagram"></i></a>` : ''}
-                            </div>
-                        </div>
-                    `;
-                    teamContainer.appendChild(playerCard);
-                });
-            } catch (error) {
-                console.error('Error loading team:', error);
-            }
-        }
-
-        // Fetch and display products
-        async function loadProducts() {
-            try {
-                const response = await fetch('/api/products');
-                const products = await response.json();
-                const productsContainer = document.getElementById('products-container');
-                
-                products.slice(0, 4).forEach(product => {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <div class="product-image">
-                            <img src="${product.image || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80'}" alt="${product.name}">
-                        </div>
-                        <div class="product-info">
-                            <h3>${product.name}</h3>
-                            <div class="product-price">$${product.price.toFixed(2)}</div>
-                            <p class="product-description">${product.description.substring(0, 100)}...</p>
-                            <a href="/store/${product._id}" class="cta-button">View Product</a>
-                        </div>
-                    `;
-                    productsContainer.appendChild(productCard);
-                });
-            } catch (error) {
-                console.error('Error loading products:', error);
-            }
-        }
-
         // Load content when page loads
         document.addEventListener('DOMContentLoaded', () => {
             loadNews();
-            loadTeam();
-            loadProducts();
         });
     </script>
 </body>
