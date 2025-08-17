@@ -126,23 +126,6 @@ const News = mongoose.model('News', newsSchema);
 const Player = mongoose.model('Player', playerSchema);
 const Product = mongoose.model('Product', productSchema);
 
-// Ensure admin user exists
-async function createDefaultAdmin() {
-  try {
-    const adminExists = await Admin.findOne({ username: 'admin' });
-    if (!adminExists) {
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      await Admin.create({
-        username: 'admin',
-        password: hashedPassword
-      });
-      console.log('Default admin created: admin / admin123');
-    }
-  } catch (error) {
-    console.error('Error creating default admin:', error);
-  }
-}
-
 // Authentication middleware
 function requireAuth(req, res, next) {
   if (req.session && req.session.userId) {
@@ -184,16 +167,25 @@ app.get('/adminp/login', (req, res) => {
 app.post('/adminp/login', async (req, res) => {
   try {
     const { username, password } = req.body;
+    
+    // Find admin by username
     const admin = await Admin.findOne({ username });
     
+    // Check if admin exists and password is correct
     if (admin && await bcrypt.compare(password, admin.password)) {
+      // Set session variables
       req.session.userId = admin._id;
       req.session.username = admin.username;
+      req.session.role = admin.role;
+      
+      // Redirect to dashboard
       res.redirect('/adminp/dashboard');
     } else {
+      // Invalid credentials
       res.status(401).json({ error: 'Invalid credentials' });
     }
   } catch (error) {
+    console.error('Login error:', error);
     res.status(500).json({ error: 'Login failed' });
   }
 });
@@ -415,7 +407,6 @@ app.use((err, req, res, next) => {
 // Start the server
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  createDefaultAdmin(); // Create default admin if not exists
 });
 
 // Handle unhandled promise rejections
