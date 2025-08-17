@@ -278,4 +278,263 @@
         }
 
         .footer-links ul li a:hover {
-            color: #0
+            color: #00ff88;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.3rem;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #00ff88;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #333;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .store-hero h1 {
+                font-size: 3rem;
+            }
+
+            .store-hero p {
+                font-size: 1.1rem;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .mobile-nav {
+                position: fixed;
+                top: 0;
+                right: -300px;
+                width: 280px;
+                height: 100vh;
+                background-color: #000;
+                z-index: 1001;
+                padding: 5rem 2rem;
+                transition: right 0.3s;
+            }
+
+            .mobile-nav.active {
+                right: 0;
+            }
+
+            .mobile-nav ul {
+                list-style: none;
+            }
+
+            .mobile-nav ul li {
+                margin-bottom: 2rem;
+            }
+
+            .mobile-nav ul li a {
+                color: white;
+                text-decoration: none;
+                font-size: 1.3rem;
+            }
+
+            .close-menu {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .store-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="/" class="logo">Stealth<span>Unit</span>GG</a>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/team">Team</a></li>
+                    <li><a href="/news">News</a></li>
+                    <li><a href="/store" class="active">Store</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <div class="mobile-nav">
+            <div class="close-menu">
+                <i class="fas fa-times"></i>
+            </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/team">Team</a></li>
+                <li><a href="/news">News</a></li>
+                <li><a href="/store">Store</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Store Hero Section -->
+    <section class="store-hero">
+        <div class="store-hero-content">
+            <h1>Official Store</h1>
+            <p>Show your support with premium quality merchandise from StealthUnitGG.</p>
+        </div>
+    </section>
+
+    <!-- Store Section -->
+    <section class="store-section">
+        <h2 class="section-title">Featured Products</h2>
+        
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all">All</button>
+            <button class="filter-btn" data-category="Apparel">Apparel</button>
+            <button class="filter-btn" data-category="Accessories">Accessories</button>
+            <button class="filter-btn" data-category="Collectibles">Collectibles</button>
+        </div>
+        
+        <div class="products-container" id="products-container">
+            <!-- Products will be populated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">Stealth<span>Unit</span>GG</div>
+                <p>One of the premier esports organizations, competing at the highest level across multiple titles with a global fanbase.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitch"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/team">Team</a></li>
+                    <li><a href="/news">News</a></li>
+                    <li><a href="/store">Store</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Team</h3>
+                <ul>
+                    <li><a href="/team/valorant">Valorant</a></li>
+                    <li><a href="/team/league-of-legends">League of Legends</a></li>
+                    <li><a href="/team/counter-strike">Counter-Strike</a></li>
+                    <li><a href="/team/apex-legends">Apex Legends</a></li>
+                    <li><a href="/team/fortnite">Fortnite</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="/contact">Contact Us</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/shipping">Shipping Info</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 StealthUnitGG. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.add('active');
+        });
+
+        document.querySelector('.close-menu').addEventListener('click', function() {
+            document.querySelector('.mobile-nav').classList.remove('active');
+        });
+
+        // Fetch and display products
+        async function loadProducts(category = 'all') {
+            try {
+                const response = await fetch('/api/products');
+                const products = await response.json();
+                const productsContainer = document.getElementById('products-container');
+                productsContainer.innerHTML = '';
+                
+                const filteredProducts = category === 'all' ? products : products.filter(p => p.category === category);
+                
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <div class="product-image">
+                            <img src="${product.image || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80'}" alt="${product.name}">
+                        </div>
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <div class="product-price">$${product.price.toFixed(2)}</div>
+                            <p class="product-description">${product.description}</p>
+                            <button class="add-to-cart">Add to Cart</button>
+                        </div>
+                    `;
+                    productsContainer.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // Category filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const category = this.getAttribute('data-category');
+                loadProducts(category);
+            });
+        });
+
+        // Load content when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+        });
+    </script>
+</body>
+</html>
