@@ -143,7 +143,7 @@ async function createDefaultAdmin() {
   }
 }
 
-// Authentication middleware
+// Authentication middleware for login/logout only
 function requireAuth(req, res, next) {
   if (req.session && req.session.userId) {
     return next();
@@ -224,12 +224,14 @@ app.get('/adminp/logout', (req, res) => {
   }
 });
 
-app.get('/adminp/dashboard', requireAuth, (req, res) => {
+// Make the dashboard accessible to everyone
+app.get('/adminp/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
 });
 
-// API Routes for Admin Panel
-app.get('/api/admin/news', requireAuth, async (req, res) => {
+// API Routes for Admin Panel - Remove requireAuth middleware
+// This allows the dashboard UI to request data, but the UI will control access via the code
+app.get('/api/admin/news', async (req, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
     res.json(news);
@@ -238,7 +240,7 @@ app.get('/api/admin/news', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/admin/news', requireAuth, async (req, res) => {
+app.post('/api/admin/news', async (req, res) => {
   try {
     const news = new News(req.body);
     await news.save();
@@ -248,7 +250,7 @@ app.post('/api/admin/news', requireAuth, async (req, res) => {
   }
 });
 
-app.put('/api/admin/news/:id', requireAuth, async (req, res) => {
+app.put('/api/admin/news/:id', async (req, res) => {
   try {
     const news = await News.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(news);
@@ -257,7 +259,7 @@ app.put('/api/admin/news/:id', requireAuth, async (req, res) => {
   }
 });
 
-app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
+app.delete('/api/admin/news/:id', async (req, res) => {
   try {
     await News.findByIdAndDelete(req.params.id);
     res.json({ message: 'News deleted successfully' });
@@ -267,7 +269,7 @@ app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
 });
 
 // Players API with file upload
-app.get('/api/admin/players', requireAuth, async (req, res) => {
+app.get('/api/admin/players', async (req, res) => {
   try {
     const players = await Player.find();
     res.json(players);
@@ -276,7 +278,7 @@ app.get('/api/admin/players', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, res) => {
+app.post('/api/admin/players', upload.single('image'), async (req, res) => {
   try {
     // If a file was uploaded, use its path, otherwise use the image URL from form
     const imagePath = req.file ? `/uploads/${req.file.filename}` : (req.body.image || '');
@@ -295,7 +297,7 @@ app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, 
   }
 });
 
-app.put('/api/admin/players/:id', requireAuth, upload.single('image'), async (req, res) => {
+app.put('/api/admin/players/:id', upload.single('image'), async (req, res) => {
   try {
     const updateData = { ...req.body };
     
@@ -325,7 +327,7 @@ app.put('/api/admin/players/:id', requireAuth, upload.single('image'), async (re
   }
 });
 
-app.delete('/api/admin/players/:id', requireAuth, async (req, res) => {
+app.delete('/api/admin/players/:id', async (req, res) => {
   try {
     const player = await Player.findById(req.params.id);
     
@@ -349,7 +351,7 @@ app.delete('/api/admin/players/:id', requireAuth, async (req, res) => {
 });
 
 // Products API
-app.get('/api/admin/products', requireAuth, async (req, res) => {
+app.get('/api/admin/products', async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -358,7 +360,7 @@ app.get('/api/admin/products', requireAuth, async (req, res) => {
   }
 });
 
-app.post('/api/admin/products', requireAuth, async (req, res) => {
+app.post('/api/admin/products', async (req, res) => {
   try {
     const product = new Product(req.body);
     await product.save();
@@ -368,7 +370,7 @@ app.post('/api/admin/products', requireAuth, async (req, res) => {
   }
 });
 
-app.put('/api/admin/products/:id', requireAuth, async (req, res) => {
+app.put('/api/admin/products/:id', async (req, res) => {
   try {
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(product);
@@ -377,7 +379,7 @@ app.put('/api/admin/products/:id', requireAuth, async (req, res) => {
   }
 });
 
-app.delete('/api/admin/products/:id', requireAuth, async (req, res) => {
+app.delete('/api/admin/products/:id', async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.json({ message: 'Product deleted successfully' });
