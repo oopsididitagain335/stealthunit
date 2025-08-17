@@ -169,7 +169,7 @@
             color: #00ff88;
         }
 
-        /* Team Hero Section */
+        /* Hero Section */
         .team-hero {
             height: 50vh;
             display: flex;
@@ -198,7 +198,7 @@
             opacity: 0.9;
         }
 
-        /* Team Section */
+        /* Section Styling */
         .team-section {
             padding: 5rem 5%;
         }
@@ -223,78 +223,129 @@
 
         .team-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .player-card, .staff-card {
+        .staff-card {
             background-color: #111;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s;
-        }
-
-        .player-card:hover, .staff-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .player-image, .staff-image {
-            height: 300px;
-            overflow: hidden;
-        }
-
-        .player-image img, .staff-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .player-card:hover .player-image img,
-        .staff-card:hover .staff-image img {
-            transform: scale(1.1);
-        }
-
-        .player-info, .staff-info {
-            padding: 1.5rem;
+            border-radius: 8px;
+            padding: 1.8rem 1.5rem;
             text-align: center;
+            transition: transform 0.3s, background-color 0.3s;
         }
 
-        .player-info h3, .staff-info h3 {
-            margin-bottom: 0.5rem;
+        .staff-card:hover {
+            transform: translateY(-5px);
+            background-color: #1a1a1a;
+        }
+
+        .staff-card h3 {
             font-size: 1.3rem;
+            margin-bottom: 0.5rem;
         }
 
-        .player-role, .staff-role {
+        .staff-role {
             color: #00ff88;
             font-size: 1rem;
             margin-bottom: 1rem;
+            font-weight: 600;
         }
 
-        .player-bio, .staff-bio {
-            margin-bottom: 1rem;
-            opacity: 0.8;
-            font-size: 0.9rem;
-            line-height: 1.4;
+        .staff-bio {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            line-height: 1.5;
         }
 
-        .social-links {
+        /* Owner Section */
+        .owner-section {
+            padding: 4rem 5%;
+            background-color: #0d0d0d;
+            margin-top: -1rem;
+        }
+
+        .owner-container {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
-        .social-links a {
-            color: white;
-            font-size: 1.2rem;
-            transition: color 0.3s;
+        .owner-card {
+            background-color: #111;
+            border-radius: 8px;
+            padding: 2rem 3rem;
+            text-align: center;
+            max-width: 420px;
+            border: 1px solid #00ff8833;
         }
 
-        .social-links a:hover {
+        .owner-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .owner-role {
             color: #00ff88;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .owner-bio {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Player Section */
+        .player-card {
+            background-color: #111;
+            border-radius: 8px;
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+        }
+
+        .player-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .player-role {
+            color: #00ff88;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .player-bio {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-label {
+            opacity: 0.7;
+        }
+
+        .stat-value {
+            font-weight: 600;
         }
 
         /* Footer */
@@ -351,22 +402,6 @@
             color: #00ff88;
         }
 
-        .social-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: 1.3rem;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #00ff88;
-        }
-
         .copyright {
             text-align: center;
             padding-top: 2rem;
@@ -376,20 +411,17 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .team-hero h1 {
                 font-size: 3rem;
             }
-
             .team-hero p {
                 font-size: 1.1rem;
             }
-
             nav ul {
                 display: none;
             }
-
             .mobile-menu {
                 display: block;
             }
@@ -399,9 +431,11 @@
             .team-hero h1 {
                 font-size: 2.5rem;
             }
-
             .section-title {
                 font-size: 2rem;
+            }
+            .owner-card {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -438,7 +472,7 @@
         </div>
     </header>
 
-    <!-- Team Hero Section -->
+    <!-- Hero -->
     <section class="team-hero">
         <div class="team-hero-content">
             <h1>OUR TEAM</h1>
@@ -450,7 +484,14 @@
     <section class="team-section">
         <h2 class="section-title">Leadership</h2>
         <div class="team-container" id="leadership-container">
-            <!-- Leadership team will be populated by JavaScript -->
+            <!-- Filled by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Owner Section -->
+    <section class="owner-section">
+        <div class="owner-container" id="owner-container">
+            <!-- Filled by JS -->
         </div>
     </section>
 
@@ -458,7 +499,7 @@
     <section class="team-section">
         <h2 class="section-title">Meet the Players</h2>
         <div class="team-container" id="team-container">
-            <!-- Players will be populated by JavaScript -->
+            <!-- Filled by API -->
         </div>
     </section>
 
@@ -468,13 +509,6 @@
             <div class="footer-about">
                 <div class="footer-logo">Stealth<span>Unit</span>GG</div>
                 <p>One of the premier esports organizations, competing at the highest level across multiple titles with a global fanbase.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitch"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-discord"></i></a>
-                </div>
             </div>
             <div class="footer-links">
                 <h3>Quick Links</h3>
@@ -513,28 +547,26 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
+        // Mobile Menu Toggle
         const mobileMenu = document.querySelector('.mobile-menu');
         const mobileNav = document.querySelector('.mobile-nav');
         const closeMenu = document.querySelector('.close-menu');
 
-        mobileMenu.addEventListener('click', function() {
+        mobileMenu.addEventListener('click', () => {
             mobileNav.classList.add('active');
         });
 
-        closeMenu.addEventListener('click', function() {
+        closeMenu.addEventListener('click', () => {
             mobileNav.classList.remove('active');
         });
 
-        // Close mobile menu when clicking on a link
         document.querySelectorAll('.mobile-nav ul li a').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', () => {
                 mobileNav.classList.remove('active');
             });
         });
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', (e) => {
             if (!mobileNav.contains(e.target) && !mobileMenu.contains(e.target)) {
                 mobileNav.classList.remove('active');
             }
@@ -542,124 +574,83 @@
 
         // Load Leadership Team
         function loadLeadership() {
-            const leadershipContainer = document.getElementById('leadership-container');
+            const container = document.getElementById('leadership-container');
 
             const leadership = [
                 {
                     name: "Kur0",
                     role: "Co-Founder",
-                    image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-                    bio: "Visionary leader and one of the original founders of StealthUnitGG. Kur0 laid the foundation for the org's competitive excellence.",
-                    socialLinks: {
-                        twitter: "https://twitter.com/kur0",
-                        instagram: "https://instagram.com/kur0"
-                    }
+                    bio: "Visionary leader and one of the original founders of StealthUnitGG. Kur0 laid the foundation for the org's competitive excellence."
                 },
                 {
                     name: "Solace",
                     role: "Co-Founder",
-                    image: "https://images.unsplash.com/photo-1494790108009-34f42eedb3ea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1148&q=80",
-                    bio: "Strategic mind and co-founder. Solace drives long-term growth and brand identity for StealthUnitGG.",
-                    socialLinks: {
-                        twitter: "https://twitter.com/solace",
-                        twitch: "https://twitch.tv/solace"
-                    }
+                    bio: "Strategic mind and co-founder. Solace drives long-term growth and brand identity for StealthUnitGG."
                 },
                 {
                     name: "Zark",
                     role: "CEO",
-                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-                    bio: "Chief Executive Officer. Zark leads operations, partnerships, and global expansion.",
-                    socialLinks: {
-                        linkedin: "https://linkedin.com/in/zark"
-                    }
+                    bio: "Chief Executive Officer. Zark leads operations, partnerships, and global expansion."
                 },
                 {
                     name: "Vixzzy",
                     role: "CFO",
-                    image: "https://images.unsplash.com/photo-1573496359144-b4670bef9811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-                    bio: "Chief Financial Officer. Vixzzy manages budgets, sponsorships, and financial strategy.",
-                    socialLinks: {
-                        linkedin: "https://linkedin.com/in/vixzzy"
-                    }
+                    bio: "Chief Financial Officer. Vixzzy manages budgets, sponsorships, and financial strategy."
                 },
                 {
                     name: "Aspect",
-                    role: "Chief Innovation Officer",
-                    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-                    bio: "Chief Innovation Officer. Aspect pioneers new tech, content, and fan engagement strategies.",
-                    socialLinks: {
-                        twitter: "https://twitter.com/aspect",
-                        youtube: "https://youtube.com/aspect"
-                    }
+                    role: "Investment Coordination Officer (ICO)",
+                    bio: "Oversees investment strategy, funding partnerships, and financial growth opportunities for the organization."
+                },
+                {
+                    name: "Naxey",
+                    role: "Chief Recruitment Officer (CRO)",
+                    bio: "Responsible for scouting, signing, and onboarding top-tier talent across all esports divisions."
                 }
             ];
 
             leadership.forEach(member => {
-                const staffCard = document.createElement('div');
-                staffCard.className = 'staff-card';
-
-                let socialHTML = '';
-                if (member.socialLinks) {
-                    if (member.socialLinks.twitter) {
-                        socialHTML += `<a href="${member.socialLinks.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
-                    }
-                    if (member.socialLinks.twitch) {
-                        socialHTML += `<a href="${member.socialLinks.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>`;
-                    }
-                    if (member.socialLinks.instagram) {
-                        socialHTML += `<a href="${member.socialLinks.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                    }
-                    if (member.socialLinks.youtube) {
-                        socialHTML += `<a href="${member.socialLinks.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>`;
-                    }
-                    if (member.socialLinks.linkedin) {
-                        socialHTML += `<a href="${member.socialLinks.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
-                    }
-                }
-
-                staffCard.innerHTML = `
-                    <div class="staff-image">
-                        <img src="${member.image}" alt="${member.name}">
-                    </div>
-                    <div class="staff-info">
-                        <h3>${member.name}</h3>
-                        <div class="staff-role">${member.role}</div>
-                        <div class="staff-bio">${member.bio}</div>
-                        ${socialHTML ? `<div class="social-links">${socialHTML}</div>` : ''}
-                    </div>
+                const card = document.createElement('div');
+                card.className = 'staff-card';
+                card.innerHTML = `
+                    <h3>${member.name}</h3>
+                    <div class="staff-role">${member.role}</div>
+                    <div class="staff-bio">${member.bio}</div>
                 `;
-                leadershipContainer.appendChild(staffCard);
+                container.appendChild(card);
             });
         }
 
-        // Fetch and display team players
+        // Load Owner
+        function loadOwner() {
+            const container = document.getElementById('owner-container');
+            const owner = {
+                name: "Chompz",
+                role: "Owner",
+                bio: "Ultimate decision-maker and visionary owner of StealthUnitGG. Chompz oversees the entire organization and ensures alignment with long-term goals."
+            };
+
+            const card = document.createElement('div');
+            card.className = 'owner-card';
+            card.innerHTML = `
+                <h3>${owner.name}</h3>
+                <div class="owner-role">${owner.role}</div>
+                <div class="owner-bio">${owner.bio}</div>
+            `;
+            container.appendChild(card);
+        }
+
+        // Load Players
         async function loadTeam() {
             try {
                 const response = await fetch('/api/players');
                 const players = await response.json();
-                const teamContainer = document.getElementById('team-container');
-                
+                const container = document.getElementById('team-container');
+
                 players.forEach(player => {
-                    const playerCard = document.createElement('div');
-                    playerCard.className = 'player-card';
-                    
-                    let socialLinksHTML = '';
-                    if (player.socialLinks) {
-                        if (player.socialLinks.twitch) {
-                            socialLinksHTML += `<a href="${player.socialLinks.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>`;
-                        }
-                        if (player.socialLinks.twitter) {
-                            socialLinksHTML += `<a href="${player.socialLinks.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
-                        }
-                        if (player.socialLinks.instagram) {
-                            socialLinksHTML += `<a href="${player.socialLinks.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
-                        }
-                        if (player.socialLinks.youtube) {
-                            socialLinksHTML += `<a href="${player.socialLinks.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>`;
-                        }
-                    }
-                    
+                    const card = document.createElement('div');
+                    card.className = 'player-card';
+
                     let statsHTML = '';
                     if (player.stats) {
                         statsHTML = `
@@ -678,50 +669,31 @@
                                 </div>
                                 <div class="stat-item">
                                     <span class="stat-label">K/D</span>
-                                    <span class="stat-value">${player.stats.kdRatio}</span>
+                                    <span class="stat-value">${player.stats.kdRatio.toFixed(2)}</span>
                                 </div>
                             </div>
                         `;
                     }
-                    
-                    let achievementsHTML = '';
-                    if (player.achievements && player.achievements.length > 0) {
-                        achievementsHTML = `
-                            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #333;">
-                                <h4 style="color: #00ff88; margin-bottom: 0.5rem;">Achievements</h4>
-                                <ul style="list-style: disc; margin-left: 1.5rem; font-size: 0.9rem;">
-                                    ${player.achievements.map(achievement => `<li>${achievement}</li>`).join('')}
-                                </ul>
-                            </div>
-                        `;
-                    }
-                    
-                    playerCard.innerHTML = `
-                        <div class="player-image">
-                            <img src="${player.image || 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'}" alt="${player.name}">
-                        </div>
-                        <div class="player-info">
-                            <h3>${player.name}</h3>
-                            <div class="player-role">${player.role} - ${player.game}</div>
-                            <div class="player-bio">${player.bio || 'No bio available.'}</div>
-                            ${statsHTML}
-                            <div class="social-links">
-                                ${socialLinksHTML}
-                            </div>
-                            ${achievementsHTML}
-                        </div>
+
+                    card.innerHTML = `
+                        <h3>${player.name}</h3>
+                        <div class="player-role">${player.role} - ${player.game}</div>
+                        <div class="player-bio">${player.bio || 'No bio available.'}</div>
+                        ${statsHTML}
                     `;
-                    teamContainer.appendChild(playerCard);
+                    container.appendChild(card);
                 });
             } catch (error) {
-                console.error('Error loading team:', error);
-                teamContainer.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">Failed to load players.</p>`;
+                console.error('Failed to load players:', error);
+                document.getElementById('team-container').innerHTML = 
+                    `<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">Could not load player data.</p>`;
             }
         }
 
-        // Load content when page loads
+        // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
             loadLeadership();
+            loadOwner();
             loadTeam();
         });
     </script>
