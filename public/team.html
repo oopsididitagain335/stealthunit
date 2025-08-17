@@ -1,4 +1,3 @@
-<!-- public/team.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -230,50 +229,51 @@
             margin: 0 auto;
         }
 
-        .player-card {
+        .player-card, .staff-card {
             background-color: #111;
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.3s;
         }
 
-        .player-card:hover {
+        .player-card:hover, .staff-card:hover {
             transform: translateY(-10px);
         }
 
-        .player-image {
+        .player-image, .staff-image {
             height: 300px;
             overflow: hidden;
         }
 
-        .player-image img {
+        .player-image img, .staff-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s;
         }
 
-        .player-card:hover .player-image img {
+        .player-card:hover .player-image img,
+        .staff-card:hover .staff-image img {
             transform: scale(1.1);
         }
 
-        .player-info {
+        .player-info, .staff-info {
             padding: 1.5rem;
             text-align: center;
         }
 
-        .player-info h3 {
+        .player-info h3, .staff-info h3 {
             margin-bottom: 0.5rem;
             font-size: 1.3rem;
         }
 
-        .player-role {
+        .player-role, .staff-role {
             color: #00ff88;
             font-size: 1rem;
             margin-bottom: 1rem;
         }
 
-        .player-bio {
+        .player-bio, .staff-bio {
             margin-bottom: 1rem;
             opacity: 0.8;
             font-size: 0.9rem;
@@ -295,27 +295,6 @@
 
         .social-links a:hover {
             color: #00ff88;
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .stat-item {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .stat-label {
-            opacity: 0.7;
-        }
-
-        .stat-value {
-            font-weight: 600;
         }
 
         /* Footer */
@@ -462,14 +441,22 @@
     <!-- Team Hero Section -->
     <section class="team-hero">
         <div class="team-hero-content">
-            <h1>OUR PLAYERS</h1>
-            <p>The elite team of professional gamers representing StealthUnitGG across multiple titles.</p>
+            <h1>OUR TEAM</h1>
+            <p>Leaders shaping the future and players dominating the competition.</p>
         </div>
     </section>
 
-    <!-- Team Section -->
+    <!-- Leadership Section -->
     <section class="team-section">
-        <h2 class="section-title">Meet the Team</h2>
+        <h2 class="section-title">Leadership</h2>
+        <div class="team-container" id="leadership-container">
+            <!-- Leadership team will be populated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Players Section -->
+    <section class="team-section">
+        <h2 class="section-title">Meet the Players</h2>
         <div class="team-container" id="team-container">
             <!-- Players will be populated by JavaScript -->
         </div>
@@ -553,6 +540,99 @@
             }
         });
 
+        // Load Leadership Team
+        function loadLeadership() {
+            const leadershipContainer = document.getElementById('leadership-container');
+
+            const leadership = [
+                {
+                    name: "Kur0",
+                    role: "Co-Founder",
+                    image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    bio: "Visionary leader and one of the original founders of StealthUnitGG. Kur0 laid the foundation for the org's competitive excellence.",
+                    socialLinks: {
+                        twitter: "https://twitter.com/kur0",
+                        instagram: "https://instagram.com/kur0"
+                    }
+                },
+                {
+                    name: "Solace",
+                    role: "Co-Founder",
+                    image: "https://images.unsplash.com/photo-1494790108009-34f42eedb3ea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1148&q=80",
+                    bio: "Strategic mind and co-founder. Solace drives long-term growth and brand identity for StealthUnitGG.",
+                    socialLinks: {
+                        twitter: "https://twitter.com/solace",
+                        twitch: "https://twitch.tv/solace"
+                    }
+                },
+                {
+                    name: "Zark",
+                    role: "CEO",
+                    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    bio: "Chief Executive Officer. Zark leads operations, partnerships, and global expansion.",
+                    socialLinks: {
+                        linkedin: "https://linkedin.com/in/zark"
+                    }
+                },
+                {
+                    name: "Vixzzy",
+                    role: "CFO",
+                    image: "https://images.unsplash.com/photo-1573496359144-b4670bef9811?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    bio: "Chief Financial Officer. Vixzzy manages budgets, sponsorships, and financial strategy.",
+                    socialLinks: {
+                        linkedin: "https://linkedin.com/in/vixzzy"
+                    }
+                },
+                {
+                    name: "Aspect",
+                    role: "Chief Innovation Officer",
+                    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
+                    bio: "Chief Innovation Officer. Aspect pioneers new tech, content, and fan engagement strategies.",
+                    socialLinks: {
+                        twitter: "https://twitter.com/aspect",
+                        youtube: "https://youtube.com/aspect"
+                    }
+                }
+            ];
+
+            leadership.forEach(member => {
+                const staffCard = document.createElement('div');
+                staffCard.className = 'staff-card';
+
+                let socialHTML = '';
+                if (member.socialLinks) {
+                    if (member.socialLinks.twitter) {
+                        socialHTML += `<a href="${member.socialLinks.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
+                    }
+                    if (member.socialLinks.twitch) {
+                        socialHTML += `<a href="${member.socialLinks.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>`;
+                    }
+                    if (member.socialLinks.instagram) {
+                        socialHTML += `<a href="${member.socialLinks.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+                    }
+                    if (member.socialLinks.youtube) {
+                        socialHTML += `<a href="${member.socialLinks.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>`;
+                    }
+                    if (member.socialLinks.linkedin) {
+                        socialHTML += `<a href="${member.socialLinks.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>`;
+                    }
+                }
+
+                staffCard.innerHTML = `
+                    <div class="staff-image">
+                        <img src="${member.image}" alt="${member.name}">
+                    </div>
+                    <div class="staff-info">
+                        <h3>${member.name}</h3>
+                        <div class="staff-role">${member.role}</div>
+                        <div class="staff-bio">${member.bio}</div>
+                        ${socialHTML ? `<div class="social-links">${socialHTML}</div>` : ''}
+                    </div>
+                `;
+                leadershipContainer.appendChild(staffCard);
+            });
+        }
+
         // Fetch and display team players
         async function loadTeam() {
             try {
@@ -564,24 +644,22 @@
                     const playerCard = document.createElement('div');
                     playerCard.className = 'player-card';
                     
-                    // Build social links HTML
                     let socialLinksHTML = '';
                     if (player.socialLinks) {
                         if (player.socialLinks.twitch) {
-                            socialLinksHTML += `<a href="${player.socialLinks.twitch}"><i class="fab fa-twitch"></i></a>`;
+                            socialLinksHTML += `<a href="${player.socialLinks.twitch}" target="_blank"><i class="fab fa-twitch"></i></a>`;
                         }
                         if (player.socialLinks.twitter) {
-                            socialLinksHTML += `<a href="${player.socialLinks.twitter}"><i class="fab fa-twitter"></i></a>`;
+                            socialLinksHTML += `<a href="${player.socialLinks.twitter}" target="_blank"><i class="fab fa-twitter"></i></a>`;
                         }
                         if (player.socialLinks.instagram) {
-                            socialLinksHTML += `<a href="${player.socialLinks.instagram}"><i class="fab fa-instagram"></i></a>`;
+                            socialLinksHTML += `<a href="${player.socialLinks.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>`;
                         }
                         if (player.socialLinks.youtube) {
-                            socialLinksHTML += `<a href="${player.socialLinks.youtube}"><i class="fab fa-youtube"></i></a>`;
+                            socialLinksHTML += `<a href="${player.socialLinks.youtube}" target="_blank"><i class="fab fa-youtube"></i></a>`;
                         }
                     }
                     
-                    // Build stats HTML
                     let statsHTML = '';
                     if (player.stats) {
                         statsHTML = `
@@ -606,7 +684,6 @@
                         `;
                     }
                     
-                    // Build achievements HTML
                     let achievementsHTML = '';
                     if (player.achievements && player.achievements.length > 0) {
                         achievementsHTML = `
@@ -638,11 +715,13 @@
                 });
             } catch (error) {
                 console.error('Error loading team:', error);
+                teamContainer.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">Failed to load players.</p>`;
             }
         }
 
         // Load content when page loads
         document.addEventListener('DOMContentLoaded', () => {
+            loadLeadership();
             loadTeam();
         });
     </script>
