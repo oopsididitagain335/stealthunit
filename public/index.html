@@ -22,12 +22,13 @@
 
         /* Header Styles */
         header {
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.9);
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
             backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
         }
 
         .header-container {
@@ -64,10 +65,26 @@
             text-decoration: none;
             font-size: 1.1rem;
             transition: color 0.3s;
+            position: relative;
         }
 
         nav ul li a:hover {
             color: #00ff88;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #00ff88;
+            transition: width 0.3s;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         .mobile-menu {
@@ -432,7 +449,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>StealthUnitGG</h1>
+            <h1>STEALTHUNITGG</h1>
             <p>Professional esports organization competing at the highest level across multiple titles.</p>
             <a href="/team" class="cta-button">Meet the Team</a>
             <a href="/store" class="cta-button secondary">Visit Store</a>
