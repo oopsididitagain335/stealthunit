@@ -13,6 +13,7 @@
             font-family: 'Orbitron', 'Arial', sans-serif;
         }
 
+        /* Google Font for futuristic feel */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
 
         body {
@@ -21,6 +22,7 @@
             overflow-x: hidden;
         }
 
+        /* Background Overlay */
         .hero-bg {
             position: fixed;
             top: 0;
@@ -30,16 +32,20 @@
             background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&q=80') no-repeat center center/cover;
             z-index: -1;
             opacity: 0.2;
+            filter: brightness(0.6);
         }
 
+        /* Header Styles */
         header {
-            background-color: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
+            background-color: rgba(0, 0, 0, 0.95);
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 255, 136, 0.3);
+            transition: all 0.3s;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
         }
 
         .header-container {
@@ -49,44 +55,140 @@
             padding: 1rem 5%;
             max-width: 1400px;
             margin: 0 auto;
+            height: 70px;
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: #fff;
+            color: white;
             text-decoration: none;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 2px;
         }
 
-        .logo span {
+        .logo span:nth-child(1) {
             color: #00ff88;
             text-shadow: 0 0 15px rgba(0, 255, 136, 0.8);
         }
 
-        nav ul {
+        .logo span:nth-child(2) {
+            color: #0088ff;
+            text-shadow: 0 0 15px rgba(0, 136, 255, 0.8);
+        }
+
+        .logo span:nth-child(3) {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        /* Desktop Nav */
+        .desktop-nav ul {
             display: flex;
             list-style: none;
+            gap: 2rem;
         }
 
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
+        .desktop-nav li a {
             color: white;
             text-decoration: none;
             font-size: 1.1rem;
+            font-weight: 500;
             transition: all 0.3s;
             position: relative;
             padding: 0.5rem 0;
+            letter-spacing: 0.5px;
         }
 
-        nav ul li a:hover {
+        .desktop-nav li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #0088ff);
+            transition: width 0.3s ease;
+        }
+
+        .desktop-nav li a:hover {
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            animation: glitch 0.5s infinite alternate;
+        }
+
+        .desktop-nav li a:hover::after {
+            width: 100%;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            60% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu:hover {
             color: #00ff88;
         }
 
-        nav ul li a::after {
+        /* Mobile Nav */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #000;
+            z-index: 1001;
+            padding: 5rem 2rem;
+            transition: right 0.3s;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 2rem;
+        }
+
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            display: block;
+            padding: 0.5rem 0;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        .mobile-nav ul li a::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -97,14 +199,26 @@
             transition: width 0.3s;
         }
 
-        nav ul li a:hover::after {
+        .mobile-nav ul li a:hover {
+            color: #00ff88;
+        }
+
+        .mobile-nav ul li a:hover::after {
             width: 100%;
         }
 
-        .mobile-menu {
-            display: none;
+        .close-menu {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
             font-size: 1.5rem;
             cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .close-menu:hover {
+            color: #00ff88;
         }
 
         /* Hero Section */
@@ -126,6 +240,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
         }
 
         .hero p {
@@ -147,6 +267,7 @@
             border-radius: 30px;
             margin: 0.5rem;
             transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.2);
         }
 
         .cta-button:hover {
@@ -176,6 +297,7 @@
             font-size: 2.5rem;
             margin-bottom: 3rem;
             position: relative;
+            color: #fff;
         }
 
         .section-title::after {
@@ -201,12 +323,13 @@
             background: #1a1a1a;
             border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .news-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.15);
         }
 
         .news-image {
@@ -242,6 +365,7 @@
             margin: 1rem 0;
             font-size: 1.3rem;
             line-height: 1.4;
+            color: #fff;
         }
 
         .news-card p {
@@ -278,8 +402,12 @@
             color: #fff;
         }
 
-        .footer-logo span {
+        .footer-logo span:nth-child(1) {
             color: #00ff88;
+        }
+
+        .footer-logo span:nth-child(2) {
+            color: #0088ff;
         }
 
         .footer-about p {
@@ -312,11 +440,12 @@
             font-size: 0.9rem;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             .hero-content h1 {
                 font-size: 3rem;
             }
-            nav ul {
+            .desktop-nav {
                 display: none;
             }
             .mobile-menu {
@@ -331,6 +460,9 @@
             .section-title {
                 font-size: 2rem;
             }
+            .mobile-nav {
+                width: 260px;
+            }
         }
     </style>
 </head>
@@ -338,8 +470,15 @@
     <!-- Header -->
     <header>
         <div class="header-container">
-            <a href="/" class="logo">Stealth<span>Unit</span>GG</a>
-            <nav>
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span>Stealth</span>
+                <span>Unit</span>
+                <span>GG</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="desktop-nav">
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/team">Team</a></li>
@@ -348,10 +487,14 @@
                     <li><a href="/contact">Contact</a></li>
                 </ul>
             </nav>
+
+            <!-- Mobile Menu Button -->
             <div class="mobile-menu">
                 <i class="fas fa-bars"></i>
             </div>
         </div>
+
+        <!-- Mobile Nav -->
         <div class="mobile-nav">
             <div class="close-menu">
                 <i class="fas fa-times"></i>
@@ -435,46 +578,65 @@
     </footer>
 
     <script>
-        // Mobile Menu
+        // Mobile Menu Toggle
         const mobileMenu = document.querySelector('.mobile-menu');
         const mobileNav = document.querySelector('.mobile-nav');
         const closeMenu = document.querySelector('.close-menu');
 
-        mobileMenu.addEventListener('click', () => mobileNav.classList.add('active'));
-        closeMenu.addEventListener('click', () => mobileNav.classList.remove('active'));
-        document.querySelectorAll('.mobile-nav ul li a').forEach(link => {
-            link.addEventListener('click', () => mobileNav.classList.remove('active'));
+        mobileMenu.addEventListener('click', () => {
+            mobileNav.classList.add('active');
         });
+
+        closeMenu.addEventListener('click', () => {
+            mobileNav.classList.remove('active');
+        });
+
+        document.querySelectorAll('.mobile-nav ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNav.classList.remove('active');
+            });
+        });
+
         document.addEventListener('click', (e) => {
             if (!mobileNav.contains(e.target) && !mobileMenu.contains(e.target)) {
                 mobileNav.classList.remove('active');
             }
         });
 
-        // Load News
+        // Load News from API
         async function loadNews() {
             const container = document.getElementById('news-container');
             try {
                 const res = await fetch('/api/news');
-                const news = await res.json();
+                if (!res.ok) throw new Error('Failed to fetch news');
 
+                const news = await res.json();
                 container.innerHTML = '';
 
                 if (news.length === 0) {
                     container.innerHTML = `
                         <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">
-                            No news at the moment.
-                        </p>`;
+                            No news at the moment. Check back later.
+                        </p>
+                    `;
                     return;
                 }
 
+                // Show latest 3
                 news.slice(0, 3).forEach(item => {
-                    const date = new Date(item.date).toLocaleDateString();
+                    const date = new Date(item.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
                     const card = document.createElement('div');
                     card.className = 'news-card';
                     card.innerHTML = `
                         <div class="news-image">
-                            <img src="${item.image || '/uploads/default.jpg'}" alt="${item.title}" onerror="this.onerror=null;this.src='/images/placeholder.jpg';">
+                            <img src="${item.image || '/uploads/default.jpg'}" 
+                                 alt="${item.title}" 
+                                 onerror="this.onerror=null;this.src='/images/placeholder.jpg';">
                         </div>
                         <div class="news-content">
                             <div class="news-date"><i class="far fa-calendar"></i> ${date}</div>
@@ -486,11 +648,16 @@
                     container.appendChild(card);
                 });
             } catch (err) {
-                container.innerHTML = `<p style="grid-column: 1 / -1; text-align: center; color: #ff4444;">Failed to load news.</p>`;
-                console.error(err);
+                console.error('News load error:', err);
+                container.innerHTML = `
+                    <p style="grid-column: 1 / -1; text-align: center; color: #ff4444;">
+                        Could not load news.
+                    </p>
+                `;
             }
         }
 
+        // Load on page load
         document.addEventListener('DOMContentLoaded', loadNews);
     </script>
 </body>
