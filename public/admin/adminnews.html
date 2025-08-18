@@ -16,8 +16,8 @@
         body {
             background: #000;
             color: white;
-            padding: 40px;
-            max-width: 800px;
+            padding: 40px 20px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -31,6 +31,12 @@
         .admin-header h1 {
             font-size: 2rem;
             color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
 
         .form-group {
@@ -41,6 +47,7 @@
             display: block;
             margin-bottom: 0.5rem;
             color: #00ff88;
+            font-size: 1.1rem;
         }
 
         input, textarea {
@@ -50,11 +57,13 @@
             border: 1px solid #333;
             color: white;
             border-radius: 6px;
+            font-size: 1rem;
         }
 
         input:focus, textarea:focus {
             outline: none;
             border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
         }
 
         button {
@@ -66,10 +75,24 @@
             cursor: pointer;
             border-radius: 30px;
             transition: all 0.3s;
+            font-size: 1.1rem;
         }
 
         button:hover {
             transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        button.delete-btn {
+            background: #ff4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        button.delete-btn:hover {
+            background: #ff6666;
+            transform: scale(1.02);
         }
 
         .message {
@@ -91,30 +114,66 @@
             border: 1px solid #ff4444;
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 1rem;
-            color: #00ff88;
-            text-decoration: none;
+        /* News List */
+        .news-list {
+            margin-top: 3rem;
+            border-top: 1px solid #333;
+            padding-top: 1.5rem;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
+        .news-list h2 {
+            font-size: 1.5rem;
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .news-item {
+            background: #111;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #333;
+        }
+
+        .news-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .news-item p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .news-meta {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 1rem;
         }
     </style>
 </head>
 <body>
-    <a href="/adminp/dashboard" class="back-link">&larr; Back to Dashboard</a>
-
     <div class="admin-header">
-        <h1><i class="fas fa-newspaper"></i> Post News</h1>
-        <p>Submit a new article for the homepage (Approval Code: 27915)</p>
+        <h1><i class="fas fa-newspaper"></i> Admin News Panel</h1>
+        <p>Post or delete news articles (Authorized personnel only)</p>
     </div>
 
+    <!-- Post News Form -->
     <form id="newsForm">
         <div class="form-group">
-            <label for="approvalCode">Approval Code</label>
-            <input type="password" id="approvalCode" placeholder="Enter code to post" required>
+            <label for="approvalCode">Authorization Code</label>
+            <input type="password" id="approvalCode" placeholder="Enter access code" required>
         </div>
 
         <div class="form-group">
@@ -142,24 +201,117 @@
 
     <div id="message" class="message"></div>
 
+    <!-- News List -->
+    <div class="news-list">
+        <h2><i class="fas fa-archive"></i> Published News</h2>
+        <div id="news-items">
+            <p style="opacity: 0.6;">Loading news...</p>
+        </div>
+    </div>
+
     <script>
+        const API_URL = '/api/admin/news';
+        const messageEl = document.getElementById('message');
+
+        // Show message
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Load all news
+        async function loadNews() {
+            const container = document.getElementById('news-items');
+            try {
+                const res = await fetch('/api/news');
+                const news = await res.json();
+
+                container.innerHTML = '';
+
+                if (news.length === 0) {
+                    container.innerHTML = '<p style="opacity: 0.6;">No news articles found.</p>';
+                    return;
+                }
+
+                news.forEach(article => {
+                    const item = document.createElement('div');
+                    item.className = 'news-item';
+                    item.innerHTML = `
+                        <h3>${article.title}</h3>
+                        <div class="news-meta">Published on ${formatDate(article.date)} by ${article.author}</div>
+                        <p>${article.content}</p>
+                        <div class="news-actions">
+                            <button class="delete-btn" data-id="${article._id}" data-title="${article.title}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(item);
+                });
+
+                // Add delete listeners
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', deleteNews);
+                });
+            } catch (err) {
+                container.innerHTML = '<p style="color: #ff4444;">Failed to load news.</p>';
+            }
+        }
+
+        // Delete news
+        async function deleteNews(e) {
+            const id = e.target.closest('.delete-btn').dataset.id;
+            const title = e.target.closest('.delete-btn').dataset.title;
+
+            const confirm = window.confirm(`Are you sure you want to delete this article?\n\n"${title}"\n\nThis action cannot be undone.`);
+            
+            if (!confirm) return;
+
+            try {
+                const res = await fetch(`/api/admin/news/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (res.ok) {
+                    showMessage('News article deleted successfully.', 'success');
+                    loadNews(); // Refresh list
+                } else {
+                    const data = await res.json();
+                    throw new Error(data.error || 'Delete failed');
+                }
+            } catch (err) {
+                showMessage('Error: ' + err.message, 'error');
+            }
+        }
+
+        // Post news
         document.getElementById('newsForm').onsubmit = async (e) => {
             e.preventDefault();
-            const msg = document.getElementById('message');
-
             const code = document.getElementById('approvalCode').value;
+
             if (code !== '27915') {
-                msg.textContent = 'Invalid approval code.';
-                msg.className = 'message error';
-                msg.style.display = 'block';
+                showMessage('Invalid authorization code.', 'error');
                 return;
             }
 
             const data = {
                 title: document.getElementById('title').value,
                 content: document.getElementById('content').value,
-                image: document.getElementById('image').value || '',
-                author: document.getElementById('author').value || 'StealthUnitGG'
+                image: document.getElementById('image').value.trim() || '',
+                author: document.getElementById('author').value.trim() || 'StealthUnitGG'
             };
 
             try {
@@ -172,18 +324,19 @@
                 const result = await res.json();
 
                 if (res.ok) {
-                    msg.textContent = 'News published successfully!';
-                    msg.className = 'message success';
+                    showMessage('News published successfully!', 'success');
                     document.getElementById('newsForm').reset();
+                    loadNews(); // Refresh list
                 } else {
                     throw new Error(result.error || 'Unknown error');
                 }
             } catch (err) {
-                msg.textContent = 'Error: ' + err.message;
-                msg.className = 'message error';
+                showMessage('Error: ' + err.message, 'error');
             }
-            msg.style.display = 'block';
         };
+
+        // Load news on page load
+        document.addEventListener('DOMContentLoaded', loadNews);
     </script>
 </body>
 </html>
