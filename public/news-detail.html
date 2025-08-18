@@ -1,406 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Article | StealthUnitGG</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Orbitron', 'Arial', sans-serif;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
-
-        body {
-            background-color: #000;
-            color: white;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: rgba(0, 0, 0, 0.95);
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 255, 136, 0.2);
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-            letter-spacing: 1px;
-        }
-
-        .logo span:nth-child(1) {
-            color: #00ff88;
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
-        }
-
-        .logo span:nth-child(2) {
-            color: #0088ff;
-            text-shadow: 0 0 10px rgba(0, 136, 255, 0.7);
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            position: relative;
-            padding: 0.5rem 0;
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00ff88, #0088ff);
-            transition: width 0.3s;
-        }
-
-        nav ul li a:hover {
-            color: #00ff88;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-
-        /* Article Content */
-        .article-container {
-            max-width: 800px;
-            margin: 120px auto 50px;
-            padding: 2rem;
-            background: #111;
-            border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .article-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .article-header h1 {
-            font-size: 2.5rem;
-            color: #fff;
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
-        .article-meta {
-            color: #00ff88;
-            font-size: 0.95rem;
-            margin-bottom: 1rem;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .article-image {
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .article-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .article-content {
-            line-height: 1.7;
-            font-size: 1.05rem;
-            color: #ccc;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-top: 2rem;
-            color: #00ff88;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        .loading {
-            text-align: center;
-            color: #00ff88;
-            font-size: 1.2rem;
-            margin-top: 50px;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #111;
-            padding: 3rem 5% 2rem;
-        }
-
-        .footer-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .footer-logo span:nth-child(1) {
-            color: #00ff88;
-        }
-
-        .footer-logo span:nth-child(2) {
-            color: #0088ff;
-        }
-
-        .footer-about p {
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-icons a {
-            color: white;
-            font-size: 1.3rem;
-            transition: color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #00ff88;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid #333;
-            opacity: 0.7;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .article-container {
-                margin: 100px 1rem 50px;
-                padding: 1.5rem;
-            }
-            .article-header h1 {
-                font-size: 2.2rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>News | StealthUnitGG</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body { background: #000; color: white; font-family: 'Arial', sans-serif; }
+    .container { max-width: 800px; margin: 100px auto; padding: 2rem; background: #111; border-radius: 12px; }
+    h1 { color: #00ff88; }
+    .meta { color: #0088ff; margin: 1rem 0; }
+    .content { line-height: 1.6; margin: 1.5rem 0; }
+    .back { color: #00ff88; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="/" class="logo">Stealth<span>Unit</span>GG</a>
-            <nav>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/team">Team</a></li>
-                    <li><a href="/news">News</a></li>
-                    <li><a href="/store">Store</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
-        </div>
-        <div class="mobile-nav">
-            <div class="close-menu">
-                <i class="fas fa-times"></i>
-            </div>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/team">Team</a></li>
-                <li><a href="/news">News</a></li>
-                <li><a href="/store">Store</a></li>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div>
-    </header>
+  <div class="container">
+    <h1 id="title">Loading...</h1>
+    <div class="meta" id="meta"></div>
+    <div class="content" id="content"></div>
+    <a href="/news" class="back">&larr; Back to News</a>
+  </div>
 
-    <!-- Article -->
-    <div class="article-container" id="article-container">
-        <div class="loading">Loading article...</div>
-    </div>
+  <script>
+    const id = window.location.pathname.split('/').pop();
+    if (!id) window.location.href = '/news';
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-about">
-                <div class="footer-logo">Stealth<span>Unit</span>GG</div>
-                <p>One of the premier esports organizations, competing at the highest level across multiple titles with a global fanbase.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-twitch"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-discord"></i></a>
-                </div>
-            </div>
-            <div class="footer-links">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/team">Team</a></li>
-                    <li><a href="/news">News</a></li>
-                    <li><a href="/store">Store</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h3>Team</h3>
-                <ul>
-                    <li><a href="/team/valorant">Valorant</a></li>
-                    <li><a href="/team/league-of-legends">League of Legends</a></li>
-                    <li><a href="/team/counter-strike">Counter-Strike</a></li>
-                    <li><a href="/team/apex-legends">Apex Legends</a></li>
-                    <li><a href="/team/fortnite">Fortnite</a></li>
-                </ul>
-            </div>
-            <div class="footer-links">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="/contact">Contact Us</a></li>
-                    <li><a href="/faq">FAQ</a></li>
-                    <li><a href="/shipping">Shipping Info</a></li>
-                    <li><a href="/returns">Returns</a></li>
-                    <li><a href="/privacy">Privacy Policy</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="copyright">
-            &copy; 2023 StealthUnitGG. All rights reserved.
-        </div>
-    </footer>
+    async function load() {
+      try {
+        const res = await fetch(`/api/news/${id}`);
+        if (!res.ok) throw new Error('Not found');
 
-    <script>
-        // Extract ID from URL path
-        const path = window.location.pathname;
-        const id = path.split('/').pop(); // Gets the last part of /news/abc123
+        const a = await res.json();
+        document.getElementById('title').textContent = a.title;
+        document.getElementById('meta').textContent = `Published on ${new Date(a.date).toLocaleDateString()} by ${a.author}`;
+        document.getElementById('content').innerHTML = a.content.replace(/\n/g, '<br>');
+      } catch (e) {
+        document.body.innerHTML = '<h2>Article not found.</h2><a href="/news">← Back</a>';
+      }
+    }
 
-        if (!id || id === 'news') {
-            document.getElementById('article-container').innerHTML = `
-                <p style="color: #ff4444; text-align: center;">Invalid article ID.</p>
-                <a href="/news" class="back-link">&larr; Back to News</a>
-            `;
-            throw new Error('Invalid ID');
-        }
-
-        // Fetch article
-        async function loadArticle() {
-            const container = document.getElementById('article-container');
-            try {
-                const res = await fetch(`/api/news/${id}`);
-                if (!res.ok) throw new Error('Article not found');
-
-                const article = await res.json();
-
-                const date = new Date(article.date).toLocaleDateString();
-
-                container.innerHTML = `
-                    <div class="article-header">
-                        <h1>${article.title}</h1>
-                        <div class="article-meta">
-                            <span><i class="far fa-calendar"></i> ${date}</span>
-                            <span><i class="far fa-user"></i> ${article.author}</span>
-                        </div>
-                    </div>
-                    ${article.image ? `
-                    <div class="article-image">
-                        <img src="${article.image}" alt="${article.title}">
-                    </div>
-                    ` : ''}
-                    <div class="article-content">
-                        ${article.content.replace(/\n/g, '<br>')}
-                    </div>
-                    <a href="/news" class="back-link">&larr; Back to News</a>
-                `;
-            } catch (err) {
-                container.innerHTML = `
-                    <p style="color: #ff4444; text-align: center;">${err.message}</p>
-                    <a href="/news" class="back-link">&larr; Back to News</a>
-                `;
-            }
-        }
-
-        // Mobile Menu Toggle
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const mobileNav = document.querySelector('.mobile-nav');
-        const closeMenu = document.querySelector('.close-menu');
-
-        mobileMenu.addEventListener('click', () => {
-            mobileNav.classList.add('active');
-        });
-
-        closeMenu.addEventListener('click', () => {
-            mobileNav.classList.remove('active');
-        });
-
-        document.querySelectorAll('.mobile-nav ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('active');
-            });
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!mobileNav.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileNav.classList.remove('active');
-            }
-        });
-
-        // Load on page load
-        document.addEventListener('DOMContentLoaded', loadArticle);
-    </script>
+    load();
+  </script>
 </body>
 </html>
