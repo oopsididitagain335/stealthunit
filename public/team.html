@@ -270,6 +270,8 @@
         .owner-container {
             display: flex;
             justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -596,16 +598,6 @@
                     name: "Vixzzy",
                     role: "CFO",
                     bio: "Chief Financial Officer. Vixzzy manages budgets, sponsorships, and financial strategy."
-                },
-                {
-                    name: "Aspect",
-                    role: "Investment Coordination Officer (ICO)",
-                    bio: "Oversees investment strategy, funding partnerships, and financial growth opportunities for the organization."
-                },
-                {
-                    name: "Naxey",
-                    role: "Chief Recruitment Officer (CRO)",
-                    bio: "Responsible for scouting, signing, and onboarding top-tier talent across all esports divisions."
                 }
             ];
 
@@ -621,23 +613,33 @@
             });
         }
 
-        // Load Owner
+        // Load Owner & Co-Owner
         function loadOwner() {
             const container = document.getElementById('owner-container');
-            const owner = {
-                name: "Chompz",
-                role: "Owner",
-                bio: "Ultimate decision-maker and visionary owner of StealthUnitGG. Chompz oversees the entire organization and ensures alignment with long-term goals."
-            };
 
-            const card = document.createElement('div');
-            card.className = 'owner-card';
-            card.innerHTML = `
-                <h3>${owner.name}</h3>
-                <div class="owner-role">${owner.role}</div>
-                <div class="owner-bio">${owner.bio}</div>
-            `;
-            container.appendChild(card);
+            const owners = [
+                {
+                    name: "Chompz",
+                    role: "Owner",
+                    bio: "Ultimate decision-maker and visionary owner of StealthUnitGG. Chompz oversees the entire organization and ensures alignment with long-term goals."
+                },
+                {
+                    name: "T0kyo",
+                    role: "Co-Owner",
+                    bio: "Key strategic partner and Co-Owner of StealthUnitGG. T0kyo supports high-level decisions, brand growth, and operational leadership."
+                }
+            ];
+
+            owners.forEach(owner => {
+                const card = document.createElement('div');
+                card.className = 'owner-card';
+                card.innerHTML = `
+                    <h3>${owner.name}</h3>
+                    <div class="owner-role">${owner.role}</div>
+                    <div class="owner-bio">${owner.bio}</div>
+                `;
+                container.appendChild(card);
+            });
         }
 
         // Load Players
