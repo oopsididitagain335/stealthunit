@@ -143,7 +143,7 @@ async function createDefaultAdmin() {
   }
 }
 
-// Authentication middleware for login/logout only
+// Authentication middleware
 function requireAuth(req, res, next) {
   if (req.session && req.session.userId) {
     return next();
@@ -151,7 +151,7 @@ function requireAuth(req, res, next) {
   res.redirect('/adminp/login');
 }
 
-// Routes
+// === PUBLIC ROUTES ===
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -176,9 +176,8 @@ app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
-// Admin Panel Routes
+// === ADMIN PANEL ROUTES ===
 app.get('/adminp/login', (req, res) => {
-  // If already logged in, redirect to dashboard
   if (req.session && req.session.userId) {
     return res.redirect('/adminp/dashboard');
   }
@@ -188,21 +187,14 @@ app.get('/adminp/login', (req, res) => {
 app.post('/adminp/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    
-    // Find admin by username
     const admin = await Admin.findOne({ username });
     
-    // Check if admin exists and password is correct
     if (admin && await bcrypt.compare(password, admin.password)) {
-      // Set session variables
       req.session.userId = admin._id;
       req.session.username = admin.username;
       req.session.role = admin.role;
-      
-      // Redirect to dashboard on successful login
       res.redirect('/adminp/dashboard');
     } else {
-      // Invalid credentials - redirect back to login with error
       res.redirect('/adminp/login');
     }
   } catch (error) {
@@ -214,9 +206,7 @@ app.post('/adminp/login', async (req, res) => {
 app.get('/adminp/logout', (req, res) => {
   if (req.session) {
     req.session.destroy(err => {
-      if (err) {
-        console.error('Session destruction error:', err);
-      }
+      if (err) console.error('Session destruction error:', err);
       res.redirect('/adminp/login');
     });
   } else {
@@ -224,39 +214,36 @@ app.get('/adminp/logout', (req, res) => {
   }
 });
 
-// Make the dashboard accessible to everyone
-app.get('/adminp/dashboard', (req, res) => {
+app.get('/adminp/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
 });
 
-// API Routes for Admin Panel
-app.get('/api/admin/news', async (req, res) => {
+// === API ROUTES ===
+
+// Admin News Routes
+app.get('/api/admin/news', requireAuth, async (req, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
     res.json(news);
   } catch (error) {
-    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
 
-app.post('/api/admin/news', async (req, res) => {
+app.post('/api/admin/news', requireAuth, async (req, res) => {
   try {
-    console.log('Request body:', req.body); // Debugging
-    
-    // Validate required fields
-    if (!req.body.title || !req.body.content) {
+    const { title, content, image, author } = req.body;
+    if (!title || !content) {
       return res.status(400).json({ error: 'Title and content are required' });
     }
-    
-    // Create new news article
+
     const news = new News({
-      title: req.body.title,
-      content: req.body.content,
-      image: req.body.image || '',
-      author: req.body.author || 'StealthUnitGG'
+      title,
+      content,
+      image: image || '',
+      author: author || 'StealthUnitGG'
     });
-    
+
     await news.save();
     res.status(201).json(news);
   } catch (error) {
@@ -265,197 +252,111 @@ app.post('/api/admin/news', async (req, res) => {
   }
 });
 
-app.put('/api/admin/news/:id', async (req, res) => {
+app.put('/api/admin/news/:id', requireAuth, async (req, res) => {
   try {
     const news = await News.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!news) {
-      return res.status(404).json({ error: 'News article not found' });
-    }
+    if (!news) return res.status(404).json({ error: 'Not found' });
     res.json(news);
   } catch (error) {
-    console.error('Error updating news:', error);
-    res.status(500).json({ error: 'Failed to update news' });
+    res.status(500).json({ error: 'Update failed' });
   }
 });
 
-app.delete('/api/admin/news/:id', async (req, res) => {
+app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
   try {
     const news = await News.findByIdAndDelete(req.params.id);
-    if (!news) {
-      return res.status(404).json({ error: 'News article not found' });
-    }
-    res.json({ message: 'News deleted successfully' });
+    if (!news) return res.status(404).json({ error: 'Not found' });
+    res.json({ message: 'Deleted successfully' });
   } catch (error) {
-    console.error('Error deleting news:', error);
-    res.status(500).json({ error: 'Failed to delete news' });
+    res.status(500).json({ error: 'Delete failed' });
   }
 });
 
-// Players API with file upload
-app.get('/api/admin/players', async (req, res) => {
-  try {
-    const players = await Player.find();
-    res.json(players);
-  } catch (error) {
-    console.error('Error fetching players:', error);
-    res.status(500).json({ error: 'Failed to fetch players' });
-  }
-});
-
-app.post('/api/admin/players', upload.single('image'), async (req, res) => {
-  try {
-    // If a file was uploaded, use its path, otherwise use the image URL from form
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : (req.body.image || '');
-    
-    // Validate required fields
-    if (!req.body.name || !req.body.username || !req.body.role || !req.body.game) {
-      return res.status(400).json({ error: 'Name, username, role, and game are required' });
-    }
-    
-    const playerData = {
-      ...req.body,
-      image: imagePath
-    };
-    
-    const player = new Player(playerData);
-    await player.save();
-    res.status(201).json(player);
-  } catch (error) {
-    console.error('Error creating player:', error);
-    res.status(500).json({ error: 'Failed to create player' });
-  }
-});
-
-app.put('/api/admin/players/:id', upload.single('image'), async (req, res) => {
-  try {
-    const updateData = { ...req.body };
-    
-    // If a new image was uploaded, update the image path
-    if (req.file) {
-      updateData.image = `/uploads/${req.file.filename}`;
-      
-      // Remove old image if it exists
-      try {
-        const player = await Player.findById(req.params.id);
-        if (player && player.image) {
-          const oldImagePath = path.join(__dirname, 'public', player.image);
-          if (fs.existsSync(oldImagePath)) {
-            fs.unlinkSync(oldImagePath);
-          }
-        }
-      } catch (err) {
-        console.error('Error removing old image:', err);
-      }
-    }
-    
-    const player = await Player.findByIdAndUpdate(req.params.id, updateData, { new: true });
-    if (!player) {
-      return res.status(404).json({ error: 'Player not found' });
-    }
-    res.json(player);
-  } catch (error) {
-    console.error('Error updating player:', error);
-    res.status(500).json({ error: 'Failed to update player' });
-  }
-});
-
-app.delete('/api/admin/players/:id', async (req, res) => {
-  try {
-    const player = await Player.findById(req.params.id);
-    if (!player) {
-      return res.status(404).json({ error: 'Player not found' });
-    }
-    
-    // Remove player image if it exists
-    if (player && player.image) {
-      try {
-        const imagePath = path.join(__dirname, 'public', player.image);
-        if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-        }
-      } catch (err) {
-        console.error('Error removing player image:', err);
-      }
-    }
-    
-    await Player.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Player deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting player:', error);
-    res.status(500).json({ error: 'Failed to delete player' });
-  }
-});
-
-// Products API
-app.get('/api/admin/products', async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Failed to fetch products' });
-  }
-});
-
-app.post('/api/admin/products', async (req, res) => {
-  try {
-    // Validate required fields
-    if (!req.body.name || !req.body.description || !req.body.price || !req.body.image || !req.body.category) {
-      return res.status(400).json({ error: 'All fields are required' });
-    }
-    
-    const product = new Product(req.body);
-    await product.save();
-    res.status(201).json(product);
-  } catch (error) {
-    console.error('Error creating product:', error);
-    res.status(500).json({ error: 'Failed to create product' });
-  }
-});
-
-app.put('/api/admin/products/:id', async (req, res) => {
-  try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json(product);
-  } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).json({ error: 'Failed to update product' });
-  }
-});
-
-app.delete('/api/admin/products/:id', async (req, res) => {
-  try {
-    const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json({ message: 'Product deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting product:', error);
-    res.status(500).json({ error: 'Failed to delete product' });
-  }
-});
-
-// Public API endpoints - These are the endpoints that the frontend will call
+// Public News API
 app.get('/api/news', async (req, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
     res.json(news);
   } catch (error) {
-    console.error('Error fetching news:', error);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });
 
+// Single News Article by ID ✅ ADDED
+app.get('/api/news/:id', async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id);
+    if (!news) {
+      return res.status(404).json({ error: 'News article not found' });
+    }
+    res.json(news);
+  } catch (error) {
+    console.error('Error fetching article:', error);
+    res.status(500).json({ error: 'Failed to fetch article' });
+  }
+});
+
+// Players API
+app.get('/api/admin/players', requireAuth, async (req, res) => {
+  try {
+    const players = await Player.find();
+    res.json(players);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch players' });
+  }
+});
+
+app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, res) => {
+  try {
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : req.body.image || '';
+    const { name, username, role, game, bio } = req.body;
+
+    if (!name || !username || !role || !game) {
+      return res.status(400).json({ error: 'Required fields missing' });
+    }
+
+    const player = new Player({
+      name, username, role, game, bio, image: imagePath
+    });
+
+    await player.save();
+    res.status(201).json(player);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create player' });
+  }
+});
+
+// Products API (same as before)
+app.get('/api/admin/products', requireAuth, async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch products' });
+  }
+});
+
+app.post('/api/admin/products', requireAuth, async (req, res) => {
+  try {
+    const { name, description, price, image, category } = req.body;
+    if (!name || !description || !price || !image || !category) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create product' });
+  }
+});
+
+// Public APIs
 app.get('/api/players', async (req, res) => {
   try {
     const players = await Player.find();
     res.json(players);
   } catch (error) {
-    console.error('Error fetching players:', error);
     res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
@@ -465,30 +366,38 @@ app.get('/api/products', async (req, res) => {
     const products = await Product.find({ inStock: true });
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
-// Handle all other routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', '404.html'));
+// === DYNAMIC NEWS DETAIL PAGE ROUTE ✅ ADDED ===
+app.get('/news/:id', async (req, res) => {
+  const newsId = req.params.id;
+  const news = await News.findById(newsId);
+  if (news) {
+    res.sendFile(path.join(__dirname, 'public', 'news-detail.html'));
+  } else {
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+  }
 });
 
-// Error handling middleware
+// Catch-all for 404
+app.get('*', (req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-// Start the server
+// Start server
 const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  // Create default admin user if it doesn't exist
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
   createDefaultAdmin();
 });
 
-// Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
   server.close(() => process.exit(1));
