@@ -50,31 +50,35 @@
             letter-spacing: 1px;
         }
 
-        .logo span {
+        .logo span:nth-child(1) {
             color: #00ff88;
             text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
+        }
+
+        .logo span:nth-child(2) {
+            color: #0088ff;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.7);
+        }
+
+        .logo span:nth-child(3) {
+            color: #fff;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 2rem;
+            gap: 2rem;
         }
 
         nav ul li a {
             color: white;
             text-decoration: none;
             font-size: 1.1rem;
+            font-weight: 500;
             transition: all 0.3s;
             position: relative;
             padding: 0.5rem 0;
-        }
-
-        nav ul li a:hover {
-            color: #00ff88;
+            letter-spacing: 0.5px;
         }
 
         nav ul li a::after {
@@ -88,12 +92,78 @@
             transition: width 0.3s;
         }
 
+        nav ul li a:hover {
+            color: #00ff88;
+        }
+
         nav ul li a:hover::after {
             width: 100%;
         }
 
         .mobile-menu {
             display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100vh;
+            background-color: #000;
+            z-index: 1001;
+            padding: 5rem 2rem;
+            transition: right 0.3s;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 2rem;
+        }
+
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            display: block;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .mobile-nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ff88, #0088ff);
+            transition: width 0.3s;
+        }
+
+        .mobile-nav ul li a:hover {
+            color: #00ff88;
+        }
+
+        .mobile-nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
             font-size: 1.5rem;
             cursor: pointer;
         }
@@ -256,8 +326,12 @@
             color: #fff;
         }
 
-        .footer-logo span {
+        .footer-logo span:nth-child(1) {
             color: #00ff88;
+        }
+
+        .footer-logo span:nth-child(2) {
+            color: #0088ff;
         }
 
         .footer-about p {
@@ -466,8 +540,8 @@
                         <div class="news-content">
                             <div class="news-date"><i class="far fa-calendar"></i> ${date}</div>
                             <h3>${item.title}</h3>
-                            <p>${item.content}</p>
-                            <a href="/news/${item._id}" class="read-more">Read More</a>
+                            <p>${item.content.substring(0, 120)}${item.content.length > 120 ? '...' : ''}</p>
+                            <a href="/news-detail?id=${item._id}" class="read-more">Read More</a>
                         </div>
                     `;
                     container.appendChild(card);
