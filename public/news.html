@@ -1,4 +1,3 @@
-<!-- public/news.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +10,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Orbitron', 'Arial', sans-serif;
         }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
 
         body {
             background-color: #000;
             color: white;
+            overflow-x: hidden;
         }
 
         /* Header Styles */
@@ -45,11 +47,12 @@
             font-weight: 700;
             color: #fff;
             text-decoration: none;
-            transition: all 0.3s;
+            letter-spacing: 1px;
         }
 
         .logo span {
             color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.7);
         }
 
         nav ul {
@@ -81,7 +84,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background-color: #00ff88;
+            background: linear-gradient(90deg, #00ff88, #0088ff);
             transition: width 0.3s;
         }
 
@@ -93,84 +96,9 @@
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: white;
-            transition: all 0.3s;
         }
 
-        .mobile-menu:hover {
-            color: #00ff88;
-        }
-
-        /* Mobile menu */
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 280px;
-            height: 100vh;
-            background-color: #000;
-            z-index: 1001;
-            padding: 5rem 2rem;
-            transition: right 0.3s;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
-        }
-
-        .mobile-nav.active {
-            right: 0;
-        }
-
-        .mobile-nav ul {
-            list-style: none;
-        }
-
-        .mobile-nav ul li {
-            margin-bottom: 2rem;
-        }
-
-        .mobile-nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.3rem;
-            transition: all 0.3s;
-            display: block;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        .mobile-nav ul li a:hover {
-            color: #00ff88;
-        }
-
-        .mobile-nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #00ff88;
-            transition: width 0.3s;
-        }
-
-        .mobile-nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        .close-menu {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: white;
-            transition: all 0.3s;
-        }
-
-        .close-menu:hover {
-            color: #00ff88;
-        }
-
-        /* News Hero Section */
+        /* Hero Section */
         .news-hero {
             height: 50vh;
             display: flex;
@@ -178,7 +106,7 @@
             justify-content: center;
             position: relative;
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://stealthunitgg.xyz/money.png') no-repeat center center/cover;
+                        url('https://www.stealthunitgg.xyz/money.png') no-repeat center center/cover;
         }
 
         .news-hero-content {
@@ -192,6 +120,10 @@
             margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
+            background: linear-gradient(90deg, #00ff88, #0088ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
         }
 
         .news-hero p {
@@ -202,6 +134,7 @@
         /* News Section */
         .news-section {
             padding: 5rem 5%;
+            background-color: #0d0d0d;
         }
 
         .section-title {
@@ -231,18 +164,20 @@
         }
 
         .news-card {
-            background-color: #111;
-            border-radius: 10px;
+            background-color: #1a1a1a;
+            border-radius: 12px;
             overflow: hidden;
-            transition: transform 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .news-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 255, 136, 0.15);
         }
 
         .news-image {
-            height: 200px;
+            height: 180px;
             overflow: hidden;
         }
 
@@ -265,18 +200,23 @@
             color: #00ff88;
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .news-card h3 {
-            margin-bottom: 1rem;
+            margin: 1rem 0;
             font-size: 1.3rem;
+            line-height: 1.4;
+            color: #fff;
         }
 
         .news-card p {
-            margin-bottom: 1.5rem;
-            opacity: 0.8;
+            color: #ccc;
             font-size: 0.95rem;
             line-height: 1.5;
+            margin-bottom: 1rem;
         }
 
         .read-more {
@@ -314,7 +254,6 @@
             font-size: 2rem;
             font-weight: 700;
             color: #fff;
-            margin-bottom: 1rem;
         }
 
         .footer-logo span {
@@ -324,30 +263,6 @@
         .footer-about p {
             opacity: 0.8;
             margin-bottom: 1.5rem;
-        }
-
-        .footer-links h3 {
-            color: #fff;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
-        }
-
-        .footer-links ul {
-            list-style: none;
-        }
-
-        .footer-links ul li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links ul li a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links ul li a:hover {
-            color: #00ff88;
         }
 
         .social-icons {
@@ -375,20 +290,14 @@
             font-size: 0.9rem;
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .news-hero h1 {
                 font-size: 3rem;
             }
-
-            .news-hero p {
-                font-size: 1.1rem;
-            }
-
             nav ul {
                 display: none;
             }
-
             .mobile-menu {
                 display: block;
             }
@@ -398,7 +307,6 @@
             .news-hero h1 {
                 font-size: 2.5rem;
             }
-
             .section-title {
                 font-size: 2rem;
             }
@@ -437,7 +345,7 @@
         </div>
     </header>
 
-    <!-- News Hero Section -->
+    <!-- Hero Section -->
     <section class="news-hero">
         <div class="news-hero-content">
             <h1>Latest News</h1>
@@ -449,7 +357,7 @@
     <section class="news-section">
         <h2 class="section-title">Recent Updates</h2>
         <div class="news-container" id="news-container">
-            <!-- News items will be populated by JavaScript -->
+            <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">Loading news...</p>
         </div>
     </section>
 
@@ -504,65 +412,77 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
+        // Mobile Menu Toggle
         const mobileMenu = document.querySelector('.mobile-menu');
         const mobileNav = document.querySelector('.mobile-nav');
         const closeMenu = document.querySelector('.close-menu');
 
-        mobileMenu.addEventListener('click', function() {
+        mobileMenu.addEventListener('click', () => {
             mobileNav.classList.add('active');
         });
 
-        closeMenu.addEventListener('click', function() {
+        closeMenu.addEventListener('click', () => {
             mobileNav.classList.remove('active');
         });
 
-        // Close mobile menu when clicking on a link
         document.querySelectorAll('.mobile-nav ul li a').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', () => {
                 mobileNav.classList.remove('active');
             });
         });
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', (e) => {
             if (!mobileNav.contains(e.target) && !mobileMenu.contains(e.target)) {
                 mobileNav.classList.remove('active');
             }
         });
 
-        // Fetch and display news
+        // Load News
         async function loadNews() {
+            const container = document.getElementById('news-container');
             try {
                 const response = await fetch('/api/news');
                 const news = await response.json();
-                const newsContainer = document.getElementById('news-container');
-                
+
+                container.innerHTML = '';
+
+                if (news.length === 0) {
+                    container.innerHTML = `
+                        <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">
+                            No news available at the moment.
+                        </p>
+                    `;
+                    return;
+                }
+
                 news.forEach(item => {
-                    const newsCard = document.createElement('div');
-                    newsCard.className = 'news-card';
-                    newsCard.innerHTML = `
+                    const date = new Date(item.date).toLocaleDateString();
+                    const card = document.createElement('div');
+                    card.className = 'news-card';
+                    card.innerHTML = `
                         <div class="news-image">
-                            <img src="${item.image || 'https://www.stealthunitgg.xyz/money.png'}" alt="${item.title}">
+                            <img src="${item.image || '/uploads/default.jpg'}" alt="${item.title}" onerror="this.src='/images/placeholder.jpg';">
                         </div>
                         <div class="news-content">
-                            <div class="news-date">${new Date(item.date).toLocaleDateString()}</div>
+                            <div class="news-date"><i class="far fa-calendar"></i> ${date}</div>
                             <h3>${item.title}</h3>
                             <p>${item.content}</p>
                             <a href="/news/${item._id}" class="read-more">Read More</a>
                         </div>
                     `;
-                    newsContainer.appendChild(newsCard);
+                    container.appendChild(card);
                 });
-            } catch (error) {
-                console.error('Error loading news:', error);
+            } catch (err) {
+                console.error('Error loading news:', err);
+                container.innerHTML = `
+                    <p style="grid-column: 1 / -1; text-align: center; color: #ff4444;">
+                        Failed to load news.
+                    </p>
+                `;
             }
         }
 
-        // Load content when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            loadNews();
-        });
+        document.addEventListener('DOMContentLoaded', loadNews);
     </script>
 </body>
 </html>
