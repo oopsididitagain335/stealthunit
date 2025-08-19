@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | StealthUnitGG</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', 'Arial', sans-serif;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
+    body {
+      background: #000;
+      color: white;
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: #111;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 5px;
+    }
+
+    .logo span:nth-child(1) { color: #00ff88; }
+    .logo span:nth-child(2) { color: #0088ff; }
+
+    .nav-links {
+      list-style: none;
+    }
+
+    .nav-links li {
+      margin-bottom: 1rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(0, 255, 136, 0.1);
+      color: #00ff88;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .title {
+      font-size: 1.8rem;
+      color: #00ff88;
+    }
+
+    .user-info {
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    .user-info strong {
+      color: #00ff88;
+    }
+
+    .card {
+      background: #111;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .card h3 {
+      color: #00ff88;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: #ccc;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #00ff88;
+      color: #000;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="logo">
+        Stealth<span>Unit</span>GG
+      </div>
+      <ul class="nav-links">
+        <li><a href="/adminp/dashboard" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="/admin/adminnews"><i class="fas fa-newspaper"></i> Manage News</a></li>
+        <li><a href="/admin/players"><i class="fas fa-users"></i> Manage Players</a></li>
+        <li><a href="/admin/products"><i class="fas fa-store"></i> Manage Store</a></li>
+        <li><a href="/adminp/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="header">
+        <h1 class="title"><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+        <div class="user-info">
+          Logged in as <strong>{{username}}</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Welcome to StealthUnitGG Admin</h3>
+        <p>You have full control over news, players, and store content. Use the sidebar to navigate between sections.</p>
+        <a href="/admin/adminnews" class="btn">Go to News Manager</a>
+      </div>
+
+      <div class="card">
+        <h3>Quick Actions</h3>
+        <p>
+          <strong>Post News:</strong> Keep fans updated with announcements.<br>
+          <strong>Update Roster:</strong> Add or edit player profiles.<br>
+          <strong>Publish Merch:</strong> Launch new products instantly.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
