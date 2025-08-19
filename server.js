@@ -20,9 +20,7 @@ if (!fs.existsSync(uploadDir)) {
 
 // Multer config
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
+  destination: (req, file, cb) => cb(null, uploadDir),
   filename: (req, file, cb) => {
     const suffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, 'upload-' + suffix + path.extname(file.originalname));
@@ -37,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'stealthunitgg-secret-key',
+  secret: process.env.SESSION_SECRET || 'super-secret-stealthunit-key-2025',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
@@ -69,57 +67,37 @@ const newsSchema = new mongoose.Schema({
 const News = mongoose.model('News', newsSchema);
 const Admin = mongoose.model('Admin', adminSchema);
 
-// Create default admin
+// === Create Default Admin with Strong Password ===
 async function createDefaultAdmin() {
-  const hash = await bcrypt.hash('admin123', 10);
-  const exists = await Admin.findOne({ username: 'admin' });
+  const username = 'admin'; // ✅ Keep as 'admin'
+  const password = 'StealthUnitGG!2025'; // 🔐 Strong, hard to guess
+
+  const hash = await bcrypt.hash(password, 10);
+  const exists = await Admin.findOne({ username });
   if (!exists) {
-    await Admin.create({ username: 'admin', password: hash });
-    console.log('🔐 Default Admin: admin / admin123');
+    await Admin.create({ username, password: hash });
+    console.log(`🔐 Admin created: ${username} / ${password}`);
+    console.log('💡 Change password after first login!');
   }
 }
 
-// Auth middleware
+// === Auth Middleware ===
 function requireAuth(req, res, next) {
-  if (req.session && req.session.userId) return next();
+  if (req.session && req.session.userId) {
+    res.locals.username = req.session.username;
+    return next();
+  }
   res.redirect('/adminp/login');
 }
 
 // === PUBLIC ROUTES ===
 app.get('/', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/team', (_, res) => res.sendFile(path.join(__dirname, 'public', 'team.html')));
 app.get('/news', (_, res) => res.sendFile(path.join(__dirname, 'public', 'news.html')));
-app.get('/news/:id', async (req, res) => {
-  try {
-    const news = await News.findById(req.params.id);
-    if (news) {
-      res.sendFile(path.join(__dirname, 'public', 'news-detail.html'));
-    } else {
-      res.status(404).send('Not Found');
-    }
-  } catch (e) {
-    res.status(404).send('Not Found');
-  }
-});
-
-// === API: Public News ===
-app.get('/api/news', async (_, res) => {
-  try {
-    const news = await News.find().sort({ date: -1 });
-    res.json(news);
-  } catch (e) {
-    res.status(500).json({ error: 'Load failed' });
-  }
-});
-
-app.get('/api/news/:id', async (req, res) => {
-  try {
-    const news = await News.findById(req.params.id);
-    if (!news) return res.status(404).json({ error: 'Not found' });
-    res.json(news);
-  } catch (e) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
+app.get('/store', (_, res) => res.sendFile(path.join(__dirname, 'public', 'store.html')));
+app.get('/lookbook', (_, res) => res.sendFile(path.join(__dirname, 'public', 'lookbook.html')));
+app.get('/contact', (_, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
+app.get('/404', (_, res) => res.sendFile(path.join(__dirname, 'public', '404.html')));
 
 // === ADMIN AUTH ===
 app.get('/adminp/login', (req, res) => {
@@ -146,16 +124,35 @@ app.get('/adminp/logout', (req, res) => {
   }
 });
 
-// === ADMIN DASHBOARD & API ===
-app.get('/adminp/dashboard', requireAuth, (_, res) => {
+// === ADMIN DASHBOARD & PAGES ===
+app.get('/adminp/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
 });
 
-app.get('/admin/adminnews', requireAuth, (_, res) => {
+app.get('/admin/adminnews', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'adminnews.html'));
 });
 
-// API: Admin News
+// === API: News ===
+app.get('/api/news', async (_, res) => {
+  try {
+    const news = await News.find().sort({ date: -1 });
+    res.json(news);
+  } catch (e) {
+    res.status(500).json({ error: 'Fetch failed' });
+  }
+});
+
+app.get('/api/news/:id', async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id);
+    if (!news) return res.status(404).json({ error: 'Not found' });
+    res.json(news);
+  } catch (e) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 app.get('/api/admin/news', requireAuth, async (_, res) => {
   try {
     const news = await News.find().sort({ date: -1 });
@@ -167,12 +164,10 @@ app.get('/api/admin/news', requireAuth, async (_, res) => {
 
 app.post('/api/admin/news', requireAuth, async (req, res) => {
   const { title, content, image, author } = req.body;
-  if (!title || !content) {
-    return res.status(400).json({ error: 'Title and content required' });
-  }
+  if (!title || !content) return res.status(400).json({ error: 'Required' });
 
   try {
-    const news = new News({ title, content, image, author: author || 'StealthUnitGG' });
+    const news = new News({ title, content, image, author: author || res.locals.username });
     await news.save();
     res.status(201).json(news);
   } catch (e) {
@@ -190,19 +185,20 @@ app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
   }
 });
 
-// === 404 & ERROR HANDLING ===
+// === Catch-all 404 ===
+app.get('*', (req, res) => {
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+// === Error Handler ===
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
-app.get('*', (req, res) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-});
-
 // Start server
 const server = app.listen(PORT, () => {
-  console.log(`🚀 Server running: http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
   createDefaultAdmin();
 });
 
