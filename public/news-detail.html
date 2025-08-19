@@ -5,14 +5,14 @@
   <title>News | StealthUnitGG</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    body { background: #000; color: white; font-family: 'Arial', sans-serif; }
+    body { background: #000; color: white; font-family: Arial, sans-serif; }
     .container { max-width: 800px; margin: 100px auto; padding: 2rem; background: #111; border-radius: 12px; }
     h1 { color: #00ff88; }
     .meta { color: #0088ff; margin: 1rem 0; }
     .content { line-height: 1.6; margin: 1.5rem 0; }
     .back { color: #00ff88; text-decoration: none; }
     .back:hover { text-decoration: underline; }
-    img { max-width: 100%; height: auto; margin: 1rem 0; border-radius: 8px; }
+    img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
   </style>
 </head>
 <body>
@@ -25,19 +25,19 @@
 
   <script>
     const id = window.location.pathname.split('/').pop();
-    if (!id) window.location.href = '/news';
+    if (!id || id === 'news') window.location.href = '/news';
 
     async function load() {
       try {
         const res = await fetch(`/api/news/${id}`);
         if (!res.ok) throw new Error('Not found');
-
         const a = await res.json();
+
         document.getElementById('title').textContent = a.title;
         document.getElementById('meta').textContent = `Published on ${new Date(a.date).toLocaleDateString()} by ${a.author}`;
         document.getElementById('content').innerHTML = a.content.replace(/\n/g, '<br>');
       } catch (e) {
-        document.body.innerHTML = '<h2>Article not found.</h2><a href="/news">← Back</a>';
+        document.body.innerHTML = '<h2>Article not found.</h2><a href="/news" class="back">← Back</a>';
       }
     }
 
