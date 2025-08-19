@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | StealthUnitGG</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', 'Arial', sans-serif;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
+    body {
+      background: #000;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
+                  url('https://images.unsplash.com/photo-1558655146-d09347e927ea?ixlib=rb-4.0.3&auto=format&fit=crop&q=80') no-repeat center center/cover;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      background: #111;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo span:nth-child(1) {
+      color: #00ff88;
+    }
+
+    .logo span:nth-child(2) {
+      color: #0088ff;
+    }
+
+    .logo span:nth-child(3) {
+      color: #fff;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #00ff88;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #00ff88;
+      font-size: 0.95rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #00ff88;
+      box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+    }
+
+    button {
+      width: 100%;
+      background: #00ff88;
+      color: #000;
+      border: none;
+      padding: 0.9rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .error {
+      text-align: center;
+      color: #ff4444;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #00ff88;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      Stealth<span>Unit</span>GG
+    </div>
+    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+      </div>
+      <button type="submit">Log In</button>
+    </form>
+    <div id="error" class="error" style="display: none;"></div>
+    <a href="/" class="back-link">&larr; Back to Site</a>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      const errorEl = document.getElementById('error');
+      errorEl.style.display = 'none';
+
+      try {
+        const res = await fetch('/adminp/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
+
+        if (res.redirected) {
+          window.location.href = res.url;
+        } else {
+          errorEl.textContent = 'Invalid credentials';
+          errorEl.style.display = 'block';
+        }
+      } catch (err) {
+        errorEl.textContent = 'Network error. Try again.';
+        errorEl.style.display = 'block';
+      }
+    };
+  </script>
+</body>
+</html>
