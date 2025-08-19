@@ -60,10 +60,6 @@
             text-shadow: 0 0 10px rgba(0, 136, 255, 0.7);
         }
 
-        .logo span:nth-child(3) {
-            color: #fff;
-        }
-
         nav ul {
             display: flex;
             list-style: none;
@@ -104,8 +100,14 @@
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: white;
         }
 
+        .mobile-menu:hover {
+            color: #00ff88;
+        }
+
+        /* Mobile Nav */
         .mobile-nav {
             position: fixed;
             top: 0;
@@ -139,6 +141,7 @@
             display: block;
             padding: 0.5rem 0;
             position: relative;
+            letter-spacing: 0.5px;
         }
 
         .mobile-nav ul li a::after {
@@ -166,6 +169,12 @@
             right: 1.5rem;
             font-size: 1.5rem;
             cursor: pointer;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .close-menu:hover {
+            color: #00ff88;
         }
 
         /* Hero Section */
@@ -175,7 +184,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
                         url('https://www.stealthunitgg.xyz/money.png') no-repeat center center/cover;
         }
 
@@ -481,7 +490,7 @@
             </div>
         </div>
         <div class="copyright">
-            &copy; 2023 StealthUnitGG. All rights reserved.
+            &copy; 2025 StealthUnitGG. All rights reserved.
         </div>
     </footer>
 
@@ -511,51 +520,61 @@
             }
         });
 
-        // Load News
+        // Load News from API
         async function loadNews() {
             const container = document.getElementById('news-container');
             try {
-                const response = await fetch('/api/news');
-                const news = await response.json();
+                const res = await fetch('/api/news');
+                if (!res.ok) throw new Error('Failed to fetch news');
 
+                const news = await res.json();
                 container.innerHTML = '';
 
                 if (news.length === 0) {
                     container.innerHTML = `
                         <p style="grid-column: 1 / -1; text-align: center; opacity: 0.7;">
-                            No news available at the moment.
+                            No news at the moment. Check back later.
                         </p>
                     `;
                     return;
                 }
 
+                // Show all news (or limit to 6)
                 news.forEach(item => {
-                    const date = new Date(item.date).toLocaleDateString();
+                    const date = new Date(item.date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                    });
+
                     const card = document.createElement('div');
                     card.className = 'news-card';
                     card.innerHTML = `
                         <div class="news-image">
-                            <img src="${item.image || '/uploads/default.jpg'}" alt="${item.title}" onerror="this.src='/images/placeholder.jpg';">
+                            <img src="${item.image || '/uploads/default.jpg'}" 
+                                 alt="${item.title}" 
+                                 onerror="this.onerror=null; this.src='/images/placeholder.jpg';">
                         </div>
                         <div class="news-content">
                             <div class="news-date"><i class="far fa-calendar"></i> ${date}</div>
                             <h3>${item.title}</h3>
                             <p>${item.content.substring(0, 120)}${item.content.length > 120 ? '...' : ''}</p>
-                            <a href="/news-detail?id=${item._id}" class="read-more">Read More</a>
+                            <a href="/news/${item._id}" class="read-more">Read More</a>
                         </div>
                     `;
                     container.appendChild(card);
                 });
             } catch (err) {
-                console.error('Error loading news:', err);
+                console.error('News load error:', err);
                 container.innerHTML = `
                     <p style="grid-column: 1 / -1; text-align: center; color: #ff4444;">
-                        Failed to load news.
+                        Could not load news. Please try again later.
                     </p>
                 `;
             }
         }
 
+        // Load news when page is ready
         document.addEventListener('DOMContentLoaded', loadNews);
     </script>
 </body>
