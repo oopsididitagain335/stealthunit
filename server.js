@@ -175,6 +175,10 @@ app.get('/contact', (_, res) => {
   res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
+app.get('/socials', (_, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'socials.html'));
+});
+
 // === DYNAMIC NEWS DETAIL PAGE ===
 app.get('/news/:id', async (req, res) => {
   try {
