@@ -12,20 +12,20 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Create uploads directory
+// Create uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, 'public', 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Multer config for file uploads
+// Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'upload-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, 'player-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
 
@@ -35,6 +35,7 @@ const upload = multer({
     const filetypes = /jpeg|jpg|png|gif/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
+    
     if (mimetype && extname) {
       return cb(null, true);
     } else {
@@ -50,11 +51,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'super-secret-stealthunit-key-2025',
+  secret: process.env.SESSION_SECRET || 'stealthunitgg-secret-key',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ 
-    mongoUrl: process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunit'
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions'
   }),
   cookie: { 
     maxAge: 1000 * 60 * 60 * 24, // 24 hours
@@ -64,26 +66,26 @@ app.use(session({
 }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/stealthunit', {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-// === MongoDB Schemas ===
-
+// MongoDB Schemas
 const adminSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  role: { type: String, default: 'admin' }
 });
 
 const newsSchema = new mongoose.Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   image: { type: String },
-  author: { type: String, default: 'StealthUnitGG' },
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  author: { type: String, default: 'StealthUnitGG' }
 });
 
 const playerSchema = new mongoose.Schema({
@@ -124,73 +126,54 @@ const News = mongoose.model('News', newsSchema);
 const Player = mongoose.model('Player', playerSchema);
 const Product = mongoose.model('Product', productSchema);
 
-// === Ensure Default Admin Exists ===
+// Ensure admin user exists
 async function createDefaultAdmin() {
   try {
-    const username = 'admin';
-    const password = 'StealthUnitGG!2025'; // 🔐 Strong password
-    const adminExists = await Admin.findOne({ username });
-    
+    const adminExists = await Admin.findOne({ username: 'admin' });
     if (!adminExists) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await Admin.create({ username, password: hashedPassword });
-      console.log(`🔐 Admin created: ${username} / ${password}`);
+      const hashedPassword = await bcrypt.hash('admin123', 10);
+      await Admin.create({
+        username: 'admin',
+        password: hashedPassword
+      });
+      console.log('Default admin created: admin / admin123');
     }
   } catch (error) {
     console.error('Error creating default admin:', error);
   }
 }
 
-// === Authentication Middleware ===
+// Authentication middleware
 function requireAuth(req, res, next) {
   if (req.session && req.session.userId) {
-    res.locals.username = req.session.username;
     return next();
   }
   res.redirect('/adminp/login');
 }
 
 // === PUBLIC ROUTES ===
-app.get('/', (_, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get('/team', (_, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'team.html'));
-});
-
-app.get('/news', (_, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'news.html'));
-});
-
-app.get('/store', (_, res) => {
+app.get('/store', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'store.html'));
 });
 
-app.get('/lookbook', (_, res) => {
+app.get('/team', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'team.html'));
+});
+
+app.get('/lookbook', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'lookbook.html'));
 });
 
-app.get('/contact', (_, res) => {
+app.get('/news', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'news.html'));
+});
+
+app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'contact.html'));
-});
-
-app.get('/socials', (_, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'socials.html'));
-});
-
-// === DYNAMIC NEWS DETAIL PAGE ===
-app.get('/news/:id', async (req, res) => {
-  try {
-    const news = await News.findById(req.params.id);
-    if (news) {
-      res.sendFile(path.join(__dirname, 'public', 'news-detail.html'));
-    } else {
-      res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-    }
-  } catch (e) {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-  }
 });
 
 // === ADMIN PANEL ROUTES ===
@@ -209,6 +192,7 @@ app.post('/adminp/login', async (req, res) => {
     if (admin && await bcrypt.compare(password, admin.password)) {
       req.session.userId = admin._id;
       req.session.username = admin.username;
+      req.session.role = admin.role;
       res.redirect('/adminp/dashboard');
     } else {
       res.redirect('/adminp/login');
@@ -221,7 +205,8 @@ app.post('/adminp/login', async (req, res) => {
 
 app.get('/adminp/logout', (req, res) => {
   if (req.session) {
-    req.session.destroy(() => {
+    req.session.destroy(err => {
+      if (err) console.error('Session destruction error:', err);
       res.redirect('/adminp/login');
     });
   } else {
@@ -233,11 +218,59 @@ app.get('/adminp/dashboard', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
 });
 
-app.get('/admin/adminnews', requireAuth, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'adminnews.html'));
+// === API ROUTES ===
+
+// Admin News Routes
+app.get('/api/admin/news', requireAuth, async (req, res) => {
+  try {
+    const news = await News.find().sort({ date: -1 });
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch news' });
+  }
 });
 
-// === API ROUTES ===
+app.post('/api/admin/news', requireAuth, async (req, res) => {
+  try {
+    const { title, content, image, author } = req.body;
+    if (!title || !content) {
+      return res.status(400).json({ error: 'Title and content are required' });
+    }
+
+    const news = new News({
+      title,
+      content,
+      image: image || '',
+      author: author || 'StealthUnitGG'
+    });
+
+    await news.save();
+    res.status(201).json(news);
+  } catch (error) {
+    console.error('Error creating news:', error);
+    res.status(500).json({ error: 'Failed to create news' });
+  }
+});
+
+app.put('/api/admin/news/:id', requireAuth, async (req, res) => {
+  try {
+    const news = await News.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!news) return res.status(404).json({ error: 'Not found' });
+    res.json(news);
+  } catch (error) {
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
+  try {
+    const news = await News.findByIdAndDelete(req.params.id);
+    if (!news) return res.status(404).json({ error: 'Not found' });
+    res.json({ message: 'Deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Delete failed' });
+  }
+});
 
 // Public News API
 app.get('/api/news', async (req, res) => {
@@ -249,7 +282,7 @@ app.get('/api/news', async (req, res) => {
   }
 });
 
-// Single News by ID
+// Single News Article by ID ✅ ADDED
 app.get('/api/news/:id', async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
@@ -258,54 +291,67 @@ app.get('/api/news/:id', async (req, res) => {
     }
     res.json(news);
   } catch (error) {
+    console.error('Error fetching article:', error);
     res.status(500).json({ error: 'Failed to fetch article' });
   }
 });
 
-// Admin News CRUD
-app.get('/api/admin/news', requireAuth, async (req, res) => {
+// Players API
+app.get('/api/admin/players', requireAuth, async (req, res) => {
   try {
-    const news = await News.find().sort({ date: -1 });
-    res.json(news);
+    const players = await Player.find();
+    res.json(players);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch news' });
+    res.status(500).json({ error: 'Failed to fetch players' });
   }
 });
 
-app.post('/api/admin/news', requireAuth, async (req, res) => {
-  const { title, content, image, author } = req.body;
-  if (!title || !content) {
-    return res.status(400).json({ error: 'Title and content are required' });
-  }
-
+app.post('/api/admin/players', requireAuth, upload.single('image'), async (req, res) => {
   try {
-    const news = new News({
-      title,
-      content,
-      image: image || '',
-      author: author || res.locals.username
+    const imagePath = req.file ? `/uploads/${req.file.filename}` : req.body.image || '';
+    const { name, username, role, game, bio } = req.body;
+
+    if (!name || !username || !role || !game) {
+      return res.status(400).json({ error: 'Required fields missing' });
+    }
+
+    const player = new Player({
+      name, username, role, game, bio, image: imagePath
     });
 
-    await news.save();
-    res.status(201).json(news);
+    await player.save();
+    res.status(201).json(player);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create news' });
+    res.status(500).json({ error: 'Failed to create player' });
   }
 });
 
-app.delete('/api/admin/news/:id', requireAuth, async (req, res) => {
+// Products API (same as before)
+app.get('/api/admin/products', requireAuth, async (req, res) => {
   try {
-    const news = await News.findByIdAndDelete(req.params.id);
-    if (!news) {
-      return res.status(404).json({ error: 'News article not found' });
-    }
-    res.json({ message: 'Deleted successfully' });
+    const products = await Product.find();
+    res.json(products);
   } catch (error) {
-    res.status(500).json({ error: 'Delete failed' });
+    res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
 
-// Players API
+app.post('/api/admin/products', requireAuth, async (req, res) => {
+  try {
+    const { name, description, price, image, category } = req.body;
+    if (!name || !description || !price || !image || !category) {
+      return res.status(400).json({ error: 'All fields required' });
+    }
+
+    const product = new Product(req.body);
+    await product.save();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create product' });
+  }
+});
+
+// Public APIs
 app.get('/api/players', async (req, res) => {
   try {
     const players = await Player.find();
@@ -315,7 +361,6 @@ app.get('/api/players', async (req, res) => {
   }
 });
 
-// Products API
 app.get('/api/products', async (req, res) => {
   try {
     const products = await Product.find({ inStock: true });
@@ -325,24 +370,34 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
-// === 404 Catch-All ===
+// === DYNAMIC NEWS DETAIL PAGE ROUTE ✅ ADDED ===
+app.get('/news/:id', async (req, res) => {
+  const newsId = req.params.id;
+  const news = await News.findById(newsId);
+  if (news) {
+    res.sendFile(path.join(__dirname, 'public', 'news-detail.html'));
+  } else {
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+  }
+});
+
+// Catch-all for 404
 app.get('*', (req, res) => {
   res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-// === Error Handler ===
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
+  res.status(500).send('Something broke!');
 });
 
-// === Start Server ===
+// Start server
 const server = app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`✅ Server is running on http://localhost:${PORT}`);
   createDefaultAdmin();
 });
 
-// Handle unhandled rejections
 process.on('unhandledRejection', (err) => {
   console.error('Unhandled Promise Rejection:', err);
   server.close(() => process.exit(1));
