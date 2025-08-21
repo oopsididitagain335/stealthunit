@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login | StealthUnitGG</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Orbitron', 'Arial', sans-serif;
     }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
 
     body {
       background: #000;
@@ -45,9 +45,17 @@
       margin-bottom: 1.5rem;
     }
 
-    .logo span:nth-child(1) { color: #00ff88; }
-    .logo span:nth-child(2) { color: #0088ff; }
-    .logo span:nth-child(3) { color: #fff; }
+    .logo span:nth-child(1) {
+      color: #00ff88;
+    }
+
+    .logo span:nth-child(2) {
+      color: #0088ff;
+    }
+
+    .logo span:nth-child(3) {
+      color: #fff;
+    }
 
     h2 {
       text-align: center;
@@ -93,7 +101,7 @@
       font-size: 1rem;
       border-radius: 30px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
 
     button:hover {
@@ -131,11 +139,11 @@
     <form id="loginForm">
       <div class="form-group">
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter username" required autocomplete="username" />
+        <input type="text" id="username" placeholder="Enter username" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password" />
+        <input type="password" id="password" placeholder="Enter password" required>
       </div>
       <button type="submit">Log In</button>
     </form>
@@ -144,20 +152,13 @@
   </div>
 
   <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById('loginForm').onsubmit = async (e) => {
       e.preventDefault();
-      
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
 
       const errorEl = document.getElementById('error');
       errorEl.style.display = 'none';
-
-      if (!username || !password) {
-        errorEl.textContent = 'Please fill in all fields';
-        errorEl.style.display = 'block';
-        return;
-      }
 
       try {
         const res = await fetch('/adminp/login', {
@@ -167,17 +168,16 @@
         });
 
         if (res.redirected) {
-          window.location.href = res.url; // Redirect to admin panel
+          window.location.href = res.url;
         } else {
           errorEl.textContent = 'Invalid credentials';
           errorEl.style.display = 'block';
         }
       } catch (err) {
-        console.error('Login error:', err);
         errorEl.textContent = 'Network error. Try again.';
         errorEl.style.display = 'block';
       }
-    });
+    };
   </script>
 </body>
 </html>
