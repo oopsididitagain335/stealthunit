@@ -3,191 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin | News</title>
+  <title>Admin | Post News</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background: #000;
-      color: white;
-      padding: 40px 20px;
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #111;
-      padding: 2.5rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      font-size: 1.8rem;
-      color: #00ff88;
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      text-align: center;
-      opacity: 0.7;
-      margin-bottom: 2rem;
-      font-size: 0.95rem;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #00ff88;
-      font-weight: 500;
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 0.9rem;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      color: white;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    input:focus, textarea:focus {
-      outline: none;
-      border-color: #00ff88;
-      box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
-    }
-
-    button {
-      background: #00ff88;
-      color: #000;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-weight: 600;
-      font-size: 1rem;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
-    }
-
-    .message {
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      text-align: center;
-      display: none;
-    }
-
-    .success {
-      background: #00ff8833;
-      color: #00ff88;
-      border: 1px solid #00ff88;
-    }
-
-    .error {
-      background: #ff444433;
-      color: #ff4444;
-      border: 1px solid #ff4444;
-    }
-
-    .news-list {
-      margin-top: 3rem;
-    }
-
-    .news-list h2 {
-      color: #00ff88;
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
-    }
-
-    .news-item {
-      background: #1a1a1a;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .news-item h3 {
-      font-size: 1.1rem;
-      color: #fff;
-      margin-bottom: 0.3rem;
-    }
-
-    .news-meta {
-      font-size: 0.8rem;
-      opacity: 0.7;
-      margin-bottom: 0.5rem;
-    }
-
-    .news-actions {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .delete-btn {
-      background: #ff4444;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .delete-btn:hover {
-      background: #ff6666;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #000; color: white; padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 2rem; color: #00ff88; text-align: center; margin-bottom: 1rem; }
+    p { opacity: 0.7; text-align: center; margin-bottom: 2rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.5rem; color: #00ff88; }
+    input, textarea { width: 100%; padding: 0.8rem; background: #111; border: 1px solid #333; color: white; border-radius: 6px; }
+    input:focus, textarea:focus { outline: none; border-color: #00ff88; }
+    button { background: #00ff88; color: #000; border: none; padding: 1rem 2rem; font-weight: 600; cursor: pointer; border-radius: 30px; transition: all 0.3s; }
+    button:hover { transform: scale(1.05); }
+    .message { margin-top: 1rem; padding: 1rem; border-radius: 6px; display: none; }
+    .success { background: #00ff8833; color: #00ff88; border: 1px solid #00ff88; }
+    .error { background: #ff444433; color: #ff4444; border: 1px solid #ff4444; }
+    .news-item { background: #111; padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+    .news-actions { margin-top: 0.5rem; }
+    .delete-btn { background: #ff4444; color: white; border: none; padding: 0.5rem 1rem; cursor: pointer; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1><i class="fas fa-newspaper"></i> Admin News Panel</h1>
-    <p>Logged in as <strong>{{username}}</strong> | <a href="/adminp/logout" style="color:#00ff88">Logout</a></p>
+  <h1><i class="fas fa-newspaper"></i> Admin News Panel</h1>
+  <p>Authorized only — use code <strong>247915</strong></p>
 
-    <form id="newsForm">
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" id="title" placeholder="News title" required>
-      </div>
+  <form id="newsForm">
+    <div class="form-group">
+      <label for="approvalCode">Authorization Code</label>
+      <input type="password" id="approvalCode" placeholder="Enter 247915" required>
+    </div>
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" placeholder="News title" required>
+    </div>
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" rows="6" placeholder="Full article..." required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="image">Image URL (Optional)</label>
+      <input type="text" id="image" placeholder="https://example.com/image.jpg">
+    </div>
+    <div class="form-group">
+      <label for="author">Author (Optional)</label>
+      <input type="text" id="author" placeholder="Staff">
+    </div>
+    <button type="submit">Publish News</button>
+  </form>
 
-      <div class="form-group">
-        <label for="content">Content</label>
-        <textarea id="content" rows="6" placeholder="Write your article..." required></textarea>
-      </div>
+  <div id="message" class="message"></div>
 
-      <div class="form-group">
-        <label for="image">Image URL (Optional)</label>
-        <input type="text" id="image" placeholder="https://example.com/image.jpg">
-      </div>
-
-      <div class="form-group">
-        <label for="author">Author (Optional)</label>
-        <input type="text" id="author" placeholder="Staff">
-      </div>
-
-      <button type="submit">Publish News</button>
-    </form>
-
-    <div id="message" class="message"></div>
-  </div>
-
-  <div class="container news-list">
+  <div class="news-list">
     <h2>Published News</h2>
     <div id="news-items">Loading...</div>
   </div>
@@ -203,15 +70,14 @@
     }
 
     async function loadNews() {
+      const container = document.getElementById('news-items');
       try {
-        const res = await fetch('/api/admin/news');
+        const res = await fetch('/api/news');
         const news = await res.json();
 
-        const container = document.getElementById('news-items');
         container.innerHTML = '';
-
         if (news.length === 0) {
-          container.innerHTML = '<p style="opacity:0.6">No articles yet.</p>';
+          container.innerHTML = '<p>No articles yet.</p>';
           return;
         }
 
@@ -220,8 +86,8 @@
           el.className = 'news-item';
           el.innerHTML = `
             <h3>${a.title}</h3>
-            <div class="news-meta">${new Date(a.date).toLocaleDateString()} • ${a.author}</div>
-            <p style="font-size:0.9rem;opacity:0.8">${a.content.substring(0, 100)}${a.content.length > 100 ? '...' : ''}</p>
+            <small>${new Date(a.date).toLocaleDateString()} • ${a.author}</small>
+            <p>${a.content.substring(0, 120)}...</p>
             <div class="news-actions">
               <button class="delete-btn" data-id="${a._id}">Delete</button>
             </div>
@@ -231,36 +97,47 @@
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async (e) => {
-            if (!confirm('Delete this article?')) return;
             const id = e.target.dataset.id;
+            if (!confirm('Delete this article?')) return;
 
-            const res = await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+            const code = prompt('Enter code 247915 to confirm:');
+            if (code !== '247915') return alert('Wrong code.');
+
+            const res = await fetch(`/api/admin/news/${id}`, {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ approvalCode: '247915' })
+            });
+
+            const data = await res.json();
             if (res.ok) {
               showMessage('Deleted!', 'success');
               loadNews();
             } else {
-              const err = await res.json();
-              showMessage('Error: ' + err.error, 'error');
+              showMessage(data.error, 'error');
             }
           });
         });
       } catch (err) {
-        document.getElementById('news-items').innerHTML = '<p style="color:#ff4444">Failed to load news.</p>';
+        container.innerHTML = '<p style="color:red">Load failed.</p>';
       }
     }
 
     document.getElementById('newsForm').onsubmit = async (e) => {
       e.preventDefault();
+      const code = document.getElementById('approvalCode').value.trim();
+      if (code !== '247915') return showMessage('Invalid code.', 'error');
 
       const data = {
+        approvalCode: code,
         title: document.getElementById('title').value.trim(),
         content: document.getElementById('content').value.trim(),
         image: document.getElementById('image').value.trim(),
-        author: document.getElementById('author').value.trim()
+        author: document.getElementById('author').value.trim() || 'StealthUnitGG'
       };
 
       if (!data.title || !data.content) {
-        return showMessage('Title and content are required.', 'error');
+        return showMessage('Title & content required.', 'error');
       }
 
       try {
