@@ -1,164 +1,183 @@
-<!-- public/admin/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | StealthUnitGG</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | StealthUnitGG</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Orbitron', 'Arial', sans-serif;
+    }
 
-        body {
-            background-color: #000;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
 
-        .login-container {
-            background-color: #111;
-            padding: 3rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid #333;
-        }
+    body {
+      background: #000;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9)),
+                  url('https://images.unsplash.com/photo-1558655146-d09347e927ea?ixlib=rb-4.0.3&auto=format&fit=crop&q=80') no-repeat center center/cover;
+    }
 
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      background: #111;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+    }
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #fff;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 1rem;
-        }
+    .logo {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
 
-        .logo span {
-            color: #00ff88;
-        }
+    .logo span:nth-child(1) {
+      color: #00ff88;
+    }
 
-        .login-title {
-            font-size: 1.5rem;
-            color: #00ff88;
-        }
+    .logo span:nth-child(2) {
+      color: #0088ff;
+    }
 
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+    .logo span:nth-child(3) {
+      color: #fff;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
-        }
+    h2 {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #00ff88;
+      margin-bottom: 1.5rem;
+    }
 
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: #222;
-            border: 1px solid #333;
-            border-radius: 5px;
-            color: white;
-            font-size: 1rem;
-        }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
 
-        .form-group input:focus {
-            outline: none;
-            border-color: #00ff88;
-            box-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
-        }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #00ff88;
+      font-size: 0.95rem;
+    }
 
-        .login-btn {
-            background-color: #00ff88;
-            color: #000;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
-        }
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      color: white;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
 
-        .login-btn:hover {
-            background-color: #00e67a;
-            transform: translateY(-2px);
-        }
+    input:focus {
+      outline: none;
+      border-color: #00ff88;
+      box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
+    }
 
-        .error-message {
-            background-color: rgba(255, 77, 77, 0.1);
-            color: #ff4d4d;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            border-left: 3px solid #ff4d4d;
-            display: none;
-        }
-    </style>
+    button {
+      width: 100%;
+      background: #00ff88;
+      color: #000;
+      border: none;
+      padding: 0.9rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+    }
+
+    .error {
+      text-align: center;
+      color: #ff4444;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #00ff88;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <a href="/" class="logo">Stealth<span>Unit</span>GG</a>
-            <h2 class="login-title">Admin Panel Login</h2>
-        </div>
-        <div class="error-message" id="error-message">
-            Invalid username or password. Please try again.
-        </div>
-        <form id="login-form">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-btn">Login</button>
-        </form>
+  <div class="login-container">
+    <div class="logo">
+      Stealth<span>Unit</span>GG
     </div>
+    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required>
+      </div>
+      <button type="submit">Log In</button>
+    </form>
+    <div id="error" class="error" style="display: none;"></div>
+    <a href="/" class="back-link">&larr; Back to Site</a>
+  </div>
 
-    <script>
-        document.getElementById('login-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            try {
-                const response = await fetch('/adminp/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
-                
-                if (response.redirected) {
-                    window.location.href = response.url;
-                } else {
-                    document.getElementById('error-message').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                document.getElementById('error-message').style.display = 'block';
-            }
+  <script>
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      const errorEl = document.getElementById('error');
+      errorEl.style.display = 'none';
+
+      try {
+        const res = await fetch('/adminp/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
         });
-    </script>
+
+        if (res.redirected) {
+          window.location.href = res.url;
+        } else {
+          errorEl.textContent = 'Invalid credentials';
+          errorEl.style.display = 'block';
+        }
+      } catch (err) {
+        errorEl.textContent = 'Network error. Try again.';
+        errorEl.style.display = 'block';
+      }
+    };
+  </script>
 </body>
 </html>
