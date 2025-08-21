@@ -1,57 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin | News Panel</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | News</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600&display=swap');
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
       background: #000;
       color: white;
       padding: 40px 20px;
-      max-width: 900px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
       margin: 0 auto;
+      background: #111;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
     }
 
-    header {
+    h1 {
       text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    header h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #00ff88;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
+      margin-bottom: 0.5rem;
     }
 
-    header p {
-      color: #aaa;
+    p {
+      text-align: center;
+      opacity: 0.7;
+      margin-bottom: 2rem;
       font-size: 0.95rem;
     }
 
-    .admin-form {
-      background: #111;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.08);
-      margin-bottom: 2rem;
-    }
-
     .form-group {
-      margin-bottom: 1.3rem;
+      margin-bottom: 1.5rem;
     }
 
     label {
@@ -59,16 +52,15 @@
       margin-bottom: 0.5rem;
       color: #00ff88;
       font-weight: 500;
-      font-size: 0.95rem;
     }
 
     input, textarea {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.9rem;
       background: #1a1a1a;
       border: 1px solid #333;
       color: white;
-      border-radius: 8px;
+      border-radius: 6px;
       font-size: 1rem;
     }
 
@@ -78,84 +70,75 @@
       box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.2);
     }
 
-    button[type="submit"] {
+    button {
       background: #00ff88;
       color: #000;
       border: none;
-      padding: 0.9rem 2rem;
+      padding: 0.8rem 1.5rem;
       font-weight: 600;
       font-size: 1rem;
       border-radius: 30px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
 
-    button[type="submit"]:hover {
+    button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
     }
 
     .message {
-      display: none;
-      opacity: 0;
       padding: 1rem;
-      border-radius: 8px;
-      margin: 1.5rem 0;
+      border-radius: 6px;
+      margin-top: 1rem;
       text-align: center;
-      font-weight: 500;
-      transition: opacity 0.3s ease;
-    }
-
-    .message.show {
-      opacity: 1;
+      display: none;
     }
 
     .success {
-      background: rgba(0, 255, 136, 0.15);
+      background: #00ff8833;
       color: #00ff88;
       border: 1px solid #00ff88;
     }
 
     .error {
-      background: rgba(255, 68, 68, 0.1);
+      background: #ff444433;
       color: #ff4444;
       border: 1px solid #ff4444;
     }
 
+    .news-list {
+      margin-top: 3rem;
+    }
+
     .news-list h2 {
       color: #00ff88;
-      margin: 1.5rem 0 1rem;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
     }
 
     .news-item {
       background: #1a1a1a;
-      padding: 1.2rem;
-      border-radius: 10px;
+      padding: 1rem;
+      border-radius: 8px;
       margin-bottom: 1rem;
     }
 
     .news-item h3 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: #fff;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .news-meta {
-      font-size: 0.85rem;
-      color: #999;
-      margin-bottom: 0.6rem;
-    }
-
-    .news-content {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      color: #ccc;
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-bottom: 0.5rem;
     }
 
     .news-actions {
-      margin-top: 0.8rem;
       display: flex;
-      justify-content: flex-end;
+      gap: 1rem;
     }
 
     .delete-btn {
@@ -165,185 +148,119 @@
       padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
     }
 
     .delete-btn:hover {
       background: #ff6666;
     }
-
-    .logout {
-      display: block;
-      text-align: right;
-      color: #00ff88;
-      font-size: 0.9rem;
-      margin: 1rem 0 0;
-      text-decoration: none;
-    }
-
-    .logout:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
-  <header>
+  <div class="container">
     <h1><i class="fas fa-newspaper"></i> Admin News Panel</h1>
-    <p>Logged in as <strong id="username-display">Admin</strong></p>
-    <a href="/adminp/logout" class="logout">Logout</a>
-  </header>
+    <p>Logged in as <strong>{{username}}</strong> | <a href="/adminp/logout" style="color:#00ff88">Logout</a></p>
 
-  <div class="admin-form">
     <form id="newsForm">
       <div class="form-group">
-        <label for="approvalCode">Authorization Code</label>
-        <input type="password" id="approvalCode" placeholder="Enter 247915" required />
-      </div>
-      <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" id="title" placeholder="News title" required />
+        <input type="text" id="title" placeholder="News title" required>
       </div>
+
       <div class="form-group">
         <label for="content">Content</label>
-        <textarea id="content" rows="6" placeholder="Full article..." required></textarea>
+        <textarea id="content" rows="6" placeholder="Write your article..." required></textarea>
       </div>
+
       <div class="form-group">
         <label for="image">Image URL (Optional)</label>
-        <input type="text" id="image" placeholder="https://example.com/image.jpg" />
+        <input type="text" id="image" placeholder="https://example.com/image.jpg">
       </div>
+
       <div class="form-group">
         <label for="author">Author (Optional)</label>
-        <input type="text" id="author" placeholder="Staff" />
+        <input type="text" id="author" placeholder="Staff">
       </div>
+
       <button type="submit">Publish News</button>
     </form>
+
+    <div id="message" class="message"></div>
   </div>
 
-  <div id="message" class="message"></div>
-
-  <div class="news-list">
+  <div class="container news-list">
     <h2>Published News</h2>
     <div id="news-items">Loading...</div>
   </div>
 
   <script>
     const messageEl = document.getElementById('message');
-    const usernameDisplay = document.getElementById('username-display');
-
-    // Extract username from URL or localStorage (set after login)
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get('user') || localStorage.getItem('adminUser') || 'Admin';
-    usernameDisplay.textContent = username;
 
     function showMessage(text, type) {
       messageEl.textContent = text;
       messageEl.className = `message ${type}`;
-      messageEl.classList.add('show');
-      setTimeout(() => {
-        messageEl.classList.remove('show');
-        setTimeout(() => (messageEl.style.display = 'none'), 300); // fade out
-      }, 5000);
+      messageEl.style.display = 'block';
+      setTimeout(() => messageEl.style.display = 'none', 5000);
     }
 
     async function loadNews() {
-      const container = document.getElementById('news-items');
       try {
-        const res = await fetch('/api/news');
-        if (!res.ok) throw new Error('Failed to load');
-
+        const res = await fetch('/api/admin/news');
         const news = await res.json();
+
+        const container = document.getElementById('news-items');
         container.innerHTML = '';
 
         if (news.length === 0) {
-          container.innerHTML = '<p style="color:#777">No articles yet.</p>';
+          container.innerHTML = '<p style="opacity:0.6">No articles yet.</p>';
           return;
         }
 
-        news.forEach(article => {
+        news.forEach(a => {
           const el = document.createElement('div');
           el.className = 'news-item';
-          el.dataset.id = article._id;
-
-          const author = article.author || 'Unknown';
-          const date = new Date(article.date).toLocaleDateString();
-
-          const contentPreview = article.content.length > 150
-            ? article.content.substring(0, 150) + '...'
-            : article.content;
-
           el.innerHTML = `
-            <h3>${escapeHtml(article.title)}</h3>
-            <div class="news-meta">Published on ${date} • By ${escapeHtml(author)}</div>
-            <div class="news-content">${escapeHtml(contentPreview)}</div>
+            <h3>${a.title}</h3>
+            <div class="news-meta">${new Date(a.date).toLocaleDateString()} • ${a.author}</div>
+            <p style="font-size:0.9rem;opacity:0.8">${a.content.substring(0, 100)}${a.content.length > 100 ? '...' : ''}</p>
             <div class="news-actions">
-              <button class="delete-btn" data-id="${article._id}">Delete</button>
+              <button class="delete-btn" data-id="${a._id}">Delete</button>
             </div>
           `;
           container.appendChild(el);
         });
 
-        // Attach delete handlers
         document.querySelectorAll('.delete-btn').forEach(btn => {
-          btn.addEventListener('click', handleDelete);
+          btn.addEventListener('click', async (e) => {
+            if (!confirm('Delete this article?')) return;
+            const id = e.target.dataset.id;
+
+            const res = await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+              showMessage('Deleted!', 'success');
+              loadNews();
+            } else {
+              const err = await res.json();
+              showMessage('Error: ' + err.error, 'error');
+            }
+          });
         });
       } catch (err) {
-        container.innerHTML = '<p style="color:#ff4444">Failed to load news. Please try again.</p>';
+        document.getElementById('news-items').innerHTML = '<p style="color:#ff4444">Failed to load news.</p>';
       }
     }
 
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    async function handleDelete(e) {
-      const id = e.target.dataset.id;
-      if (!confirm('Delete this article permanently?')) return;
-
-      const code = prompt('Enter authorization code (247915):');
-      if (code !== '247915') {
-        alert('Incorrect code.');
-        return;
-      }
-
-      try {
-        const res = await fetch(`/api/admin/news/${id}`, {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ approvalCode: '247915' })
-        });
-
-        const data = await res.json();
-        if (res.ok) {
-          showMessage('✅ Article deleted!', 'success');
-          loadNews(); // Refresh list
-        } else {
-          showMessage('❌ ' + (data.error || 'Delete failed'), 'error');
-        }
-      } catch (err) {
-        showMessage('Network error.', 'error');
-      }
-    }
-
-    document.getElementById('newsForm').addEventListener('submit', async (e) => {
+    document.getElementById('newsForm').onsubmit = async (e) => {
       e.preventDefault();
 
-      const code = document.getElementById('approvalCode').value.trim();
-      if (code !== '247915') {
-        return showMessage('❌ Invalid authorization code.', 'error');
-      }
-
       const data = {
-        approvalCode: code,
         title: document.getElementById('title').value.trim(),
         content: document.getElementById('content').value.trim(),
-        image: document.getElementById('image').value.trim() || null,
-        author: document.getElementById('author').value.trim() || 'Staff'
+        image: document.getElementById('image').value.trim(),
+        author: document.getElementById('author').value.trim()
       };
 
       if (!data.title || !data.content) {
-        return showMessage('❌ Title and content are required.', 'error');
+        return showMessage('Title and content are required.', 'error');
       }
 
       try {
@@ -355,21 +272,18 @@
 
         const result = await res.json();
         if (res.ok) {
-          showMessage('✅ Published successfully!', 'success');
+          showMessage('✅ Published!', 'success');
           document.getElementById('newsForm').reset();
           loadNews();
         } else {
-          showMessage('❌ ' + (result.error || 'Publish failed'), 'error');
+          showMessage('❌ ' + result.error, 'error');
         }
       } catch (err) {
-        showMessage('Network error. Please try again.', 'error');
+        showMessage('Network error.', 'error');
       }
-    });
+    };
 
-    // Load news on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      loadNews();
-    });
+    document.addEventListener('DOMContentLoaded', loadNews);
   </script>
 </body>
 </html>
