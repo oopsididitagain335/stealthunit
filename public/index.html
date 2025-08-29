@@ -202,11 +202,12 @@
     desk.receiveShadow = true;
     scene.add(desk);
 
-    // Physics World (using cannon-es)
-    const world = new CANNON.World();
-    world.gravity.set(0, -10, 0);
-    world.broadphase = new CANNON.NaiveBroadphase();
-    world.solver.iterations = 16;
+    // Physics World
+const world = new CANNON.World();
+world.gravity.set(0, -10, 0); // Gravity pulls down (Y-negative)
+world.broadphase = new CANNON.NaiveBroadphase(); // Or use GridBroadphase for better performance
+world.solver.iterations = 16;
+world.allowSleep = true; // Improves performance for static objects
 
     const deskShape = new CANNON.Box(new CANNON.Vec3(10, 0.25, 5));
     const deskBody = new CANNON.Body({ mass: 0 });
