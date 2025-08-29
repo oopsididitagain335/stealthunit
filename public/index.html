@@ -118,7 +118,7 @@
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
         "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
-       "cannon": "https://cdn.jsdelivr.net/npm/cannon-es@6.0.1/dist/cannon-es.mjs"
+        "cannon": "https://cdn.jsdelivr.net/npm/cannon-es@6.3.0/dist/cannon-es.mjs"
       }
     }
   </script>
@@ -188,7 +188,7 @@
     const nebula = new THREE.Mesh(bgGeometry, bgMaterial);
     scene.add(nebula);
 
-    // Desk (Futuristic)
+    // Desk
     const deskGeometry = new THREE.BoxGeometry(20, 0.5, 10);
     const deskMaterial = new THREE.MeshStandardMaterial({
       color: 0x1a1a3a,
@@ -203,11 +203,11 @@
     scene.add(desk);
 
     // Physics World
-const world = new CANNON.World();
-world.gravity.set(0, -10, 0); // Gravity pulls down (Y-negative)
-world.broadphase = new CANNON.NaiveBroadphase(); // Or use GridBroadphase for better performance
-world.solver.iterations = 16;
-world.allowSleep = true; // Improves performance for static objects
+    const world = new CANNON.World();
+    world.gravity.set(0, -10, 0);
+    world.broadphase = new CANNON.NaiveBroadphase();
+    world.solver.iterations = 16;
+    world.allowSleep = true;
 
     const deskShape = new CANNON.Box(new CANNON.Vec3(10, 0.25, 5));
     const deskBody = new CANNON.Body({ mass: 0 });
@@ -232,7 +232,6 @@ world.allowSleep = true; // Improves performance for static objects
       });
       const screen = new THREE.Mesh(monitorGeometry, screenMaterial);
       screen.position.z = 0.05;
-      screen.receiveShadow = true;
 
       const frame = new THREE.Mesh(frameGeometry, new THREE.MeshStandardMaterial({ color: 0x222222 }));
       frame.add(screen);
@@ -260,7 +259,7 @@ world.allowSleep = true; // Improves performance for static objects
       loadingTexts.push(text);
     }
 
-    // Quantum Logo (Shader)
+    // Quantum Logo
     let logo = null;
     const logoLoader = new GLTFLoader();
     logoLoader.load(
@@ -274,27 +273,22 @@ world.allowSleep = true; // Improves performance for static objects
             child.material = new THREE.ShaderMaterial({
               uniforms: {
                 time: { value: 0 },
-                glowColor: { value: new THREE.Color(0x00ffcc) },
-                pulse: { value: 0 }
+                glowColor: { value: new THREE.Color(0x00ffcc) }
               },
               vertexShader: `
                 varying vec3 vNormal;
-                varying vec3 vPosition;
                 void main() {
                   vNormal = normalize(normalMatrix * normal);
-                  vPosition = position;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal * sin(time * 2.0) * 0.02, 1.0);
+                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                 }
               `,
               fragmentShader: `
                 uniform vec3 glowColor;
                 uniform float time;
                 varying vec3 vNormal;
-                varying vec3 vPosition;
                 void main() {
-                  float intensity = pow(0.95 - dot(vNormal, vec3(0, 0, 1.0)), 4.0);
-                  vec3 glow = glowColor * intensity * (0.8 + 0.2 * sin(time * 5.0));
-                  gl_FragColor = vec4(mix(vec3(0.1, 0.1, 0.2), glow, intensity * 1.5), 1.0);
+                  float intensity = pow(0.9 - dot(vNormal, vec3(0, 0, 1.0)), 3.0);
+                  gl_FragColor = vec4(glowColor * intensity, 1.0);
                 }
               `,
               transparent: true,
@@ -306,73 +300,61 @@ world.allowSleep = true; // Improves performance for static objects
         scene.add(logo);
       },
       undefined,
-      (error) => console.warn('Logo load failed:', error.message)
+      () => console.warn('Logo failed to load - using text or placeholder')
     );
 
-    // Character (Fallback if model fails)
-    let character = null;
-    let mixer = null;
+    // ✅ Fallback Character (Box-style, no GLB needed)
+    let character = new THREE.Group();
     let characterBody = null;
 
-    const characterLoader = new GLTFLoader();
-    const modelUrl = './models/jinx.glb'; // Replace with your hosted model
-
-    characterLoader.load(
-      modelUrl,
-      (gltf) => setupCharacter(gltf),
-      undefined,
-      () => {
-        console.warn('Primary model failed. Loading fallback...');
-        // Try direct public URL (if hosted)
-        const fallbackUrl = 'https://example.com/models/jinx.glb'; // Replace with real public URL
-        characterLoader.load(fallbackUrl, setupCharacter, undefined, createFallbackCharacter);
-      }
+    // Parts
+    const body = new THREE.Mesh(
+      new THREE.BoxGeometry(0.6, 1.2, 0.4),
+      new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.5 })
+    );
+    const head = new THREE.Mesh(
+      new THREE.BoxGeometry(0.4, 0.4, 0.4),
+      new THREE.MeshStandardMaterial({ color: 0xffb6c1 })
+    );
+    const leftArm = new THREE.Mesh(
+      new THREE.BoxGeometry(0.2, 0.7, 0.2),
+      new THREE.MeshStandardMaterial({ color: 0x00ffcc })
+    );
+    const rightArm = new THREE.Mesh(
+      new THREE.BoxGeometry(0.2, 0.7, 0.2),
+      new THREE.MeshStandardMaterial({ color: 0x00ffcc })
+    );
+    const leftLeg = new THREE.Mesh(
+      new THREE.BoxGeometry(0.2, 0.6, 0.2),
+      new THREE.MeshStandardMaterial({ color: 0x000000 })
+    );
+    const rightLeg = new THREE.Mesh(
+      new THREE.BoxGeometry(0.2, 0.6, 0.2),
+      new THREE.MeshStandardMaterial({ color: 0x000000 })
     );
 
-    function setupCharacter(gltf) {
-      character = gltf.scene;
-      character.scale.set(1, 1, 1);
-      character.position.set(-10, -1.5, -3);
-      character.rotation.y = Math.PI / 2;
-      character.castShadow = true;
-      scene.add(character);
+    // Position
+    head.position.y = 1.0;
+    leftArm.position.set(-0.4, 0.3, 0);
+    rightArm.position.set(0.4, 0.3, 0);
+    leftLeg.position.set(-0.15, -1.0, 0);
+    rightLeg.position.set(0.15, -1.0, 0);
 
-      const shape = new CANNON.Box(new CANNON.Vec3(0.4, 0.9, 0.4));
-      characterBody = new CANNON.Body({ mass: 1 });
-      characterBody.addShape(shape);
-      characterBody.position.set(-10, -1.5, -3);
-      world.addBody(characterBody);
+    character.add(body, head, leftArm, rightArm, leftLeg, rightLeg);
+    character.position.set(-10, -1.5, -3);
+    character.rotation.y = Math.PI / 2;
+    character.castShadow = true;
+    scene.add(character);
 
-      if (gltf.animations.length > 0) {
-        mixer = new THREE.AnimationMixer(character);
-        const action = mixer.clipAction(gltf.animations[0]);
-        action.play();
-      }
-    }
+    // Physics for character
+    const shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.6, 0.2));
+    characterBody = new CANNON.Body({ mass: 1 });
+    characterBody.addShape(shape);
+    characterBody.position.set(-10, -1.5, -3);
+    world.addBody(characterBody);
 
-    function createFallbackCharacter() {
-      console.log('Using fallback cube character.');
-      const body = new THREE.Mesh(
-        new THREE.BoxGeometry(0.6, 1.2, 0.4),
-        new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.5 })
-      );
-      const head = new THREE.Mesh(
-        new THREE.BoxGeometry(0.4, 0.4, 0.4),
-        new THREE.MeshStandardMaterial({ color: 0xffb6c1 })
-      );
-      head.position.y = 0.8;
-      character = new THREE.Group();
-      character.add(body, head);
-      character.position.set(-10, -1.5, -3);
-      character.castShadow = true;
-      scene.add(character);
-
-      const shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.6, 0.2));
-      characterBody = new CANNON.Body({ mass: 1 });
-      characterBody.addShape(shape);
-      characterBody.position.set(-10, -1.5, -3);
-      world.addBody(characterBody);
-    }
+    // Store references for animation
+    character.userData = { leftArm, rightArm, leftLeg, rightLeg };
 
     // Particles
     const particleCount = 300;
@@ -405,7 +387,7 @@ world.allowSleep = true; // Improves performance for static objects
     // Animation State
     let time = 0;
     let phase = 0;
-    let characterState = 'idle';
+    let characterState = 'walkingIn';
     let characterTime = 0;
     let glitchActive = false;
     let flickerCount = 0;
@@ -416,32 +398,26 @@ world.allowSleep = true; // Improves performance for static objects
       requestAnimationFrame(animate);
       time += 0.05;
 
-      // Update physics
+      // Physics
       world.step(1 / 60);
 
       // Sync character
       if (character && characterBody) {
         character.position.copy(characterBody.position);
         character.position.y = -1.5;
+        character.quaternion.copy(characterBody.quaternion);
       }
 
       // Update shaders
       nebula.material.uniforms.time.value = time;
-      if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.time.value = time));
+      if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.time?.value = time));
 
-      // Phase 0: Monitors On (0–4s)
-      if (phase === 0 && time > 4) {
-        monitors.forEach((m, i) => {
-          if (time > i * 1.2 + 0.5) {
-            const t = (time - i * 1.2) * 0.3;
-            m.material.opacity = Math.min(t, 1);
-            m.material.emissiveIntensity = m.material.opacity * 0.8;
-          }
-        });
+      // Phase 0: Monitors On
+      if (phase === 0) {
         if (time > 4) phase = 1;
       }
 
-      // Phase 1: Loading Text (4–8s)
+      // Phase 1: Loading Text
       if (phase === 1) {
         loadingTexts.forEach((text, i) => {
           const delay = 4 + i * 0.8;
@@ -455,24 +431,27 @@ world.allowSleep = true; // Improves performance for static objects
         }
       }
 
-      // Phase 2: Logo Appears (8–12s)
+      // Phase 2: Logo Appears
       if (phase === 2 && logo) {
         if (logo.scale.x < 1.5) {
-          logo.scale.x += 0.02;
-          logo.scale.y += 0.02;
-          logo.scale.z += 0.02;
+          logo.scale.multiplyScalar(1.02);
         } else {
           phase = 3;
         }
       }
 
-      // Phase 3: Character Walk In, Glitch, Walk Out (12–21s)
-      if (phase === 3 && character && characterBody) {
-        if (characterState === 'idle') characterState = 'walkingIn';
-
+      // Phase 3: Character Walk In, Glitch, Walk Out
+      if (phase === 3) {
         if (characterState === 'walkingIn') {
           characterBody.velocity.x = 0.03 * 60;
-          if (mixer) mixer.update(0.016);
+          // Arm/leg swing
+          if (character.userData.leftArm) {
+            const swing = Math.sin(characterTime * 5);
+            character.userData.leftArm.rotation.x = swing * 0.5;
+            character.userData.rightArm.rotation.x = -swing * 0.5;
+            character.userData.leftLeg.rotation.x = -swing * 0.5;
+            character.userData.rightLeg.rotation.x = swing * 0.5;
+          }
           if (characterBody.position.x >= -2) {
             characterBody.velocity.set(0, 0, 0);
             characterState = 'glitching';
@@ -488,17 +467,20 @@ world.allowSleep = true; // Improves performance for static objects
 
         if (characterState === 'walkingOut') {
           characterBody.velocity.x = 0.05 * 60;
-          if (mixer) mixer.update(0.016);
+          const swing = Math.sin(characterTime * 5);
+          character.userData.leftArm.rotation.x = swing * 0.5;
+          character.userData.rightArm.rotation.x = -swing * 0.5;
+          character.userData.leftLeg.rotation.x = -swing * 0.5;
+          character.userData.rightLeg.rotation.x = swing * 0.5;
           if (characterBody.position.x > 10) {
             characterBody.position.x = -10;
-            characterBody.velocity.set(0, 0, 0);
             phase = 4;
           }
         }
 
         // Glitch effect
         if (glitchActive && time - glitchStartTime < 2) {
-          if (Math.random() < 0.15 && flickerCount < 5) {
+          if (Math.random() < 0.1 && flickerCount < 5) {
             monitors.forEach(m => {
               m.material.opacity = 0.3;
               m.material.emissiveIntensity = 0;
@@ -514,9 +496,11 @@ world.allowSleep = true; // Improves performance for static objects
             flickerCount++;
           }
         }
+
+        characterTime += 0.05;
       }
 
-      // Phase 4: Fullscreen Zoom (21–22s)
+      // Phase 4: Zoom Logo
       if (phase === 4 && logo) {
         if (logo.scale.x < 8) {
           logo.scale.multiplyScalar(1.05);
@@ -535,7 +519,7 @@ world.allowSleep = true; // Improves performance for static objects
       for (let i = 0; i < particleCount * 3; i += 3) {
         positions[i] += velocities[i];
         positions[i + 1] += velocities[i + 1];
-        positions[i + 2] += velocities[i + 2]; // ✅ Fixed: was missing ']'
+        positions[i + 2] += velocities[i + 2];
         if (Math.abs(positions[i]) > 10) velocities[i] *= -1;
         if (Math.abs(positions[i + 1]) > 10) velocities[i + 1] *= -1;
         if (Math.abs(positions[i + 2]) > 10) velocities[i + 2] *= -1;
