@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantum Clash - eSport Logo Animation</title>
+  <title>Quantum Clash - eSport Launch</title>
   <style>
     body { margin: 0; overflow: hidden; background: #000; }
     canvas { display: block; }
@@ -19,7 +19,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      font-family: 'Orbitron', sans-serif;
+      font-family: 'Exo 2', sans-serif;
       pointer-events: none;
       opacity: 0;
       transition: opacity 1s ease-in-out;
@@ -27,55 +27,66 @@
     #overlay.active { opacity: 1; }
     #overlay h1 {
       font-size: 4.5em;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      background: linear-gradient(45deg, #00ffcc, #ff00ff, #00ccff);
+      background: linear-gradient(45deg, #00ffcc, #ff00ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      animation: glow 1.5s ease-in-out infinite alternate;
-      text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.9), 0 0 25px rgba(255, 0, 255, 0.8);
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+      animation-delay: 22s;
     }
     #overlay p {
       font-size: 1.6em;
-      color: #e0e0e0;
+      font-weight: 400;
+      color: #d0d0d0;
       max-width: 600px;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+      animation-delay: 22.5s;
     }
     #overlay button {
       pointer-events: auto;
       margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 1.2em;
+      padding: 15px 40px;
+      font-size: 1.3em;
+      font-weight: 500;
       background: linear-gradient(45deg, #ff00ff, #00ffcc);
       border: none;
-      border-radius: 25px;
+      border-radius: 50px;
       color: #fff;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+      animation-delay: 23s;
     }
     #overlay button:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 25px rgba(0, 255, 255, 1);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 1);
     }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00ffcc, 0 0 20px #ff00ff; }
-      to { text-shadow: 0 0 20px #00ccff, 0 0 30px #ff00ff; }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
     @media (max-width: 768px) {
-      #overlay h1 { font-size: 2.5em; }
-      #overlay p { font-size: 1.2em; }
-      #overlay button { font-size: 1em; padding: 10px 20px; }
+      #overlay h1 { font-size: 2.8em; letter-spacing: 0.1em; }
+      #overlay p { font-size: 1.2em; max-width: 90%; }
+      #overlay button { font-size: 1em; padding: 10px 25px; }
     }
   </style>
 </head>
 <body>
   <div id="overlay">
     <h1>Quantum Clash</h1>
-    <p>The eSport That Shatters Reality - Join the Revolution!</p>
-    <button onclick="window.location.href='https://yourstore.com'">Enter the Arena</button>
+    <p>Unleash Your Power in the Ultimate eSport Arena!</p>
+    <button id="joinButton" onclick="window.location.href='https://yourstore.com'">Join the Revolution</button>
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/examples/js/loaders/GLTFLoader.js"></script>
   <script>
     // Three.js setup
     const scene = new THREE.Scene();
@@ -85,204 +96,380 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+    // Realistic Lighting
+    const ambientLight = new THREE.AmbientLight(0x333333, 0.3);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0x00ffcc, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
     directionalLight.position.set(10, 20, 10);
     scene.add(directionalLight);
-    const pointLight = new THREE.PointLight(0xff00ff, 1, 100);
-    pointLight.position.set(-10, -10, 10);
-    scene.add(pointLight);
+    const monitorGlow = new THREE.PointLight(0x00ffcc, 1.5, 8);
+    monitorGlow.position.set(0, 0, -4);
+    scene.add(monitorGlow);
 
-    // Desk (Simple plane for context)
-    const deskGeometry = new THREE.PlaneGeometry(20, 10);
-    const deskMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
+    // Desk (Wooden texture simulation)
+    const deskGeometry = new THREE.BoxGeometry(20, 0.5, 10);
+    const deskMaterial = new THREE.MeshStandardMaterial({
+      color: 0x3c2f2f,
+      roughness: 0.9,
+      metalness: 0.05
+    });
     const desk = new THREE.Mesh(deskGeometry, deskMaterial);
-    desk.rotation.x = -Math.PI / 2;
-    desk.position.y = -2;
+    desk.position.y = -2.5;
     scene.add(desk);
 
-    // Three Monitors
+    // Three Monitors (Realistic with glossy bezels)
     const monitors = [];
-    const monitorGeometry = new THREE.BoxGeometry(3, 2, 0.2);
-    const monitorScreenMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-    const monitorFrameMaterial = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5 });
+    const monitorGeometry = new THREE.BoxGeometry(3, 2, 0.1);
+    const monitorFrameGeometry = new THREE.BoxGeometry(3.2, 2.2, 0.2);
     for (let i = 0; i < 3; i++) {
       const monitor = new THREE.Group();
-      const screen = new THREE.Mesh(monitorGeometry, monitorScreenMaterial);
-      const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.2, 0.3), monitorFrameMaterial);
+      const screenMaterial = new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        emissive: 0x000000,
+        emissiveIntensity: 0,
+        roughness: 0.1,
+        metalness: 0.3,
+        transparent: true,
+        opacity: 0
+      });
+      const screen = new THREE.Mesh(monitorGeometry, screenMaterial);
+      const frameMaterial = new THREE.MeshStandardMaterial({
+        color: 0x1a1a1a,
+        roughness: 0.4,
+        metalness: 0.5
+      });
+      const frame = new THREE.Mesh(monitorFrameGeometry, frameMaterial);
       monitor.add(screen, frame);
-      monitor.position.set((i - 1) * 4, 0, -5);
-      monitor.rotation.y = (i - 1) * 0.2; // Slight angle for realism
+      monitor.position.set((i - 1) * 3.5, -1.5, -5);
+      monitor.rotation.y = (i - 1) * 0.15;
       scene.add(monitor);
-      monitors.push({ group: monitor, screen });
+      monitors.push({ group: monitor, screen, material: screenMaterial });
     }
 
-    // Logo (Torus Knot for a complex, futuristic "Quantum Clash" symbol)
-    const logoGeometry = new THREE.TorusKnotGeometry(0.5, 0.1, 100, 16, 2, 3);
-    const logoMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        glowColor: { value: new THREE.Color(0x00ffcc) }
-      },
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float time;
-        uniform vec3 glowColor;
-        varying vec3 vNormal;
-        void main() {
-          float intensity = pow(0.8 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
-          gl_FragColor = vec4(glowColor * intensity, 1.0) * (sin(time) * 0.5 + 0.5);
-        }
-      `
-    });
-    const logo = new THREE.Mesh(logoGeometry, logoMaterial);
-    logo.scale.set(0, 0, 0); // Start hidden
-    scene.add(logo);
+    // LOADING Text (Simulated with planes)
+    const loadingTextMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffcc, transparent: true, opacity: 0 });
+    const loadingTextGeometry = new THREE.PlaneGeometry(2, 0.5);
+    const loadingTexts = [];
+    for (let i = 0; i < 3; i++) {
+      const loadingText = new THREE.Mesh(loadingTextGeometry, loadingTextMaterial);
+      loadingText.position.set((i - 1) * 3.5, -1.5, -4.9);
+      loadingText.rotation.y = (i - 1) * 0.15;
+      scene.add(loadingText);
+      loadingTexts.push(loadingText);
+    }
 
-    // Particle System (Sparkles around logo)
-    const particleCount = 500;
+    // Load GLTF Logo (Placeholder)
+    let logo;
+    const logoLoader = new THREE.GLTFLoader();
+    logoLoader.load(
+      'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
+      (gltf) => {
+        logo = gltf.scene;
+        logo.scale.set(0, 0, 0);
+        logo.position.set(0, -1.5, -5);
+        logo.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.ShaderMaterial({
+              uniforms: {
+                time: { value: 0 },
+                glowColor: { value: new THREE.Color(0x00ffcc) },
+                metalness: { value: 0.9 }
+              },
+              vertexShader: `
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+                void main() {
+                  vNormal = normalize(normalMatrix * normal);
+                  vPosition = position;
+                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+              `,
+              fragmentShader: `
+                uniform float time;
+                uniform vec3 glowColor;
+                uniform float metalness;
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+                void main() {
+                  float intensity = pow(0.8 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
+                  vec3 color = mix(glowColor, vec3(0.95, 0.95, 0.95), metalness);
+                  float gradient = sin(vPosition.y + time) * 0.5 + 0.5;
+                  vec3 finalColor = mix(color, vec3(1.0, 0.0, 1.0), gradient * 0.3);
+                  gl_FragColor = vec4(finalColor * intensity, 1.0);
+                }
+              `
+            });
+          }
+        });
+        scene.add(logo);
+      },
+      undefined,
+      (error) => console.error('Error loading logo GLTF:', error)
+    );
+
+    // Load Jinx GLTF Character
+    let character;
+    let mixer;
+    const characterLoader = new THREE.GLTFLoader();
+    characterLoader.load(
+      'https://drive.google.com/uc?export=download&id=1xKIkokrDn4h-anQRhlp7afBpgHRDhKNH',
+      (gltf) => {
+        character = gltf.scene;
+        character.scale.set(1, 1, 1); // Adjust scale as needed
+        character.position.set(-10, -2, -5); // Start off-screen
+        character.rotation.y = Math.PI / 2; // Face forward
+        scene.add(character);
+        // Animation setup
+        if (gltf.animations.length > 0) {
+          mixer = new THREE.AnimationMixer(character);
+          const walkAnimation = mixer.clipAction(gltf.animations[0]); // Assumes first animation is walk
+          walkAnimation.play();
+        }
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading Jinx GLTF:', error);
+        // Fallback: Box-based character
+        const fallbackCharacter = new THREE.Group();
+        const body = new THREE.Mesh(
+          new THREE.BoxGeometry(0.5, 1, 0.3),
+          new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.6, metalness: 0.2 })
+        );
+        const head = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 0.3, 0.3),
+          new THREE.MeshStandardMaterial({ color: 0xffb6c1, roughness: 0.6 })
+        );
+        const leftArm = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 0.6, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0x00ffcc })
+        );
+        const rightArm = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 0.6, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0x00ffcc })
+        );
+        const leftLeg = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 0.6, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0x000000 })
+        );
+        const rightLeg = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 0.6, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0x000000 })
+        );
+        head.position.y = 0.65;
+        leftArm.position.set(-0.35, 0.2, 0);
+        rightArm.position.set(0.35, 0.2, 0);
+        leftLeg.position.set(-0.15, -0.8, 0);
+        rightLeg.position.set(0.15, -0.8, 0);
+        fallbackCharacter.add(body, head, leftArm, rightArm, leftLeg, rightLeg);
+        fallbackCharacter.position.set(-10, -2, -5);
+        scene.add(fallbackCharacter);
+        character = fallbackCharacter;
+        character.userData = { leftArm, rightArm, leftLeg, rightLeg };
+      }
+    );
+
+    // Character Animation State
+    let characterState = 'walkingIn';
+    let characterTime = 0;
+    let glitchActive = false;
+    let flickerCount = 0;
+    let glitchStartTime = 0;
+
+    // Particle System (Subtle sparkles)
+    const particleCount = 200;
     const particlesGeometry = new THREE.BufferGeometry();
     const posArray = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 10;
-      posArray[i + 1] = (Math.random() - 0.5) * 10;
-      posArray[i + 2] = (Math.random() - 0.5) * 10;
-      velocities[i] = (Math.random() - 0.5) * 0.05;
-      velocities[i + 1] = (Math.random() - 0.5) * 0.05;
-      velocities[i + 2] = (Math.random() - 0.5) * 0.05;
+      posArray[i] = (Math.random() - 0.5) * 4;
+      posArray[i + 1] = (Math.random() - 0.5) * 4;
+      posArray[i + 2] = (Math.random() - 0.5) * 4;
+      velocities[i] = (Math.random() - 0.5) * 0.015;
+      velocities[i + 1] = (Math.random() - 0.5) * 0.015;
+      velocities[i + 2] = (Math.random() - 0.5) * 0.015;
     }
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particleMaterial = new THREE.PointsMaterial({
       color: 0xff00ff,
-      size: 0.1,
+      size: 0.04,
       transparent: true,
       blending: THREE.AdditiveBlending
     });
     const particles = new THREE.Points(particlesGeometry, particleMaterial);
     scene.add(particles);
 
-    // Background Shader (Subtle cyberpunk ambiance)
+    // Background (Dark gradient)
     const bgGeometry = new THREE.PlaneGeometry(100, 100);
-    const bgMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        void main() {
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float time;
-        uniform vec2 resolution;
-        varying vec2 vUv;
-        void main() {
-          vec2 uv = vUv * 2.0 - 1.0;
-          float d = length(uv);
-          vec3 color = vec3(0.05, 0.1, 0.2) * (sin(d * 3.0 - time) * 0.5 + 0.5);
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `
+    const bgMaterial = new THREE.MeshBasicMaterial({
+      color: 0x111111,
+      transparent: true,
+      opacity: 0.9
     });
     const bg = new THREE.Mesh(bgGeometry, bgMaterial);
     bg.position.z = -50;
     scene.add(bg);
 
-    camera.position.set(0, 2, 10);
-    camera.lookAt(0, 0, -5);
+    camera.position.set(0, 1, 8);
+    camera.lookAt(0, -1.5, -5);
 
     // Animation Timeline
     let time = 0;
-    let phase = 0; // 0: Monitors light up, 1: Logo appears, 2: Flicker and fullscreen, 3: Overlay reveal
+    let phase = 0; // 0: Monitors on, 1: Loading text, 2: Logo, 3: Character & glitch, 4: Fullscreen, 5: Overlay
     function animate() {
       requestAnimationFrame(animate);
       time += 0.05;
 
-      // Phase 0: Monitors light up
+      // Phase 0: Monitors turn on (0-4s)
       if (phase === 0) {
         monitors.forEach((monitor, i) => {
-          const delay = i * 0.5;
-          if (time > delay && monitor.screen.material.opacity < 1) {
-            monitor.screen.material.opacity += 0.1;
-            monitor.screen.material.color.setHex(0x00ffcc);
+          const delay = i * 1;
+          if (time > delay && monitor.material.opacity < 1) {
+            monitor.material.opacity += 0.05; // Slower fade
+            monitor.material.emissive.setHex(0x00ffcc);
+            monitor.material.emissiveIntensity = monitor.material.opacity * 0.6;
           }
         });
-        if (time > 2.5) {
+        if (time > 4) {
           phase = 1;
         }
       }
 
-      // Phase 1: Logo appears on monitors
+      // Phase 1: Loading text (4-8s)
       if (phase === 1) {
-        if (logo.scale.x < 1) {
-          logo.scale.x += 0.05;
-          logo.scale.y += 0.05;
-          logo.scale.z += 0.05;
-          logo.position.set(0, 0, -5);
-        }
-        if (time > 4) {
+        loadingTexts.forEach((text, i) => {
+          const delay = 4 + i * 0.6;
+          if (time > delay && text.material.opacity < 1) {
+            text.material.opacity += 0.05; // Slower fade
+          }
+        });
+        if (time > 8) {
           phase = 2;
+          loadingTexts.forEach(text => text.material.opacity = 0);
         }
       }
 
-      // Phase 2: Flicker and fullscreen
-      if (phase === 2) {
-        // Flicker effect
-        if (time % 0.2 > 0.1) {
-          monitors.forEach(monitor => {
-            monitor.screen.material.opacity = 0.5;
-          });
-        } else {
-          monitors.forEach(monitor => {
-            monitor.screen.material.opacity = 1;
-          });
+      // Phase 2: Logo appears (8-12s)
+      if (phase === 2 && logo) {
+        if (logo.scale.x < 1) {
+          logo.scale.x += 0.025; // Slower scale-up
+          logo.scale.y += 0.025;
+          logo.scale.z += 0.025;
         }
-        // Zoom logo to fullscreen
-        if (logo.scale.x < 3) {
-          logo.scale.x += 0.1;
-          logo.scale.y += 0.1;
-          logo.scale.z += 0.1;
-          logo.position.z += 0.2;
-          camera.position.z -= 0.1; // Pull camera back slightly
-          monitors.forEach(monitor => {
-            monitor.group.scale.x *= 0.9;
-            monitor.group.scale.y *= 0.9;
-            monitor.group.scale.z *= 0.9;
-          });
-        }
-        if (time > 6) {
+        if (time > 12) {
           phase = 3;
+        }
+      }
+
+      // Phase 3: Character walks in, triggers glitch, pauses, walks out (12-20s)
+      if (phase === 3 && character) {
+        if (characterState === 'walkingIn') {
+          character.position.x += 0.05; // Slower walk (4s to cross 10 units)
+          if (mixer) mixer.update(0.05);
+          else if (character.userData.leftArm) {
+            character.userData.leftArm.rotation.x = Math.sin(characterTime * 5) * 0.5;
+            character.userData.rightArm.rotation.x = -Math.sin(characterTime * 5) * 0.5;
+            character.userData.leftLeg.rotation.x = -Math.sin(characterTime * 5) * 0.5;
+            character.userData.rightLeg.rotation.x = Math.sin(characterTime * 5) * 0.5;
+          }
+          if (character.position.x >= -2 && !glitchActive) {
+            glitchActive = true;
+            glitchStartTime = time;
+            flickerCount = 0;
+          }
+          if (character.position.x >= 0) {
+            characterState = 'pausing';
+            characterTime = 0;
+            if (mixer) mixer.stopAllAction();
+          }
+        } else if (characterState === 'pausing') {
+          if (characterTime > 4) { // Longer pause
+            characterState = 'walkingOut';
+            if (mixer) mixer.clipAction(mixer.getRoot().animations[0]).play();
+          }
+        } else if (characterState === 'walkingOut') {
+          character.position.x += 0.1; // Faster walk out (2s)
+          if (mixer) mixer.update(0.05);
+          else if (character.userData.leftArm) {
+            character.userData.leftArm.rotation.x = Math.sin(characterTime * 5) * 0.5;
+            character.userData.rightArm.rotation.x = -Math.sin(characterTime * 5) * 0.5;
+            character.userData.leftLeg.rotation.x = -Math.sin(characterTime * 5) * 0.5;
+            character.userData.rightLeg.rotation.x = Math.sin(characterTime * 5) * 0.5;
+          }
+          if (character.position.x > 10) {
+            characterState = 'idle';
+            character.position.x = -10;
+            if (mixer) mixer.stopAllAction();
+            phase = 4;
+          }
+        }
+        characterTime += 0.05;
+
+        // Glitch effect when character is near monitors
+        if (glitchActive && time - glitchStartTime < 2) {
+          if (time % 0.5 > 0.4 && flickerCount < 4) {
+            monitors.forEach(monitor => {
+              monitor.material.opacity = 0.2;
+              monitor.material.emissiveIntensity = 0;
+            });
+            if (logo) logo.traverse(child => {
+              if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0xff00ff);
+            });
+          } else if (time % 0.5 > 0.35) {
+            monitors.forEach(monitor => {
+              monitor.material.opacity = 1;
+              monitor.material.emissiveIntensity = 0.6;
+            });
+            if (logo) logo.traverse(child => {
+              if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0x00ffcc);
+            });
+            flickerCount += time % 0.5 > 0.4 ? 1 : 0;
+          }
+        } else if (glitchActive && time - glitchStartTime >= 2) {
+          glitchActive = false;
+          monitors.forEach(monitor => {
+            monitor.material.opacity = 1;
+            monitor.material.emissiveIntensity = 0.6;
+          });
+          if (logo) logo.traverse(child => {
+            if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0x00ffcc);
+          });
+        }
+      }
+
+      // Phase 4: Fullscreen logo (20-22s)
+      if (phase === 4 && logo) {
+        if (logo.scale.x < 5) {
+          logo.scale.x += 0.06; // Slower zoom
+          logo.scale.y += 0.06;
+          logo.scale.z += 0.06;
+          logo.position.z += 0.1;
+          camera.position.z -= 0.03;
+          monitors.forEach(monitor => {
+            monitor.group.scale.x *= 0.97;
+            monitor.group.scale.y *= 0.97;
+            monitor.group.scale.z *= 0.97;
+          });
+        }
+        if (time > 22) {
+          phase = 5;
           document.getElementById('overlay').classList.add('active');
         }
       }
 
-      // Phase 3: Logo rotates and particles move
-      logo.rotation.x += 0.01;
-      logo.rotation.y += 0.01;
-      logoMaterial.uniforms.time.value = time;
-      bgMaterial.uniforms.time.value = time;
-
-      // Animate particles
+      // Phase 5: Update logo shader and particles
+      if (logo) {
+        logo.traverse(child => {
+          if (child.isMesh) child.material.uniforms.time.value = time;
+        });
+      }
       const positions = particlesGeometry.attributes.position.array;
       for (let i = 0; i < particleCount * 3; i += 3) {
         positions[i] += velocities[i];
         positions[i + 1] += velocities[i + 1];
         positions[i + 2] += velocities[i + 2];
-        if (Math.abs(positions[i]) > 5) velocities[i] *= -1;
-        if (Math.abs(positions[i + 1]) > 5) velocities[i + 1] *= -1;
-        if (Math.abs(positions[i + 2]) > 5) velocities[i + 2] *= -1;
+        if (Math.abs(positions[i]) > 3) velocities[i] *= -1;
+        if (Math.abs(positions[i + 1]) > 3) velocities[i + 1] *= -1;
+        if (Math.abs(positions[i + 2]) > 3) velocities[i + 2] *= -1;
       }
       particlesGeometry.attributes.position.needsUpdate = true;
 
@@ -295,7 +482,6 @@
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      bgMaterial.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
     });
   </script>
 </body>
