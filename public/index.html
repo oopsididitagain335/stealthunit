@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quantum Clash - eSport Launch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;800&display=swap" rel="stylesheet" />
   <style>
-    body { margin: 0; overflow: hidden; background: #000; }
-    canvas { display: block; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      font-family: 'Exo 2', sans-serif;
+    }
+    canvas {
+      display: block;
+    }
     #overlay {
       position: absolute;
       top: 0;
@@ -19,63 +27,82 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      font-family: 'Exo 2', sans-serif;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 1s ease-in-out;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 10;
     }
-    #overlay.active { opacity: 1; }
+    #overlay.active {
+      opacity: 1;
+    }
     #overlay h1 {
-      font-size: 4.5em;
+      font-size: 5em;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.2em;
       background: linear-gradient(45deg, #00ffcc, #ff00ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 15px rgba(0, 255, 255, 0.9), 0 0 25px rgba(255, 0, 255, 0.8);
+      text-shadow: 0 0 20px rgba(0, 255, 204, 0.8), 0 0 35px rgba(255, 0, 255, 0.7);
       opacity: 0;
-      animation: fadeIn 1s ease-in forwards;
-      animation-delay: 22s;
+      animation: fadeInUp 1.2s ease-out forwards;
+      animation-delay: 0.8s;
     }
     #overlay p {
-      font-size: 1.6em;
+      font-size: 1.8em;
       font-weight: 400;
-      color: #d0d0d0;
-      max-width: 600px;
-      text-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
+      color: #e0f7fa;
+      max-width: 700px;
+      margin: 20px 0;
+      text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
       opacity: 0;
-      animation: fadeIn 1s ease-in forwards;
-      animation-delay: 22.5s;
+      animation: fadeInUp 1.2s ease-out forwards;
+      animation-delay: 1.4s;
     }
     #overlay button {
       pointer-events: auto;
-      margin-top: 20px;
-      padding: 15px 40px;
-      font-size: 1.3em;
-      font-weight: 500;
+      margin-top: 30px;
+      padding: 18px 50px;
+      font-size: 1.5em;
+      font-weight: 600;
       background: linear-gradient(45deg, #ff00ff, #00ffcc);
       border: none;
-      border-radius: 50px;
+      border-radius: 60px;
       color: #fff;
       cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.7, 0.9);
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.8);
       opacity: 0;
-      animation: fadeIn 1s ease-in forwards;
-      animation-delay: 23s;
+      animation: fadeInUp 1.2s ease-out forwards;
+      animation-delay: 2s;
     }
     #overlay button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 1);
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 0 40px rgba(0, 255, 204, 1);
     }
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     @media (max-width: 768px) {
-      #overlay h1 { font-size: 2.8em; letter-spacing: 0.1em; }
-      #overlay p { font-size: 1.2em; max-width: 90%; }
-      #overlay button { font-size: 1em; padding: 10px 25px; }
+      #overlay h1 {
+        font-size: 3em;
+        letter-spacing: 0.1em;
+      }
+      #overlay p {
+        font-size: 1.3em;
+        max-width: 90%;
+      }
+      #overlay button {
+        font-size: 1.2em;
+        padding: 14px 36px;
+      }
     }
   </style>
 </head>
@@ -83,84 +110,163 @@
   <div id="overlay">
     <h1>Quantum Clash</h1>
     <p>Unleash Your Power in the Ultimate eSport Arena!</p>
-    <button id="joinButton" onclick="window.location.href='https://yourstore.com'">Join the Revolution</button>
+    <button id="joinButton" onclick="window.open('https://yourstore.com', '_blank');">Join the Revolution</button>
   </div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/examples/js/loaders/GLTFLoader.js"></script>
-  <script>
-    // Three.js setup
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
+        "cannon": "https://cdn.jsdelivr.net/npm/cannon@0.6.2/build/cannon.min.js"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import * as CANNON from 'cannon';
+
+    // Scene Setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
 
-    // Realistic Lighting
-    const ambientLight = new THREE.AmbientLight(0x333333, 0.3);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x1a1a3a, 0.4);
     scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight.position.set(10, 20, 10);
-    scene.add(directionalLight);
-    const monitorGlow = new THREE.PointLight(0x00ffcc, 1.5, 8);
-    monitorGlow.position.set(0, 0, -4);
-    scene.add(monitorGlow);
 
-    // Desk (Wooden texture simulation)
+    const mainLight = new THREE.DirectionalLight(0x00ccff, 1.2);
+    mainLight.position.set(5, 10, 5);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
+
+    const backLight = new THREE.DirectionalLight(0xff00ff, 0.8);
+    backLight.position.set(-5, -2, -10);
+    scene.add(backLight);
+
+    const glowLight = new THREE.PointLight(0x00ffcc, 2.5, 15);
+    glowLight.position.set(0, 0, -4);
+    scene.add(glowLight);
+
+    // Nebula Background
+    const bgGeometry = new THREE.SphereGeometry(100, 64, 64);
+    const bgMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+        colorA: { value: new THREE.Color(0x000033) },
+        colorB: { value: new THREE.Color(0x330066) },
+        colorC: { value: new THREE.Color(0x00ffcc) }
+      },
+      vertexShader: `
+        varying vec3 vPosition;
+        void main() {
+          vPosition = position;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform float time;
+        uniform vec3 colorA;
+        uniform vec3 colorB;
+        uniform vec3 colorC;
+        varying vec3 vPosition;
+        void main() {
+          vec3 color = mix(colorA, colorB, sin(vPosition.x * 0.1 + time) * 0.5 + 0.5);
+          color = mix(color, colorC, pow(length(vPosition.xy) * 0.05 + sin(time * 0.5) * 0.1, 2.0));
+          gl_FragColor = vec4(color, 1.0);
+        }
+      `,
+      side: THREE.BackSide
+    });
+    const nebula = new THREE.Mesh(bgGeometry, bgMaterial);
+    scene.add(nebula);
+
+    // Desk (Futuristic Blue-Edge)
     const deskGeometry = new THREE.BoxGeometry(20, 0.5, 10);
     const deskMaterial = new THREE.MeshStandardMaterial({
-      color: 0x3c2f2f,
-      roughness: 0.9,
-      metalness: 0.05
+      color: 0x1a1a3a,
+      roughness: 0.6,
+      metalness: 0.4,
+      emissive: 0x003344,
+      emissiveIntensity: 0.3
     });
     const desk = new THREE.Mesh(deskGeometry, deskMaterial);
     desk.position.y = -2.5;
+    desk.receiveShadow = true;
     scene.add(desk);
 
-    // Three Monitors (Realistic with glossy bezels)
+    // Physics for desk
+    const world = new CANNON.World();
+    world.gravity.set(0, -10, 0);
+    world.broadphase = new CANNON.NaiveBroadphase();
+    world.solver.iterations = 16;
+
+    const deskShape = new CANNON.Box(new CANNON.Vec3(10, 0.25, 5));
+    const deskBody = new CANNON.Body({ mass: 0 });
+    deskBody.addShape(deskShape);
+    deskBody.position.copy(desk.position);
+    world.addBody(deskBody);
+
+    // Monitors with glowing screens
     const monitors = [];
     const monitorGeometry = new THREE.BoxGeometry(3, 2, 0.1);
-    const monitorFrameGeometry = new THREE.BoxGeometry(3.2, 2.2, 0.2);
+    const frameGeometry = new THREE.BoxGeometry(3.2, 2.2, 0.3);
     for (let i = 0; i < 3; i++) {
       const monitor = new THREE.Group();
       const screenMaterial = new THREE.MeshStandardMaterial({
-        color: 0x000000,
-        emissive: 0x000000,
+        color: 0x001122,
+        emissive: 0x00ffcc,
         emissiveIntensity: 0,
         roughness: 0.1,
-        metalness: 0.3,
+        metalness: 0.8,
         transparent: true,
         opacity: 0
       });
       const screen = new THREE.Mesh(monitorGeometry, screenMaterial);
+      screen.position.z = 0.05;
+      screen.receiveShadow = true;
+
       const frameMaterial = new THREE.MeshStandardMaterial({
-        color: 0x1a1a1a,
-        roughness: 0.4,
-        metalness: 0.5
+        color: 0x222222,
+        roughness: 0.3,
+        metalness: 0.7
       });
-      const frame = new THREE.Mesh(monitorFrameGeometry, frameMaterial);
-      monitor.add(screen, frame);
-      monitor.position.set((i - 1) * 3.5, -1.5, -5);
-      monitor.rotation.y = (i - 1) * 0.15;
+      const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+      frame.add(screen);
+      frame.rotation.y = (i - 1) * 0.15;
+      frame.position.set((i - 1) * 3.5, -1.5, -5);
+      monitor.add(frame);
       scene.add(monitor);
       monitors.push({ group: monitor, screen, material: screenMaterial });
     }
 
-    // LOADING Text (Simulated with planes)
-    const loadingTextMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffcc, transparent: true, opacity: 0 });
-    const loadingTextGeometry = new THREE.PlaneGeometry(2, 0.5);
+    // Loading Text Planes
+    const loadingTextGeometry = new THREE.PlaneGeometry(2.2, 0.6);
+    const loadingTextMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00ffcc,
+      transparent: true,
+      opacity: 0,
+      side: THREE.DoubleSide
+    });
     const loadingTexts = [];
     for (let i = 0; i < 3; i++) {
-      const loadingText = new THREE.Mesh(loadingTextGeometry, loadingTextMaterial);
-      loadingText.position.set((i - 1) * 3.5, -1.5, -4.9);
-      loadingText.rotation.y = (i - 1) * 0.15;
-      scene.add(loadingText);
-      loadingTexts.push(loadingText);
+      const text = new THREE.Mesh(loadingTextGeometry, loadingTextMaterial);
+      text.position.set((i - 1) * 3.5, -1.5, -4.9);
+      text.rotation.y = (i - 1) * 0.15;
+      scene.add(text);
+      loadingTexts.push(text);
     }
 
-    // Load GLTF Logo (Placeholder)
+    // Quantum Logo (Shader Glow)
     let logo;
-    const logoLoader = new THREE.GLTFLoader();
+    const logoLoader = new GLTFLoader();
     logoLoader.load(
       'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
       (gltf) => {
@@ -173,7 +279,7 @@
               uniforms: {
                 time: { value: 0 },
                 glowColor: { value: new THREE.Color(0x00ffcc) },
-                metalness: { value: 0.9 }
+                pulse: { value: 0 }
               },
               vertexShader: `
                 varying vec3 vNormal;
@@ -181,303 +287,282 @@
                 void main() {
                   vNormal = normalize(normalMatrix * normal);
                   vPosition = position;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position + normal * sin(time * 2.0) * 0.02, 1.0);
                 }
               `,
               fragmentShader: `
-                uniform float time;
                 uniform vec3 glowColor;
-                uniform float metalness;
+                uniform float time;
+                uniform float pulse;
                 varying vec3 vNormal;
                 varying vec3 vPosition;
                 void main() {
-                  float intensity = pow(0.8 - dot(vNormal, vec3(0, 0, 1.0)), 2.0);
-                  vec3 color = mix(glowColor, vec3(0.95, 0.95, 0.95), metalness);
-                  float gradient = sin(vPosition.y + time) * 0.5 + 0.5;
-                  vec3 finalColor = mix(color, vec3(1.0, 0.0, 1.0), gradient * 0.3);
-                  gl_FragColor = vec4(finalColor * intensity, 1.0);
+                  float intensity = pow(0.95 - dot(vNormal, vec3(0, 0, 1.0)), 4.0);
+                  vec3 glow = glowColor * intensity * (0.8 + 0.2 * sin(time * 5.0));
+                  gl_FragColor = vec4(mix(vec3(0.1, 0.1, 0.2), glow, intensity * 1.5), 1.0);
                 }
-              `
+              `,
+              transparent: true,
+              blending: THREE.AdditiveBlending
             });
+            child.castShadow = true;
           }
         });
         scene.add(logo);
       },
       undefined,
-      (error) => console.error('Error loading logo GLTF:', error)
+      (error) => console.warn('Logo load failed:', error.message)
     );
 
-    // Load Jinx GLTF Character
-    let character;
-    let mixer;
-    const characterLoader = new THREE.GLTFLoader();
+    // Character (Jinx or Fallback)
+    let character = null;
+    let mixer = null;
+    let characterBody = null;
+
+    const characterLoader = new GLTFLoader();
+    const modelUrl = './models/jinx.glb'; // Replace with your hosted model
+    const fallbackUrl = 'https://cors-anywhere.herokuapp.com/https://drive.google.com/uc?export=download&id=1xKIkokrDn4h-anQRhlp7afBpgHRDhKNH';
+
     characterLoader.load(
-      'https://drive.google.com/uc?export=download&id=1xKIkokrDn4h-anQRhlp7afBpgHRDhKNH',
-      (gltf) => {
-        character = gltf.scene;
-        character.scale.set(1, 1, 1); // Adjust scale as needed
-        character.position.set(-10, -2, -5); // Start off-screen
-        character.rotation.y = Math.PI / 2; // Face forward
-        scene.add(character);
-        // Animation setup
-        if (gltf.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(character);
-          const walkAnimation = mixer.clipAction(gltf.animations[0]); // Assumes first animation is walk
-          walkAnimation.play();
-        }
-      },
+      modelUrl,
+      onLoadSuccess,
       undefined,
-      (error) => {
-        console.error('Error loading Jinx GLTF:', error);
-        // Fallback: Box-based character
-        const fallbackCharacter = new THREE.Group();
-        const body = new THREE.Mesh(
-          new THREE.BoxGeometry(0.5, 1, 0.3),
-          new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.6, metalness: 0.2 })
-        );
-        const head = new THREE.Mesh(
-          new THREE.BoxGeometry(0.3, 0.3, 0.3),
-          new THREE.MeshStandardMaterial({ color: 0xffb6c1, roughness: 0.6 })
-        );
-        const leftArm = new THREE.Mesh(
-          new THREE.BoxGeometry(0.2, 0.6, 0.2),
-          new THREE.MeshStandardMaterial({ color: 0x00ffcc })
-        );
-        const rightArm = new THREE.Mesh(
-          new THREE.BoxGeometry(0.2, 0.6, 0.2),
-          new THREE.MeshStandardMaterial({ color: 0x00ffcc })
-        );
-        const leftLeg = new THREE.Mesh(
-          new THREE.BoxGeometry(0.2, 0.6, 0.2),
-          new THREE.MeshStandardMaterial({ color: 0x000000 })
-        );
-        const rightLeg = new THREE.Mesh(
-          new THREE.BoxGeometry(0.2, 0.6, 0.2),
-          new THREE.MeshStandardMaterial({ color: 0x000000 })
-        );
-        head.position.y = 0.65;
-        leftArm.position.set(-0.35, 0.2, 0);
-        rightArm.position.set(0.35, 0.2, 0);
-        leftLeg.position.set(-0.15, -0.8, 0);
-        rightLeg.position.set(0.15, -0.8, 0);
-        fallbackCharacter.add(body, head, leftArm, rightArm, leftLeg, rightLeg);
-        fallbackCharacter.position.set(-10, -2, -5);
-        scene.add(fallbackCharacter);
-        character = fallbackCharacter;
-        character.userData = { leftArm, rightArm, leftLeg, rightLeg };
-      }
+      () => tryFallback()
     );
 
-    // Character Animation State
-    let characterState = 'walkingIn';
-    let characterTime = 0;
-    let glitchActive = false;
-    let flickerCount = 0;
-    let glitchStartTime = 0;
+    function onLoadSuccess(gltf) {
+      setupCharacter(gltf);
+    }
 
-    // Particle System (Subtle sparkles)
-    const particleCount = 200;
+    function tryFallback() {
+      console.warn('Primary model failed. Trying fallback...');
+      characterLoader.load(fallbackUrl, setupCharacter, undefined, createFallbackCharacter);
+    }
+
+    function setupCharacter(gltf) {
+      character = gltf.scene;
+      character.scale.set(1, 1, 1);
+      character.position.set(-10, -1.5, -3);
+      character.rotation.y = Math.PI / 2;
+      character.castShadow = true;
+      scene.add(character);
+
+      // Physics
+      const shape = new CANNON.Box(new CANNON.Vec3(0.4, 0.9, 0.4));
+      characterBody = new CANNON.Body({ mass: 1 });
+      characterBody.addShape(shape);
+      characterBody.position.set(-10, -1.5, -3);
+      world.addBody(characterBody);
+
+      // Animation
+      if (gltf.animations.length > 0) {
+        mixer = new THREE.AnimationMixer(character);
+        const action = mixer.clipAction(gltf.animations[0]);
+        action.play();
+      }
+    }
+
+    function createFallbackCharacter() {
+      console.log('Using fallback cube character.');
+      const body = new THREE.Mesh(
+        new THREE.BoxGeometry(0.6, 1.2, 0.4),
+        new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.5 })
+      );
+      const head = new THREE.Mesh(
+        new THREE.BoxGeometry(0.4, 0.4, 0.4),
+        new THREE.MeshStandardMaterial({ color: 0xffb6c1 })
+      );
+      head.position.y = 0.8;
+      character = new THREE.Group();
+      character.add(body, head);
+      character.position.set(-10, -1.5, -3);
+      character.castShadow = true;
+      scene.add(character);
+
+      // Physics
+      const shape = new CANNON.Box(new CANNON.Vec3(0.3, 0.6, 0.2));
+      characterBody = new CANNON.Body({ mass: 1 });
+      characterBody.addShape(shape);
+      characterBody.position.set(-10, -1.5, -3);
+      world.addBody(characterBody);
+    }
+
+    // Particles (Quantum Sparkles)
+    const particleCount = 300;
     const particlesGeometry = new THREE.BufferGeometry();
-    const posArray = new Float32Array(particleCount * 3);
+    const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 4;
-      posArray[i + 1] = (Math.random() - 0.5) * 4;
-      posArray[i + 2] = (Math.random() - 0.5) * 4;
-      velocities[i] = (Math.random() - 0.5) * 0.015;
-      velocities[i + 1] = (Math.random() - 0.5) * 0.015;
-      velocities[i + 2] = (Math.random() - 0.5) * 0.015;
+      positions[i] = (Math.random() - 0.5) * 10;
+      positions[i + 1] = (Math.random() - 0.5) * 10;
+      positions[i + 2] = (Math.random() - 0.5) * 10;
+      velocities[i] = (Math.random() - 0.5) * 0.02;
+      velocities[i + 1] = (Math.random() - 0.5) * 0.02;
+      velocities[i + 2] = (Math.random() - 0.5) * 0.02;
     }
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0xff00ff,
-      size: 0.04,
+      color: 0x00ffcc,
+      size: 0.06,
       transparent: true,
+      opacity: 0.9,
       blending: THREE.AdditiveBlending
     });
     const particles = new THREE.Points(particlesGeometry, particleMaterial);
     scene.add(particles);
 
-    // Background (Dark gradient)
-    const bgGeometry = new THREE.PlaneGeometry(100, 100);
-    const bgMaterial = new THREE.MeshBasicMaterial({
-      color: 0x111111,
-      transparent: true,
-      opacity: 0.9
-    });
-    const bg = new THREE.Mesh(bgGeometry, bgMaterial);
-    bg.position.z = -50;
-    scene.add(bg);
-
-    camera.position.set(0, 1, 8);
+    // Camera Position
+    camera.position.set(0, 1, 10);
     camera.lookAt(0, -1.5, -5);
 
-    // Animation Timeline
+    // Animation State
     let time = 0;
-    let phase = 0; // 0: Monitors on, 1: Loading text, 2: Logo, 3: Character & glitch, 4: Fullscreen, 5: Overlay
+    let phase = 0;
+    let characterState = 'idle';
+    let characterTime = 0;
+    let glitchActive = false;
+    let flickerCount = 0;
+    let glitchStartTime = 0;
+
+    // Animation Loop
     function animate() {
       requestAnimationFrame(animate);
       time += 0.05;
 
-      // Phase 0: Monitors turn on (0-4s)
-      if (phase === 0) {
-        monitors.forEach((monitor, i) => {
-          const delay = i * 1;
-          if (time > delay && monitor.material.opacity < 1) {
-            monitor.material.opacity += 0.05; // Slower fade
-            monitor.material.emissive.setHex(0x00ffcc);
-            monitor.material.emissiveIntensity = monitor.material.opacity * 0.6;
-          }
-        });
-        if (time > 4) {
-          phase = 1;
-        }
+      // Update physics
+      world.step(1 / 60);
+
+      // Sync character position
+      if (character && characterBody) {
+        character.position.copy(characterBody.position);
+        character.position.y = -1.5; // Keep on ground
       }
 
-      // Phase 1: Loading text (4-8s)
+      // Update shaders
+      nebula.material.uniforms.time.value = time;
+      if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.time.value = time));
+
+      // Phase 0: Monitors Power On (0–4s)
+      if (phase === 0 && time > 4) {
+        monitors.forEach((m, i) => {
+          if (time > i * 1.2 + 0.5) {
+            const t = (time - i * 1.2) * 0.3;
+            m.material.opacity = Math.min(t, 1);
+            m.material.emissiveIntensity = m.material.opacity * 0.8;
+          }
+        });
+        if (time > 4) phase = 1;
+      }
+
+      // Phase 1: Loading Text (4–8s)
       if (phase === 1) {
         loadingTexts.forEach((text, i) => {
-          const delay = 4 + i * 0.6;
-          if (time > delay && text.material.opacity < 1) {
-            text.material.opacity += 0.05; // Slower fade
+          const delay = 4 + i * 0.8;
+          if (time > delay) {
+            text.material.opacity = Math.min((time - delay) * 0.5, 1);
           }
         });
         if (time > 8) {
+          loadingTexts.forEach(t => t.material.opacity = 0);
           phase = 2;
-          loadingTexts.forEach(text => text.material.opacity = 0);
         }
       }
 
-      // Phase 2: Logo appears (8-12s)
-      if (phase === 2 && logo) {
-        if (logo.scale.x < 1) {
-          logo.scale.x += 0.025; // Slower scale-up
-          logo.scale.y += 0.025;
-          logo.scale.z += 0.025;
-        }
-        if (time > 12) {
+      // Phase 2: Logo Appears (8–12s)
+      if (phase === 2 && logo && time > 12) {
+        if (logo.scale.x < 1.5) {
+          logo.scale.x += 0.02;
+          logo.scale.y += 0.02;
+          logo.scale.z += 0.02;
+        } else {
           phase = 3;
         }
       }
 
-      // Phase 3: Character walks in, triggers glitch, pauses, walks out (12-20s)
-      if (phase === 3 && character) {
+      // Phase 3: Character Walks In, Glitch, Walks Out (12–21s)
+      if (phase === 3 && character && characterBody) {
+        if (characterState === 'idle') {
+          characterState = 'walkingIn';
+        }
+
         if (characterState === 'walkingIn') {
-          character.position.x += 0.05; // Slower walk (4s to cross 10 units)
-          if (mixer) mixer.update(0.05);
-          else if (character.userData.leftArm) {
-            character.userData.leftArm.rotation.x = Math.sin(characterTime * 5) * 0.5;
-            character.userData.rightArm.rotation.x = -Math.sin(characterTime * 5) * 0.5;
-            character.userData.leftLeg.rotation.x = -Math.sin(characterTime * 5) * 0.5;
-            character.userData.rightLeg.rotation.x = Math.sin(characterTime * 5) * 0.5;
-          }
-          if (character.position.x >= -2 && !glitchActive) {
+          characterBody.velocity.x = 0.03 * 60;
+          if (mixer) mixer.update(0.016);
+          if (characterBody.position.x >= -2) {
+            characterBody.velocity.set(0, 0, 0);
+            characterState = 'glitching';
             glitchActive = true;
             glitchStartTime = time;
             flickerCount = 0;
           }
-          if (character.position.x >= 0) {
-            characterState = 'pausing';
-            characterTime = 0;
-            if (mixer) mixer.stopAllAction();
-          }
-        } else if (characterState === 'pausing') {
-          if (characterTime > 4) { // Longer pause
-            characterState = 'walkingOut';
-            if (mixer) mixer.clipAction(mixer.getRoot().animations[0]).play();
-          }
-        } else if (characterState === 'walkingOut') {
-          character.position.x += 0.1; // Faster walk out (2s)
-          if (mixer) mixer.update(0.05);
-          else if (character.userData.leftArm) {
-            character.userData.leftArm.rotation.x = Math.sin(characterTime * 5) * 0.5;
-            character.userData.rightArm.rotation.x = -Math.sin(characterTime * 5) * 0.5;
-            character.userData.leftLeg.rotation.x = -Math.sin(characterTime * 5) * 0.5;
-            character.userData.rightLeg.rotation.x = Math.sin(characterTime * 5) * 0.5;
-          }
-          if (character.position.x > 10) {
-            characterState = 'idle';
-            character.position.x = -10;
-            if (mixer) mixer.stopAllAction();
+        }
+
+        if (characterState === 'glitching' && time - glitchStartTime > 2) {
+          characterState = 'walkingOut';
+        }
+
+        if (characterState === 'walkingOut') {
+          characterBody.velocity.x = 0.05 * 60;
+          if (mixer) mixer.update(0.016);
+          if (characterBody.position.x > 10) {
+            characterBody.position.x = -10;
+            characterBody.velocity.set(0, 0, 0);
             phase = 4;
           }
         }
-        characterTime += 0.05;
 
-        // Glitch effect when character is near monitors
+        // Glitch Effect
         if (glitchActive && time - glitchStartTime < 2) {
-          if (time % 0.5 > 0.4 && flickerCount < 4) {
-            monitors.forEach(monitor => {
-              monitor.material.opacity = 0.2;
-              monitor.material.emissiveIntensity = 0;
+          if (Math.random() < 0.15 && flickerCount < 5) {
+            monitors.forEach(m => {
+              m.material.opacity = 0.3;
+              m.material.emissiveIntensity = 0;
             });
-            if (logo) logo.traverse(child => {
-              if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0xff00ff);
-            });
-          } else if (time % 0.5 > 0.35) {
-            monitors.forEach(monitor => {
-              monitor.material.opacity = 1;
-              monitor.material.emissiveIntensity = 0.6;
-            });
-            if (logo) logo.traverse(child => {
-              if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0x00ffcc);
-            });
-            flickerCount += time % 0.5 > 0.4 ? 1 : 0;
+            if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.glowColor.value.setHex(0xff00ff)));
+            setTimeout(() => {
+              monitors.forEach(m => {
+                m.material.opacity = 1;
+                m.material.emissiveIntensity = 0.8;
+              });
+              if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.glowColor.value.setHex(0x00ffcc)));
+            }, 100);
+            flickerCount++;
           }
-        } else if (glitchActive && time - glitchStartTime >= 2) {
-          glitchActive = false;
-          monitors.forEach(monitor => {
-            monitor.material.opacity = 1;
-            monitor.material.emissiveIntensity = 0.6;
-          });
-          if (logo) logo.traverse(child => {
-            if (child.isMesh) child.material.uniforms.glowColor.value.setHex(0x00ffcc);
-          });
         }
       }
 
-      // Phase 4: Fullscreen logo (20-22s)
+      // Phase 4: Fullscreen Zoom (21–22s)
       if (phase === 4 && logo) {
-        if (logo.scale.x < 5) {
-          logo.scale.x += 0.06; // Slower zoom
-          logo.scale.y += 0.06;
-          logo.scale.z += 0.06;
-          logo.position.z += 0.1;
-          camera.position.z -= 0.03;
-          monitors.forEach(monitor => {
-            monitor.group.scale.x *= 0.97;
-            monitor.group.scale.y *= 0.97;
-            monitor.group.scale.z *= 0.97;
-          });
-        }
-        if (time > 22) {
+        if (logo.scale.x < 8) {
+          logo.scale.multiplyScalar(1.05);
+          logo.position.z += 0.2;
+          camera.position.z -= 0.1;
+          monitors.forEach(m => m.group.scale.multiplyScalar(0.95));
+        } else {
           phase = 5;
-          document.getElementById('overlay').classList.add('active');
+          setTimeout(() => {
+            document.getElementById('overlay').classList.add('active');
+          }, 200);
         }
       }
 
-      // Phase 5: Update logo shader and particles
-      if (logo) {
-        logo.traverse(child => {
-          if (child.isMesh) child.material.uniforms.time.value = time;
-        });
-      }
-      const positions = particlesGeometry.attributes.position.array;
+      // Update particles
       for (let i = 0; i < particleCount * 3; i += 3) {
         positions[i] += velocities[i];
         positions[i + 1] += velocities[i + 1];
         positions[i + 2] += velocities[i + 2];
-        if (Math.abs(positions[i]) > 3) velocities[i] *= -1;
-        if (Math.abs(positions[i + 1]) > 3) velocities[i + 1] *= -1;
-        if (Math.abs(positions[i + 2]) > 3) velocities[i + 2] *= -1;
+        if (Math.abs(positions[i]) > 10) velocities[i] *= -1;
+        if (Math.abs(positions[i + 1]) > 10) velocities[i + 1] *= -1;
+        if (Math.abs(positions[i + 2]) > 10) velocities[i + 2] *= -1;
       }
       particlesGeometry.attributes.position.needsUpdate = true;
 
       renderer.render(scene, camera);
     }
+
     animate();
 
-    // Handle window resize
+    // Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
