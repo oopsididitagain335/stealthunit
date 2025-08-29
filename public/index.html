@@ -300,14 +300,13 @@
         scene.add(logo);
       },
       undefined,
-      () => console.warn('Logo failed to load - using text or placeholder')
+      (error) => console.warn('Logo failed to load:', error.message)
     );
 
-    // ✅ Fallback Character (Box-style, no GLB needed)
+    // ✅ Fallback Character (No external model needed)
     let character = new THREE.Group();
     let characterBody = null;
 
-    // Parts
     const body = new THREE.Mesh(
       new THREE.BoxGeometry(0.6, 1.2, 0.4),
       new THREE.MeshStandardMaterial({ color: 0xff4d94, roughness: 0.5 })
@@ -333,7 +332,6 @@
       new THREE.MeshStandardMaterial({ color: 0x000000 })
     );
 
-    // Position
     head.position.y = 1.0;
     leftArm.position.set(-0.4, 0.3, 0);
     rightArm.position.set(0.4, 0.3, 0);
@@ -353,12 +351,11 @@
     characterBody.position.set(-10, -1.5, -3);
     world.addBody(characterBody);
 
-    // Store references for animation
+    // Store limb references
     character.userData = { leftArm, rightArm, leftLeg, rightLeg };
 
     // Particles
     const particleCount = 300;
-    const particlesGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
@@ -369,6 +366,7 @@
       velocities[i + 1] = (Math.random() - 0.5) * 0.02;
       velocities[i + 2] = (Math.random() - 0.5) * 0.02;
     }
+    const particlesGeometry = new THREE.BufferGeometry();
     particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     const particleMaterial = new THREE.PointsMaterial({
       color: 0x00ffcc,
@@ -398,10 +396,10 @@
       requestAnimationFrame(animate);
       time += 0.05;
 
-      // Physics
+      // Step physics
       world.step(1 / 60);
 
-      // Sync character
+      // Sync character position
       if (character && characterBody) {
         character.position.copy(characterBody.position);
         character.position.y = -1.5;
@@ -410,14 +408,20 @@
 
       // Update shaders
       nebula.material.uniforms.time.value = time;
-      if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.time?.value = time));
-
-      // Phase 0: Monitors On
-      if (phase === 0) {
-        if (time > 4) phase = 1;
+      if (logo) {
+        logo.traverse((child) => {
+          if (child.isMesh && child.material.uniforms?.time) {
+            child.material.uniforms.time.value = time;
+          }
+        });
       }
 
-      // Phase 1: Loading Text
+      // Phase 0: Monitors On (0–4s)
+      if (phase === 0 && time > 4) {
+        phase = 1;
+      }
+
+      // Phase 1: Loading Text (4–8s)
       if (phase === 1) {
         loadingTexts.forEach((text, i) => {
           const delay = 4 + i * 0.8;
@@ -431,7 +435,7 @@
         }
       }
 
-      // Phase 2: Logo Appears
+      // Phase 2: Logo Appears (8–12s)
       if (phase === 2 && logo) {
         if (logo.scale.x < 1.5) {
           logo.scale.multiplyScalar(1.02);
@@ -444,9 +448,8 @@
       if (phase === 3) {
         if (characterState === 'walkingIn') {
           characterBody.velocity.x = 0.03 * 60;
-          // Arm/leg swing
+          const swing = Math.sin(characterTime * 5);
           if (character.userData.leftArm) {
-            const swing = Math.sin(characterTime * 5);
             character.userData.leftArm.rotation.x = swing * 0.5;
             character.userData.rightArm.rotation.x = -swing * 0.5;
             character.userData.leftLeg.rotation.x = -swing * 0.5;
@@ -478,20 +481,28 @@
           }
         }
 
-        // Glitch effect
-        if (glitchActive && time - glitchStartTime < 2) {
-          if (Math.random() < 0.1 && flickerCount < 5) {
+        // Glitch Effect
+        if (glitchActive && time - glitchStartTime < 2 && flickerCount < 5) {
+          if (Math.random() < 0.1) {
             monitors.forEach(m => {
               m.material.opacity = 0.3;
               m.material.emissiveIntensity = 0;
             });
-            if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.glowColor.value.setHex(0xff00ff)));
+            if (logo) {
+              logo.traverse(c => {
+                if (c.isMesh) c.material.uniforms.glowColor.value.setHex(0xff00ff);
+              });
+            }
             setTimeout(() => {
               monitors.forEach(m => {
                 m.material.opacity = 1;
                 m.material.emissiveIntensity = 0.8;
               });
-              if (logo) logo.traverse(c => c.isMesh && (c.material.uniforms.glowColor.value.setHex(0x00ffcc)));
+              if (logo) {
+                logo.traverse(c => {
+                  if (c.isMesh) c.material.uniforms.glowColor.value.setHex(0x00ffcc);
+                });
+              }
             }, 100);
             flickerCount++;
           }
@@ -500,7 +511,7 @@
         characterTime += 0.05;
       }
 
-      // Phase 4: Zoom Logo
+      // Phase 4: Zoom Logo (21–22s)
       if (phase === 4 && logo) {
         if (logo.scale.x < 8) {
           logo.scale.multiplyScalar(1.05);
@@ -531,7 +542,7 @@
 
     animate();
 
-    // Resize
+    // Resize Handler
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
